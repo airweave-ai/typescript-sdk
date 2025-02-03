@@ -12,7 +12,10 @@ export const Connection: core.serialization.ObjectSchema<serializers.Connection.
     core.serialization.object({
         name: core.serialization.string(),
         integrationType: core.serialization.property("integration_type", IntegrationType),
-        integrationCredentialId: core.serialization.property("integration_credential_id", core.serialization.string()),
+        integrationCredentialId: core.serialization.property(
+            "integration_credential_id",
+            core.serialization.string().optional(),
+        ),
         status: ConnectionStatus,
         shortName: core.serialization.property("short_name", core.serialization.string()),
         id: core.serialization.string(),
@@ -25,7 +28,7 @@ export declare namespace Connection {
     export interface Raw {
         name: string;
         integration_type: IntegrationType.Raw;
-        integration_credential_id: string;
+        integration_credential_id?: string | null;
         status: ConnectionStatus.Raw;
         short_name: string;
         id: string;

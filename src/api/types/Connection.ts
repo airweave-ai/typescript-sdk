@@ -10,7 +10,7 @@ import * as AirweaveSDK from "../index";
 export interface Connection {
     name: string;
     integrationType: AirweaveSDK.IntegrationType;
-    integrationCredentialId: string;
+    integrationCredentialId?: string;
     status: AirweaveSDK.ConnectionStatus;
     shortName: string;
     id: string;

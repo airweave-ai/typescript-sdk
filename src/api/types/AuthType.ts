@@ -14,6 +14,7 @@
  *     api_key: API key authentication.
  *     native_functionality: Native functionality.
  *     url_and_api_key: URL and API key authentication.
+ *     none: No authentication.
  */
 export type AuthType =
     | "oauth2"
@@ -22,7 +23,8 @@ export type AuthType =
     | "trello_auth"
     | "api_key"
     | "native_functionality"
-    | "config_class";
+    | "config_class"
+    | "none";
 export const AuthType = {
     Oauth2: "oauth2",
     Oauth2WithRefresh: "oauth2_with_refresh",
@@ -31,4 +33,5 @@ export const AuthType = {
     ApiKey: "api_key",
     NativeFunctionality: "native_functionality",
     ConfigClass: "config_class",
+    None: "none",
 } as const;

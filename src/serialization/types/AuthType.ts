@@ -15,6 +15,7 @@ export const AuthType: core.serialization.Schema<serializers.AuthType.Raw, Airwe
         "api_key",
         "native_functionality",
         "config_class",
+        "none",
     ]);
 
 export declare namespace AuthType {
@@ -25,5 +26,6 @@ export declare namespace AuthType {
         | "trello_auth"
         | "api_key"
         | "native_functionality"
-        | "config_class";
+        | "config_class"
+        | "none";
 }
