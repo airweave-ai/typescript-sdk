@@ -2714,6 +2714,64 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 
 ## Chat
 
+<details><summary><code>client.chat.<a href="/src/api/resources/chat/client/Client.ts">openaiKeySet</a>() -> boolean</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Check if the OpenAI API key is set for the current user.
+
+Returns:
+bool: True if the OpenAI API key is set, False otherwise.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.chat.openaiKeySet();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Chat.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.chat.<a href="/src/api/resources/chat/client/Client.ts">listChats</a>({ ...params }) -> AirweaveSDK.Chat[]</code></summary>
 <dl>
 <dd>

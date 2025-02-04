@@ -33,6 +33,85 @@ export class Chat {
     constructor(protected readonly _options: Chat.Options) {}
 
     /**
+     * Check if the OpenAI API key is set for the current user.
+     *
+     * Returns:
+     *     bool: True if the OpenAI API key is set, False otherwise.
+     *
+     * @param {Chat.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.chat.openaiKeySet()
+     */
+    public async openaiKeySet(requestOptions?: Chat.RequestOptions): Promise<boolean> {
+        const _response = await core.fetcher({
+            url: urlJoin(await core.Supplier.get(this._options.environment), "chat/openai_key_set"),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.chat.openaiKeySet.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /chat/openai_key_set.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * List all chats for the current user.
      *
      * @param {AirweaveSDK.ListChatsChatGetRequest} request
@@ -67,8 +146,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -151,8 +230,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -229,8 +308,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -311,8 +390,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -389,8 +468,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -471,8 +550,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -552,8 +631,8 @@ export class Chat {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.8",
-                "User-Agent": "@airweave/sdk/0.1.8",
+                "X-Fern-SDK-Version": "0.1.9",
+                "User-Agent": "@airweave/sdk/0.1.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
