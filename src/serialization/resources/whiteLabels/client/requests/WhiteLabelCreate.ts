@@ -11,7 +11,7 @@ export const WhiteLabelCreate: core.serialization.Schema<
     AirweaveSDK.WhiteLabelCreate
 > = core.serialization.object({
     name: core.serialization.string(),
-    sourceId: core.serialization.property("source_id", core.serialization.string()),
+    sourceShortName: core.serialization.property("source_short_name", core.serialization.string()),
     redirectUrl: core.serialization.property("redirect_url", core.serialization.string()),
     clientId: core.serialization.property("client_id", core.serialization.string()),
     clientSecret: core.serialization.property("client_secret", core.serialization.string()),
@@ -20,7 +20,7 @@ export const WhiteLabelCreate: core.serialization.Schema<
 export declare namespace WhiteLabelCreate {
     export interface Raw {
         name: string;
-        source_id: string;
+        source_short_name: string;
         redirect_url: string;
         client_id: string;
         client_secret: string;

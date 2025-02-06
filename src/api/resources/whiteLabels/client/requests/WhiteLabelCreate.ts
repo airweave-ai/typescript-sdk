@@ -6,7 +6,7 @@
  * @example
  *     {
  *         name: "name",
- *         sourceId: "source_id",
+ *         sourceShortName: "source_short_name",
  *         redirectUrl: "redirect_url",
  *         clientId: "client_id",
  *         clientSecret: "client_secret"
@@ -14,7 +14,7 @@
  */
 export interface WhiteLabelCreate {
     name: string;
-    sourceId: string;
+    sourceShortName: string;
     redirectUrl: string;
     clientId: string;
     clientSecret: string;

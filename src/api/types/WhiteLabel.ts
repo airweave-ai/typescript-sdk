@@ -7,7 +7,7 @@
  */
 export interface WhiteLabel {
     name: string;
-    sourceId: string;
+    sourceShortName: string;
     redirectUrl: string;
     clientId: string;
     clientSecret: string;

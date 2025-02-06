@@ -2279,7 +2279,7 @@ Create new white label integration.
 ```typescript
 await client.whiteLabels.createWhiteLabel({
     name: "name",
-    sourceId: "source_id",
+    sourceShortName: "source_short_name",
     redirectUrl: "redirect_url",
     clientId: "client_id",
     clientSecret: "client_secret",
