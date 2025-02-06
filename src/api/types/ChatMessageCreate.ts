@@ -3,10 +3,7 @@
  */
 
 /**
- * @example
- *     {
- *         content: "content"
- *     }
+ * Schema for creating a chat message.
  */
 export interface ChatMessageCreate {
     content: string;

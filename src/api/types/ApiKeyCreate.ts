@@ -3,8 +3,7 @@
  */
 
 /**
- * @example
- *     {}
+ * Schema for creating an APIKey object.
  */
 export interface ApiKeyCreate {
     expirationDate?: Date;

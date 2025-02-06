@@ -3,11 +3,7 @@
  */
 
 /**
- * @example
- *     {
- *         name: "name",
- *         syncId: "sync_id"
- *     }
+ * Schema for creating a chat.
  */
 export interface ChatCreate {
     name: string;

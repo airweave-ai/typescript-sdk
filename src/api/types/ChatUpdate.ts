@@ -3,8 +3,7 @@
  */
 
 /**
- * @example
- *     {}
+ * Schema for updating a chat.
  */
 export interface ChatUpdate {
     name?: string;

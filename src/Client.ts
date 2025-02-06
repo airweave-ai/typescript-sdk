@@ -4,8 +4,6 @@
 
 import * as environments from "./environments";
 import * as core from "./core";
-import { Health } from "./api/resources/health/client/Client";
-import { ApiKeys } from "./api/resources/apiKeys/client/Client";
 import { Users } from "./api/resources/users/client/Client";
 import { Sources } from "./api/resources/sources/client/Client";
 import { Destinations } from "./api/resources/destinations/client/Client";
@@ -13,7 +11,6 @@ import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
 import { Sync } from "./api/resources/sync/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
-import { Chat } from "./api/resources/chat/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -37,8 +34,6 @@ export declare namespace AirweaveSDKClient {
 }
 
 export class AirweaveSDKClient {
-    protected _health: Health | undefined;
-    protected _apiKeys: ApiKeys | undefined;
     protected _users: Users | undefined;
     protected _sources: Sources | undefined;
     protected _destinations: Destinations | undefined;
@@ -46,17 +41,8 @@ export class AirweaveSDKClient {
     protected _connections: Connections | undefined;
     protected _sync: Sync | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
-    protected _chat: Chat | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
-
-    public get health(): Health {
-        return (this._health ??= new Health(this._options));
-    }
-
-    public get apiKeys(): ApiKeys {
-        return (this._apiKeys ??= new ApiKeys(this._options));
-    }
 
     public get users(): Users {
         return (this._users ??= new Users(this._options));
@@ -84,9 +70,5 @@ export class AirweaveSDKClient {
 
     public get whiteLabels(): WhiteLabels {
         return (this._whiteLabels ??= new WhiteLabels(this._options));
-    }
-
-    public get chat(): Chat {
-        return (this._chat ??= new Chat(this._options));
     }
 }
