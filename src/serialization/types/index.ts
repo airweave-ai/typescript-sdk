@@ -18,6 +18,7 @@ export * from "./Fields";
 export * from "./HttpValidationError";
 export * from "./IntegrationType";
 export * from "./Source";
+export * from "./SourceWithConfigFields";
 export * from "./Sync";
 export * from "./SyncJob";
 export * from "./SyncJobStatus";

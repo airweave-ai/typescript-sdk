@@ -67,7 +67,7 @@ await client.users.readUser();
 
 ## Sources
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.Source</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.SourceWithConfigFields</code></summary>
 <dl>
 <dd>
 

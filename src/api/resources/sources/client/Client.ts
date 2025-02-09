@@ -54,7 +54,10 @@ export class Sources {
      * @example
      *     await client.sources.readSource("short_name")
      */
-    public async readSource(shortName: string, requestOptions?: Sources.RequestOptions): Promise<AirweaveSDK.Source> {
+    public async readSource(
+        shortName: string,
+        requestOptions?: Sources.RequestOptions,
+    ): Promise<AirweaveSDK.SourceWithConfigFields> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -68,8 +71,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.15",
-                "User-Agent": "@airweave/sdk/0.1.15",
+                "X-Fern-SDK-Version": "0.1.16",
+                "User-Agent": "@airweave/sdk/0.1.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -81,7 +84,7 @@ export class Sources {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.Source.parseOrThrow(_response.body, {
+            return serializers.SourceWithConfigFields.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -153,8 +156,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.15",
-                "User-Agent": "@airweave/sdk/0.1.15",
+                "X-Fern-SDK-Version": "0.1.16",
+                "User-Agent": "@airweave/sdk/0.1.16",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
