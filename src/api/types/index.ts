@@ -17,8 +17,6 @@ export * from "./EmbeddingModelWithConfigFields";
 export * from "./Fields";
 export * from "./HttpValidationError";
 export * from "./IntegrationType";
-export * from "./MetadataSearchFilter";
-export * from "./SearchResult";
 export * from "./Source";
 export * from "./SourceWithConfigFields";
 export * from "./Sync";
