@@ -11,6 +11,7 @@ import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
 import { Sync } from "./api/resources/sync/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
+import { Search } from "./api/resources/search/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -41,6 +42,7 @@ export class AirweaveSDKClient {
     protected _connections: Connections | undefined;
     protected _sync: Sync | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
+    protected _search: Search | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
@@ -70,5 +72,9 @@ export class AirweaveSDKClient {
 
     public get whiteLabels(): WhiteLabels {
         return (this._whiteLabels ??= new WhiteLabels(this._options));
+    }
+
+    public get search(): Search {
+        return (this._search ??= new Search(this._options));
     }
 }

@@ -2343,3 +2343,147 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 </dd>
 </dl>
 </details>
+
+## Search
+
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">searchSummary</a>({ ...params }) -> AirweaveSDK.SearchSummary</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search for summarized information.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.search.searchSummary({
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchSummarySearchSummaryGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Search.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> AirweaveSDK.SearchResult[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search for a specific item.
+
+## Args:
+
+    db (AsyncSession): The database session.
+    query (str): The query to search for.
+    sync_id (Optional[UUID]): The sync ID to search for.
+    metadata_filter (Optional[list[MetadataSearchFilter]]): The filter to search for.
+    user (schemas.User): The user to search for.
+
+## Returns:
+
+    list[SearchResult]: The search results.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.search.search({
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchSearchObjectsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Search.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
