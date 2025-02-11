@@ -71,8 +71,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -131,8 +131,13 @@ export class Sources {
     /**
      * Get all sources for the current user.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     user: The current user
+     *
      * Returns:
-     * -------
+     * --------
      *     list[schemas.Source]: The list of sources.
      *
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
@@ -156,8 +161,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

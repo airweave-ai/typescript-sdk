@@ -5,7 +5,6 @@ export * as destinations from "./destinations";
 export * as embeddingModels from "./embeddingModels";
 export * as connections from "./connections";
 export * as whiteLabels from "./whiteLabels";
-export * as search from "./search";
 export * from "./connections/client/requests";
 export * from "./sync/client/requests";
 export * from "./whiteLabels/client/requests";

@@ -36,6 +36,16 @@ export class Connections {
     /**
      * Get a specific connection.
      *
+     * Args:
+     * -----
+     *     connection_id: The ID of the connection to get.
+     *     db: The database session.
+     *     user: The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.Connection: The connection.
+     *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -61,8 +71,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -121,6 +131,15 @@ export class Connections {
     /**
      * Get all active connections for the current user across all integration types.
      *
+     * Args:
+     * -----
+     *     db: The database session.
+     *     user: The current user.
+     *
+     * Returns:
+     * -------
+     *     list[schemas.Connection]: The list of connections.
+     *
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -144,8 +163,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -203,11 +222,13 @@ export class Connections {
      * Get all integrations of specified type connected to the current user.
      *
      * Args:
+     * -----
      *     integration_type (IntegrationType): The type of integration to get connections for.
      *     db (AsyncSession): The database session.
      *     user (schemas.User): The current user.
      *
      * Returns:
+     * -------
      *     list[schemas.Connection]: The list of connections.
      *
      * @param {AirweaveSDK.IntegrationType} integrationType
@@ -235,8 +256,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -303,6 +324,19 @@ export class Connections {
      * }
      * ```
      *
+     * Args:
+     * -----
+     *     db: The database session.
+     *     integration_type: The type of integration to connect to.
+     *     short_name: The short name of the integration to connect to.
+     *     name: The name of the connection.
+     *     config_fields: The config fields for the integration.
+     *     user: The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.Connection: The connection.
+     *
      * @param {AirweaveSDK.IntegrationType} integrationType
      * @param {string} shortName
      * @param {AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost} request
@@ -336,8 +370,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -401,12 +435,14 @@ export class Connections {
      * Get the credentials for a connection.
      *
      * Args:
+     * -----
      *     connection_id (UUID): The ID of the connection to get credentials for
      *     db (AsyncSession): The database session
      *     user (schemas.User): The current user
      *
      * Returns:
-     *     dict: The credentials for the connection
+     * -------
+     *     decrypted_credentials (dict): The credentials for the connection
      *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -433,8 +469,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -496,13 +532,14 @@ export class Connections {
      * Deletes the connection and integration credential.
      *
      * Args:
+     * -----
      *     db (AsyncSession): The database session
      *     connection_id (UUID): The ID of the connection to delete
-     *     delete_syncs_and_data (bool): Whether to delete the associated syncs and data
      *     user (schemas.User): The current user
      *
      * Returns:
-     *     schemas.Connection: The deleted connection
+     * --------
+     *     connection (schemas.Connection): The deleted connection
      *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -529,8 +566,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -590,11 +627,14 @@ export class Connections {
      * Disconnect from a source connection.
      *
      * Args:
+     * -----
      *     db (AsyncSession): The database session
      *     connection_id (UUID): The ID of the connection to disconnect
      *     user (schemas.User): The current user
+     *
      * Returns:
-     *     schemas.Connection: The disconnected connection
+     * --------
+     *     connection_schema (schemas.Connection): The disconnected connection
      *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -621,8 +661,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -682,12 +722,14 @@ export class Connections {
      * Disconnect from a destination connection.
      *
      * Args:
+     * -----
      *     db (AsyncSession): The database session
      *     connection_id (UUID): The ID of the connection to disconnect
      *     user (schemas.User): The current user
      *
      * Returns:
-     *     schemas.Connection: The disconnected connection
+     * --------
+     *     connection_schema (schemas.Connection): The disconnected connection
      *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -714,8 +756,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -774,6 +816,12 @@ export class Connections {
     /**
      * Get the OAuth2 authorization URL for a source.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     short_name: The short name of the source
+     *     user: The current user
+     *
      * @param {AirweaveSDK.GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -804,8 +852,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -870,6 +918,17 @@ export class Connections {
      * 2. Exchange the authorization code for a token
      * 3. Create an integration credential with the token
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     short_name: The short name of the source
+     *     code: The authorization code
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The created connection
+     *
      * @param {AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -898,8 +957,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -961,6 +1020,18 @@ export class Connections {
     /**
      * Exchange the OAuth2 authorization code for a white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label integration
+     *     code: The authorization code
+     *     user: The current user
+     *     background_tasks: The background tasks
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The created connection
+     *
      * @param {string} whiteLabelId
      * @param {string} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -988,8 +1059,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -1051,6 +1122,16 @@ export class Connections {
     /**
      * Get the OAuth2 authorization URL for a white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label integration
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     str: The OAuth2 authorization URL
+     *
      * @param {string} whiteLabelId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -1076,8 +1157,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

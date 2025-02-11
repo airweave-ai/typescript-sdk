@@ -36,6 +36,15 @@ export class WhiteLabels {
     /**
      * List all white labels for the current user's organization.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     current_user: The current user
+     *
+     * Returns:
+     * --------
+     *     list[schemas.WhiteLabel]: A list of white labels
+     *
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -57,8 +66,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -115,6 +124,16 @@ export class WhiteLabels {
     /**
      * Create new white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     current_user: The current user
+     *     white_label_in: The white label to create
+     *
+     * Returns:
+     * --------
+     *     white_label (schemas.WhiteLabel): The created white label
+     *
      * @param {AirweaveSDK.WhiteLabelCreate} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -146,8 +165,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -205,6 +224,16 @@ export class WhiteLabels {
     /**
      * Get a specific white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label to get
+     *     current_user: The current user
+     *
+     * Returns:
+     * --------
+     *     white_label (schemas.WhiteLabel): The white label
+     *
      * @param {string} whiteLabelId
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -230,8 +259,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -290,6 +319,17 @@ export class WhiteLabels {
     /**
      * Update a white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     current_user: The current user
+     *     white_label_id: The ID of the white label to update
+     *     white_label_in: The white label to update
+     *
+     * Returns:
+     * --------
+     *     white_label (schemas.WhiteLabel): The updated white label
+     *
      * @param {string} whiteLabelId
      * @param {AirweaveSDK.WhiteLabelUpdate} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
@@ -317,8 +357,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -378,6 +418,16 @@ export class WhiteLabels {
     /**
      * Delete a white label integration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     current_user: The current user
+     *     white_label_id: The ID of the white label to delete
+     *
+     * Returns:
+     * --------
+     *     white_label (schemas.WhiteLabel): The deleted white label
+     *
      * @param {string} whiteLabelId
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -403,8 +453,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -463,6 +513,16 @@ export class WhiteLabels {
     /**
      * Generate the OAuth2 authorization URL by delegating to oauth2_service.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label to get the auth URL for
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     str: The OAuth2 authorization URL
+     *
      * @param {string} whiteLabelId
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -488,8 +548,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -548,6 +608,17 @@ export class WhiteLabels {
     /**
      * Exchange OAuth2 code for tokens and create connection.
      *
+     * Args:
+     * -----
+     *     white_label_id: The ID of the white label to exchange the code for
+     *     code: The OAuth2 code
+     *     db: The database session
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The created connection
+     *
      * @param {string} whiteLabelId
      * @param {string} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
@@ -575,8 +646,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -638,6 +709,16 @@ export class WhiteLabels {
     /**
      * List all syncs for a specific white label.
      *
+     * Args:
+     * -----
+     *     white_label_id: The ID of the white label to list syncs for
+     *     db: The database session
+     *     current_user: The current user
+     *
+     * Returns:
+     * --------
+     *     list[schemas.Sync]: A list of syncs
+     *
      * @param {string} whiteLabelId
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -663,8 +744,8 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

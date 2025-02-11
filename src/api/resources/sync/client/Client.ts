@@ -36,6 +36,18 @@ export class Sync {
     /**
      * List all syncs for the current user.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     skip: The number of syncs to skip
+     *     limit: The number of syncs to return
+     *     with_source_connection: Whether to include the source connection in the response
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     list[schemas.Sync] | list[schemas.SyncWithSourceConnection]: A list of syncs
+     *
      * @param {AirweaveSDK.ListSyncsSyncGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -75,8 +87,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -134,6 +146,17 @@ export class Sync {
     /**
      * Create a new sync configuration.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_in: The sync to create
+     *     user: The current user
+     *     background_tasks: The background tasks
+     *
+     * Returns:
+     * --------
+     *     sync (schemas.Sync): The created sync
+     *
      * @param {AirweaveSDK.SyncCreate} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -162,8 +185,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -221,6 +244,16 @@ export class Sync {
     /**
      * Get a specific sync by ID.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to get
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     sync (schemas.Sync): The sync
+     *
      * @param {string} syncId
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -243,8 +276,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -301,6 +334,17 @@ export class Sync {
     /**
      * Delete a sync configuration and optionally its associated data.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to delete
+     *     delete_data: Whether to delete the data associated with the sync
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     sync (schemas.Sync): The deleted sync
+     *
      * @param {string} syncId
      * @param {AirweaveSDK.DeleteSyncSyncSyncIdDeleteRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
@@ -334,8 +378,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -393,6 +437,17 @@ export class Sync {
     /**
      * Trigger a sync run.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to run
+     *     user: The current user
+     *     background_tasks: The background tasks
+     *
+     * Returns:
+     * --------
+     *     sync_job (schemas.SyncJob): The sync job
+     *
      * @param {string} syncId
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -415,8 +470,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -473,6 +528,16 @@ export class Sync {
     /**
      * List all jobs for a specific sync.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to list jobs for
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     list[schemas.SyncJob]: A list of sync jobs
+     *
      * @param {string} syncId
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -495,8 +560,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -553,6 +618,17 @@ export class Sync {
     /**
      * Get details of a specific sync job.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to list jobs for
+     *     job_id: The ID of the job to get
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     sync_job (schemas.SyncJob): The sync job
+     *
      * @param {string} jobId
      * @param {AirweaveSDK.GetSyncJobSyncJobJobIdGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
@@ -585,8 +661,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -644,6 +720,15 @@ export class Sync {
     /**
      * Server-Sent Events (SSE) endpoint to subscribe to a sync job's progress.
      *
+     * Args:
+     * -----
+     *     job_id: The ID of the job to subscribe to
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     StreamingResponse: The streaming response
+     *
      * @param {string} jobId
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -666,8 +751,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

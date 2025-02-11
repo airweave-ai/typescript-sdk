@@ -36,6 +36,15 @@ export class Destinations {
     /**
      * Get all available destinations.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     List[schemas.Destination]: A list of destinations
+     *
      * @param {Destinations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -57,8 +66,8 @@ export class Destinations {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -115,6 +124,16 @@ export class Destinations {
     /**
      * Get destination by short name.
      *
+     * Args:
+     * -----
+     *     db: The database session
+     *     short_name: The short name of the destination
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     destination (schemas.Destination): The destination
+     *
      * @param {string} shortName
      * @param {Destinations.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -140,8 +159,8 @@ export class Destinations {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.19",
-                "User-Agent": "@airweave/sdk/0.1.19",
+                "X-Fern-SDK-Version": "0.1.20",
+                "User-Agent": "@airweave/sdk/0.1.20",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

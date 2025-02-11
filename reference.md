@@ -154,6 +154,11 @@ await client.sources.readSource("short_name");
 
 Get all sources for the current user.
 
+## Args:
+
+    db: The database session
+    user: The current user
+
 ## Returns:
 
     list[schemas.Source]: The list of sources.
@@ -215,6 +220,15 @@ await client.sources.readSources();
 
 Get all available destinations.
 
+## Args:
+
+    db: The database session
+    user: The current user
+
+## Returns:
+
+    List[schemas.Destination]: A list of destinations
+
 </dd>
 </dl>
 </dd>
@@ -269,6 +283,16 @@ await client.destinations.listDestinations();
 <dd>
 
 Get destination by short name.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the destination
+    user: The current user
+
+## Returns:
+
+    destination (schemas.Destination): The destination
 
 </dd>
 </dl>
@@ -474,6 +498,16 @@ await client.embeddingModels.readEmbeddingModels();
 
 Get a specific connection.
 
+## Args:
+
+    connection_id: The ID of the connection to get.
+    db: The database session.
+    user: The current user.
+
+## Returns:
+
+    schemas.Connection: The connection.
+
 </dd>
 </dl>
 </dd>
@@ -537,6 +571,15 @@ await client.connections.getConnection("connection_id");
 
 Get all active connections for the current user across all integration types.
 
+## Args:
+
+    db: The database session.
+    user: The current user.
+
+## Returns:
+
+    list[schemas.Connection]: The list of connections.
+
 </dd>
 </dl>
 </dd>
@@ -592,13 +635,15 @@ await client.connections.listAllConnectedIntegrations();
 
 Get all integrations of specified type connected to the current user.
 
-Args:
-integration_type (IntegrationType): The type of integration to get connections for.
-db (AsyncSession): The database session.
-user (schemas.User): The current user.
+## Args:
 
-Returns:
-list[schemas.Connection]: The list of connections.
+    integration_type (IntegrationType): The type of integration to get connections for.
+    db (AsyncSession): The database session.
+    user (schemas.User): The current user.
+
+## Returns:
+
+    list[schemas.Connection]: The list of connections.
 
 </dd>
 </dl>
@@ -671,6 +716,19 @@ Expects a POST body with:
     ... other config fields specific to the integration type ...
 }
 ```
+
+## Args:
+
+    db: The database session.
+    integration_type: The type of integration to connect to.
+    short_name: The short name of the integration to connect to.
+    name: The name of the connection.
+    config_fields: The config fields for the integration.
+    user: The current user.
+
+## Returns:
+
+    schemas.Connection: The connection.
 
 </dd>
 </dl>
@@ -755,13 +813,15 @@ await client.connections.connectIntegration("source", "short_name", {
 
 Get the credentials for a connection.
 
-Args:
-connection_id (UUID): The ID of the connection to get credentials for
-db (AsyncSession): The database session
-user (schemas.User): The current user
+## Args:
 
-Returns:
-dict: The credentials for the connection
+    connection_id (UUID): The ID of the connection to get credentials for
+    db (AsyncSession): The database session
+    user (schemas.User): The current user
+
+## Returns:
+
+    decrypted_credentials (dict): The credentials for the connection
 
 </dd>
 </dl>
@@ -828,14 +888,15 @@ Delete a connection.
 
 Deletes the connection and integration credential.
 
-Args:
-db (AsyncSession): The database session
-connection_id (UUID): The ID of the connection to delete
-delete_syncs_and_data (bool): Whether to delete the associated syncs and data
-user (schemas.User): The current user
+## Args:
 
-Returns:
-schemas.Connection: The deleted connection
+    db (AsyncSession): The database session
+    connection_id (UUID): The ID of the connection to delete
+    user (schemas.User): The current user
+
+## Returns:
+
+    connection (schemas.Connection): The deleted connection
 
 </dd>
 </dl>
@@ -900,12 +961,15 @@ await client.connections.deleteConnection("connection_id");
 
 Disconnect from a source connection.
 
-Args:
-db (AsyncSession): The database session
-connection_id (UUID): The ID of the connection to disconnect
-user (schemas.User): The current user
-Returns:
-schemas.Connection: The disconnected connection
+## Args:
+
+    db (AsyncSession): The database session
+    connection_id (UUID): The ID of the connection to disconnect
+    user (schemas.User): The current user
+
+## Returns:
+
+    connection_schema (schemas.Connection): The disconnected connection
 
 </dd>
 </dl>
@@ -970,13 +1034,15 @@ await client.connections.disconnectSourceConnection("connection_id");
 
 Disconnect from a destination connection.
 
-Args:
-db (AsyncSession): The database session
-connection_id (UUID): The ID of the connection to disconnect
-user (schemas.User): The current user
+## Args:
 
-Returns:
-schemas.Connection: The disconnected connection
+    db (AsyncSession): The database session
+    connection_id (UUID): The ID of the connection to disconnect
+    user (schemas.User): The current user
+
+## Returns:
+
+    connection_schema (schemas.Connection): The disconnected connection
 
 </dd>
 </dl>
@@ -1040,6 +1106,12 @@ await client.connections.disconnectDestinationConnection("connection_id");
 <dd>
 
 Get the OAuth2 authorization URL for a source.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source
+    user: The current user
 
 </dd>
 </dl>
@@ -1111,10 +1183,22 @@ This will:
 1. Get the OAuth2 settings for the source
 2. Exchange the authorization code for a token
 3. Create an integration credential with the token
- </dd>
- </dl>
- </dd>
- </dl>
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source
+    code: The authorization code
+    user: The current user
+
+## Returns:
+
+    connection (schemas.Connection): The created connection
+
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -1176,6 +1260,18 @@ await client.connections.sendOauth2Code({
 <dd>
 
 Exchange the OAuth2 authorization code for a white label integration.
+
+## Args:
+
+    db: The database session
+    white_label_id: The ID of the white label integration
+    code: The authorization code
+    user: The current user
+    background_tasks: The background tasks
+
+## Returns:
+
+    connection (schemas.Connection): The created connection
 
 </dd>
 </dl>
@@ -1248,6 +1344,16 @@ await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string");
 
 Get the OAuth2 authorization URL for a white label integration.
 
+## Args:
+
+    db: The database session
+    white_label_id: The ID of the white label integration
+    user: The current user
+
+## Returns:
+
+    str: The OAuth2 authorization URL
+
 </dd>
 </dl>
 </dd>
@@ -1313,6 +1419,18 @@ await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id");
 
 List all syncs for the current user.
 
+## Args:
+
+    db: The database session
+    skip: The number of syncs to skip
+    limit: The number of syncs to return
+    with_source_connection: Whether to include the source connection in the response
+    user: The current user
+
+## Returns:
+
+    list[schemas.Sync] | list[schemas.SyncWithSourceConnection]: A list of syncs
+
 </dd>
 </dl>
 </dd>
@@ -1375,6 +1493,17 @@ await client.sync.listSyncs();
 <dd>
 
 Create a new sync configuration.
+
+## Args:
+
+    db: The database session
+    sync_in: The sync to create
+    user: The current user
+    background_tasks: The background tasks
+
+## Returns:
+
+    sync (schemas.Sync): The created sync
 
 </dd>
 </dl>
@@ -1442,6 +1571,16 @@ await client.sync.createSync({
 
 Get a specific sync by ID.
 
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to get
+    user: The current user
+
+## Returns:
+
+    sync (schemas.Sync): The sync
+
 </dd>
 </dl>
 </dd>
@@ -1504,6 +1643,17 @@ await client.sync.getSync("sync_id");
 <dd>
 
 Delete a sync configuration and optionally its associated data.
+
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to delete
+    delete_data: Whether to delete the data associated with the sync
+    user: The current user
+
+## Returns:
+
+    sync (schemas.Sync): The deleted sync
 
 </dd>
 </dl>
@@ -1576,6 +1726,17 @@ await client.sync.deleteSync("sync_id");
 
 Trigger a sync run.
 
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to run
+    user: The current user
+    background_tasks: The background tasks
+
+## Returns:
+
+    sync_job (schemas.SyncJob): The sync job
+
 </dd>
 </dl>
 </dd>
@@ -1639,6 +1800,16 @@ await client.sync.runSync("sync_id");
 
 List all jobs for a specific sync.
 
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to list jobs for
+    user: The current user
+
+## Returns:
+
+    list[schemas.SyncJob]: A list of sync jobs
+
 </dd>
 </dl>
 </dd>
@@ -1701,6 +1872,17 @@ await client.sync.listSyncJobs("sync_id");
 <dd>
 
 Get details of a specific sync job.
+
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to list jobs for
+    job_id: The ID of the job to get
+    user: The current user
+
+## Returns:
+
+    sync_job (schemas.SyncJob): The sync job
 
 </dd>
 </dl>
@@ -1775,6 +1957,15 @@ await client.sync.getSyncJob("job_id", {
 
 Server-Sent Events (SSE) endpoint to subscribe to a sync job's progress.
 
+## Args:
+
+    job_id: The ID of the job to subscribe to
+    user: The current user
+
+## Returns:
+
+    StreamingResponse: The streaming response
+
 </dd>
 </dl>
 </dd>
@@ -1840,6 +2031,15 @@ await client.sync.subscribeSyncJob("job_id");
 
 List all white labels for the current user's organization.
 
+## Args:
+
+    db: The database session
+    current_user: The current user
+
+## Returns:
+
+    list[schemas.WhiteLabel]: A list of white labels
+
 </dd>
 </dl>
 </dd>
@@ -1894,6 +2094,16 @@ await client.whiteLabels.listWhiteLabels();
 <dd>
 
 Create new white label integration.
+
+## Args:
+
+    db: The database session
+    current_user: The current user
+    white_label_in: The white label to create
+
+## Returns:
+
+    white_label (schemas.WhiteLabel): The created white label
 
 </dd>
 </dl>
@@ -1964,6 +2174,16 @@ await client.whiteLabels.createWhiteLabel({
 
 Get a specific white label integration.
 
+## Args:
+
+    db: The database session
+    white_label_id: The ID of the white label to get
+    current_user: The current user
+
+## Returns:
+
+    white_label (schemas.WhiteLabel): The white label
+
 </dd>
 </dl>
 </dd>
@@ -2026,6 +2246,17 @@ await client.whiteLabels.getWhiteLabel("white_label_id");
 <dd>
 
 Update a white label integration.
+
+## Args:
+
+    db: The database session
+    current_user: The current user
+    white_label_id: The ID of the white label to update
+    white_label_in: The white label to update
+
+## Returns:
+
+    white_label (schemas.WhiteLabel): The updated white label
 
 </dd>
 </dl>
@@ -2098,6 +2329,16 @@ await client.whiteLabels.updateWhiteLabel("white_label_id");
 
 Delete a white label integration.
 
+## Args:
+
+    db: The database session
+    current_user: The current user
+    white_label_id: The ID of the white label to delete
+
+## Returns:
+
+    white_label (schemas.WhiteLabel): The deleted white label
+
 </dd>
 </dl>
 </dd>
@@ -2161,6 +2402,16 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 
 Generate the OAuth2 authorization URL by delegating to oauth2_service.
 
+## Args:
+
+    db: The database session
+    white_label_id: The ID of the white label to get the auth URL for
+    user: The current user
+
+## Returns:
+
+    str: The OAuth2 authorization URL
+
 </dd>
 </dl>
 </dd>
@@ -2223,6 +2474,17 @@ await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
 <dd>
 
 Exchange OAuth2 code for tokens and create connection.
+
+## Args:
+
+    white_label_id: The ID of the white label to exchange the code for
+    code: The OAuth2 code
+    db: The database session
+    user: The current user
+
+## Returns:
+
+    connection (schemas.Connection): The created connection
 
 </dd>
 </dl>
@@ -2295,6 +2557,16 @@ await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", "string"
 
 List all syncs for a specific white label.
 
+## Args:
+
+    white_label_id: The ID of the white label to list syncs for
+    db: The database session
+    current_user: The current user
+
+## Returns:
+
+    list[schemas.Sync]: A list of syncs
+
 </dd>
 </dl>
 </dd>
@@ -2334,150 +2606,6 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 <dd>
 
 **requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## Search
-
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">searchSummary</a>({ ...params }) -> AirweaveSDK.SearchSummary</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Search for summarized information.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.search.searchSummary({
-    query: "query",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SearchSummarySearchSummaryGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Search.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> AirweaveSDK.SearchResult[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Search for a specific item.
-
-## Args:
-
-    db (AsyncSession): The database session.
-    query (str): The query to search for.
-    sync_id (Optional[UUID]): The sync ID to search for.
-    metadata_filter (Optional[list[MetadataSearchFilter]]): The filter to search for.
-    user (schemas.User): The user to search for.
-
-## Returns:
-
-    list[SearchResult]: The search results.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.search.search({
-    query: "query",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SearchSearchObjectsGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Search.RequestOptions`
 
 </dd>
 </dl>
