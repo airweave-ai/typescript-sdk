@@ -9,7 +9,7 @@ import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 
-export declare namespace Sources {
+export declare namespace Search {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Override the x-api-key header */
@@ -30,38 +30,53 @@ export declare namespace Sources {
     }
 }
 
-export class Sources {
-    constructor(protected readonly _options: Sources.Options = {}) {}
+export class Search {
+    constructor(protected readonly _options: Search.Options = {}) {}
 
     /**
-     * Get source by id.
+     * Search for summarized information.
      *
-     * Args:
-     * ----
-     *     db (AsyncSession): The database session.
-     *     short_name (str): The short name of the source.
-     *     user (schemas.User): The current user.
-     *
-     * Returns:
-     * -------
-     *     schemas.Source: The source object.
-     *
-     * @param {string} shortName
-     * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.SearchSummarySearchSummaryGetRequest} request
+     * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSource("short_name")
+     *     await client.search.searchSummary({
+     *         query: "query"
+     *     })
      */
-    public async readSource(
-        shortName: string,
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<AirweaveSDK.SourceWithConfigFields> {
+    public async searchSummary(
+        request: AirweaveSDK.SearchSummarySearchSummaryGetRequest,
+        requestOptions?: Search.RequestOptions,
+    ): Promise<AirweaveSDK.SearchSummary> {
+        const { query, topK, searchMethod, syncId, metaDataFilter } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["query"] = query;
+        if (topK != null) {
+            _queryParams["top_k"] = topK.toString();
+        }
+
+        if (searchMethod != null) {
+            _queryParams["search_method"] = searchMethod;
+        }
+
+        if (syncId != null) {
+            _queryParams["sync_id"] = syncId;
+        }
+
+        if (metaDataFilter != null) {
+            if (Array.isArray(metaDataFilter)) {
+                _queryParams["meta_data_filter"] = metaDataFilter.map((item) => item);
+            } else {
+                _queryParams["meta_data_filter"] = metaDataFilter;
+            }
+        }
+
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                `sources/detail/${encodeURIComponent(shortName)}`,
+                "search/summary",
             ),
             method: "GET",
             headers: {
@@ -78,13 +93,14 @@ export class Sources {
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.SourceWithConfigFields.parseOrThrow(_response.body, {
+            return serializers.SearchSummary.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -118,9 +134,7 @@ export class Sources {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /sources/detail/{short_name}.",
-                );
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search/summary.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -129,29 +143,53 @@ export class Sources {
     }
 
     /**
-     * Get all sources for the current user.
+     * Search for a specific item.
      *
      * Args:
-     * -----
-     *     db: The database session
-     *     user: The current user
+     * ----
+     *     db (AsyncSession): The database session.
+     *     query (str): The query to search for.
+     *     sync_id (Optional[UUID]): The sync ID to search for.
+     *     metadata_filter (Optional[list[MetadataSearchFilter]]): The filter to search for.
+     *     user (schemas.User): The user to search for.
      *
      * Returns:
-     * --------
-     *     list[schemas.Source]: The list of sources.
+     * -------
+     *     list[SearchResult]: The search results.
      *
-     * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.SearchSearchObjectsGetRequest} request
+     * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSources()
+     *     await client.search.search({
+     *         query: "query"
+     *     })
      */
-    public async readSources(requestOptions?: Sources.RequestOptions): Promise<AirweaveSDK.Source[]> {
+    public async search(
+        request: AirweaveSDK.SearchSearchObjectsGetRequest,
+        requestOptions?: Search.RequestOptions,
+    ): Promise<AirweaveSDK.SearchResult[]> {
+        const { query, syncId, metadataFilter } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["query"] = query;
+        if (syncId != null) {
+            _queryParams["sync_id"] = syncId;
+        }
+
+        if (metadataFilter != null) {
+            if (Array.isArray(metadataFilter)) {
+                _queryParams["metadata_filter"] = metadataFilter.map((item) => item);
+            } else {
+                _queryParams["metadata_filter"] = metadataFilter;
+            }
+        }
+
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "sources/list",
+                "search/objects",
             ),
             method: "GET",
             headers: {
@@ -168,13 +206,14 @@ export class Sources {
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.sources.readSources.Response.parseOrThrow(_response.body, {
+            return serializers.search.search.Response.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -208,7 +247,7 @@ export class Sources {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sources/list.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search/objects.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
