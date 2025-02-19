@@ -11,10 +11,10 @@ export const SyncJob: core.serialization.ObjectSchema<serializers.SyncJob.Raw, A
     core.serialization.object({
         syncId: core.serialization.property("sync_id", core.serialization.string()),
         status: SyncJobStatus.optional(),
-        chunksDetected: core.serialization.property("chunks_detected", core.serialization.number().optional()),
-        chunksInserted: core.serialization.property("chunks_inserted", core.serialization.number().optional()),
-        chunksDeleted: core.serialization.property("chunks_deleted", core.serialization.number().optional()),
-        chunksSkipped: core.serialization.property("chunks_skipped", core.serialization.number().optional()),
+        entitiesDetected: core.serialization.property("entities_detected", core.serialization.number().optional()),
+        entitiesInserted: core.serialization.property("entities_inserted", core.serialization.number().optional()),
+        entitiesDeleted: core.serialization.property("entities_deleted", core.serialization.number().optional()),
+        entitiesSkipped: core.serialization.property("entities_skipped", core.serialization.number().optional()),
         error: core.serialization.string().optional(),
         id: core.serialization.string(),
         organizationId: core.serialization.property("organization_id", core.serialization.string()),
@@ -31,10 +31,10 @@ export declare namespace SyncJob {
     export interface Raw {
         sync_id: string;
         status?: SyncJobStatus.Raw | null;
-        chunks_detected?: number | null;
-        chunks_inserted?: number | null;
-        chunks_deleted?: number | null;
-        chunks_skipped?: number | null;
+        entities_detected?: number | null;
+        entities_inserted?: number | null;
+        entities_deleted?: number | null;
+        entities_skipped?: number | null;
         error?: string | null;
         id: string;
         organization_id: string;

@@ -10,10 +10,10 @@ import * as AirweaveSDK from "../index";
 export interface SyncJob {
     syncId: string;
     status?: AirweaveSDK.SyncJobStatus;
-    chunksDetected?: number;
-    chunksInserted?: number;
-    chunksDeleted?: number;
-    chunksSkipped?: number;
+    entitiesDetected?: number;
+    entitiesInserted?: number;
+    entitiesDeleted?: number;
+    entitiesSkipped?: number;
     error?: string;
     id: string;
     organizationId: string;
