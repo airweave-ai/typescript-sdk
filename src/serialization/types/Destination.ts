@@ -15,6 +15,15 @@ export const Destination: core.serialization.ObjectSchema<serializers.Destinatio
         className: core.serialization.property("class_name", core.serialization.string()),
         authType: core.serialization.property("auth_type", AuthType.optional()),
         authConfigClass: core.serialization.property("auth_config_class", core.serialization.string().optional()),
+        inputEntityDefinitionIds: core.serialization.property(
+            "input_entity_definition_ids",
+            core.serialization.list(core.serialization.string()).optional(),
+        ),
+        organizationId: core.serialization.property("organization_id", core.serialization.string().optional()),
+        configSchema: core.serialization.property(
+            "config_schema",
+            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+        ),
         id: core.serialization.string(),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
@@ -28,6 +37,9 @@ export declare namespace Destination {
         class_name: string;
         auth_type?: AuthType.Raw | null;
         auth_config_class?: string | null;
+        input_entity_definition_ids?: string[] | null;
+        organization_id?: string | null;
+        config_schema?: Record<string, unknown> | null;
         id: string;
         created_at: string;
         modified_at: string;

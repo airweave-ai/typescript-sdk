@@ -87,8 +87,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -185,8 +185,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -276,8 +276,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -378,8 +378,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -435,6 +435,103 @@ export class Sync {
     }
 
     /**
+     * Update a sync configuration.
+     *
+     * Args:
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to update
+     *     sync_update: The sync update data
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     sync (schemas.Sync): The updated sync
+     *
+     * @param {string} syncId
+     * @param {AirweaveSDK.SyncUpdate} request
+     * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.sync.updateSync("sync_id")
+     */
+    public async updateSync(
+        syncId: string,
+        request: AirweaveSDK.SyncUpdate = {},
+        requestOptions?: Sync.RequestOptions,
+    ): Promise<AirweaveSDK.Sync> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `sync/${encodeURIComponent(syncId)}`,
+            ),
+            method: "PATCH",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.SyncUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Sync.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling PATCH /sync/{sync_id}.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Trigger a sync run.
      *
      * Args:
@@ -470,8 +567,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -560,8 +657,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -661,8 +758,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -751,8 +848,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.1.24",
-                "User-Agent": "@airweave/sdk/0.1.24",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -796,6 +893,86 @@ export class Sync {
                 throw new errors.AirweaveSDKTimeoutError(
                     "Timeout exceeded when calling GET /sync/job/{job_id}/subscribe.",
                 );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Get the DAG for a specific sync.
+     *
+     * @param {string} syncId
+     * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.sync.getSyncDag("sync_id")
+     */
+    public async getSyncDag(syncId: string, requestOptions?: Sync.RequestOptions): Promise<AirweaveSDK.SyncDag> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `sync/${encodeURIComponent(syncId)}/dag`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.1.25",
+                "User-Agent": "@airweave/sdk/0.1.25",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.SyncDag.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sync/{sync_id}/dag.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

@@ -1712,6 +1712,88 @@ await client.sync.deleteSync("sync_id");
 </dl>
 </details>
 
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">updateSync</a>(syncId, { ...params }) -> AirweaveSDK.Sync</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a sync configuration.
+
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to update
+    sync_update: The sync update data
+    user: The current user
+
+## Returns:
+
+    sync (schemas.Sync): The updated sync
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.sync.updateSync("sync_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SyncUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Sync.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">runSync</a>(syncId) -> AirweaveSDK.SyncJob</code></summary>
 <dl>
 <dd>
@@ -1997,6 +2079,69 @@ await client.sync.subscribeSyncJob("job_id");
 <dd>
 
 **jobId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Sync.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncDag</a>(syncId) -> AirweaveSDK.SyncDag</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the DAG for a specific sync.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.sync.getSyncDag("sync_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**syncId:** `string`
 
 </dd>
 </dl>
@@ -2606,6 +2751,1123 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 <dd>
 
 **requestOptions:** `WhiteLabels.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Dag
+
+<details><summary><code>client.dag.<a href="/src/api/resources/dag/client/Client.ts">getSyncDag</a>(syncId) -> AirweaveSDK.SyncDag</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the DAG definition for a sync.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.dag.getSyncDag("sync_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Dag.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.dag.<a href="/src/api/resources/dag/client/Client.ts">createSyncDag</a>(syncId, { ...params }) -> AirweaveSDK.SyncDag</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new DAG definition for a sync.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.dag.createSyncDag("sync_id", {
+    name: "name",
+    syncDagCreateSyncId: "sync_id",
+    nodes: [
+        {
+            type: "source",
+            name: "name",
+        },
+    ],
+    edges: [
+        {
+            fromNodeId: "from_node_id",
+            toNodeId: "to_node_id",
+        },
+    ],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SyncDagCreate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Dag.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.dag.<a href="/src/api/resources/dag/client/Client.ts">updateSyncDag</a>(syncId, { ...params }) -> AirweaveSDK.SyncDag</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a DAG definition for a sync.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.dag.updateSyncDag("sync_id", {
+    name: "name",
+    syncDagUpdateSyncId: "sync_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SyncDagUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Dag.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.dag.<a href="/src/api/resources/dag/client/Client.ts">initializeDag</a>({ ...params }) -> AirweaveSDK.SyncDag</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Initialize a new DAG with source, entities, and destination.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.dag.initializeDag({
+    syncId: "sync_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.InitializeDagDagInitGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Dag.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Entities
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityDefinitions</a>() -> AirweaveSDK.EntityDefinition[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all entity definitions for the current user's organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.listEntityDefinitions();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">createEntityDefinition</a>({ ...params }) -> AirweaveSDK.EntityDefinition</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new entity definition.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.createEntityDefinition({
+    name: "name",
+    type: "file",
+    entitySchema: ["entity_schema"],
+    moduleName: "module_name",
+    className: "class_name",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.EntityDefinitionCreate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">updateEntityDefinition</a>(definitionId, { ...params }) -> AirweaveSDK.EntityDefinition</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an entity definition.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.updateEntityDefinition("definition_id", {
+    name: "name",
+    type: "file",
+    entitySchema: ["entity_schema"],
+    moduleName: "module_name",
+    className: "class_name",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**definitionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.EntityDefinitionUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityRelations</a>() -> AirweaveSDK.EntityRelation[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all entity relations for the current user's organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.listEntityRelations();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">createEntityRelation</a>({ ...params }) -> AirweaveSDK.EntityRelation</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new entity relation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.createEntityRelation({
+    name: "name",
+    fromEntityId: "from_entity_id",
+    toEntityId: "to_entity_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.EntityRelationCreate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">updateEntityRelation</a>(relationId, { ...params }) -> AirweaveSDK.EntityRelation</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update an entity relation.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.updateEntityRelation("relation_id", {
+    name: "name",
+    fromEntityId: "from_entity_id",
+    toEntityId: "to_entity_id",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**relationId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.EntityRelationUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">getEntityDefinitionsByIds</a>({ ...params }) -> AirweaveSDK.EntityDefinition[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get multiple entity definitions by their IDs.
+
+Args:
+ids: List of entity definition IDs to fetch
+db: Database session
+current_user: Current authenticated user
+
+Returns:
+List of entity definitions matching the provided IDs
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.getEntityDefinitionsByIds(["string"]);
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `string[]`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## Transformers
+
+<details><summary><code>client.transformers.<a href="/src/api/resources/transformers/client/Client.ts">listTransformers</a>() -> AirweaveSDK.Transformer[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all transformers for the current user's organization.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.transformers.listTransformers();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Transformers.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.transformers.<a href="/src/api/resources/transformers/client/Client.ts">createTransformer</a>({ ...params }) -> AirweaveSDK.Transformer</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new transformer.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.transformers.createTransformer({
+    name: "name",
+    methodName: "method_name",
+    moduleName: "module_name",
+    inputEntityDefinitionIds: ["input_entity_definition_ids"],
+    outputEntityDefinitionIds: ["output_entity_definition_ids"],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.TransformerCreate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Transformers.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.transformers.<a href="/src/api/resources/transformers/client/Client.ts">updateTransformer</a>(transformerId, { ...params }) -> AirweaveSDK.Transformer</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a transformer.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.transformers.updateTransformer("transformer_id", {
+    name: "name",
+    methodName: "method_name",
+    moduleName: "module_name",
+    inputEntityDefinitionIds: ["input_entity_definition_ids"],
+    outputEntityDefinitionIds: ["output_entity_definition_ids"],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**transformerId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.TransformerUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Transformers.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## CursorDevelopment
+
+<details><summary><code>client.cursorDevelopment.<a href="/src/api/resources/cursorDevelopment/client/Client.ts">checkConnectionStatus</a>(shortName) -> AirweaveSDK.Connection[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Check if a source connection exists for the given short_name.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source to check
+    user: The admin user
+
+## Returns:
+
+    List[schemas.Connection]: List of source connections for the given short_name
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cursorDevelopment.checkConnectionStatus("short_name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**shortName:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CursorDevelopment.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cursorDevelopment.<a href="/src/api/resources/cursorDevelopment/client/Client.ts">testSync</a>(shortName) -> AirweaveSDK.SyncJob</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Run a sync for a specific source by short_name.
+
+This endpoint is used for testing source integrations during development.
+It finds the first available source connection for the given short_name and
+runs a sync on it.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source to sync
+    background_tasks: The background tasks
+    user: The admin user
+
+## Returns:
+
+    schemas.SyncJob: The created sync job
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cursorDevelopment.testSync("short_name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**shortName:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CursorDevelopment.RequestOptions`
 
 </dd>
 </dl>

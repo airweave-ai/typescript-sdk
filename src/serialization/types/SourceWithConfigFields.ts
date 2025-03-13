@@ -18,6 +18,15 @@ export const SourceWithConfigFields: core.serialization.ObjectSchema<
     authConfigClass: core.serialization.property("auth_config_class", core.serialization.string().optional()),
     shortName: core.serialization.property("short_name", core.serialization.string()),
     className: core.serialization.property("class_name", core.serialization.string()),
+    outputEntityDefinitionIds: core.serialization.property(
+        "output_entity_definition_ids",
+        core.serialization.list(core.serialization.string()).optional(),
+    ),
+    organizationId: core.serialization.property("organization_id", core.serialization.string().optional()),
+    configSchema: core.serialization.property(
+        "config_schema",
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    ),
     id: core.serialization.string(),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
@@ -32,6 +41,9 @@ export declare namespace SourceWithConfigFields {
         auth_config_class?: string | null;
         short_name: string;
         class_name: string;
+        output_entity_definition_ids?: string[] | null;
+        organization_id?: string | null;
+        config_schema?: Record<string, unknown> | null;
         id: string;
         created_at: string;
         modified_at: string;

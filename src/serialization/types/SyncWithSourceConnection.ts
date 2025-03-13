@@ -24,6 +24,7 @@ export const SyncWithSourceConnection: core.serialization.ObjectSchema<
         core.serialization.string().optional(),
     ),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
+    nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
     whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
     whiteLabelUserIdentifier: core.serialization.property(
         "white_label_user_identifier",
@@ -33,13 +34,13 @@ export const SyncWithSourceConnection: core.serialization.ObjectSchema<
         "sync_metadata",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
     ),
+    status: SyncStatus,
     id: core.serialization.string(),
     organizationId: core.serialization.property("organization_id", core.serialization.string()),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
     createdByEmail: core.serialization.property("created_by_email", core.serialization.string()),
     modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string()),
-    status: SyncStatus,
     sourceConnection: core.serialization.property("source_connection", Connection.optional()),
 });
 
@@ -51,16 +52,17 @@ export declare namespace SyncWithSourceConnection {
         destination_connection_id?: string | null;
         embedding_model_connection_id?: string | null;
         cron_schedule?: string | null;
+        next_scheduled_run?: string | null;
         white_label_id?: string | null;
         white_label_user_identifier?: string | null;
         sync_metadata?: Record<string, unknown> | null;
+        status: SyncStatus.Raw;
         id: string;
         organization_id: string;
         created_at: string;
         modified_at: string;
         created_by_email: string;
         modified_by_email: string;
-        status: SyncStatus.Raw;
         source_connection?: Connection.Raw | null;
     }
 }

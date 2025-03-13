@@ -14,6 +14,9 @@ export interface Destination {
     className: string;
     authType?: AirweaveSDK.AuthType;
     authConfigClass?: string;
+    inputEntityDefinitionIds?: string[];
+    organizationId?: string;
+    configSchema?: Record<string, unknown>;
     id: string;
     createdAt: Date;
     modifiedAt: Date;

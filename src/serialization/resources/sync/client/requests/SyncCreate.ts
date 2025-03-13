@@ -5,6 +5,7 @@
 import * as serializers from "../../../../index";
 import * as AirweaveSDK from "../../../../../api/index";
 import * as core from "../../../../../core";
+import { SyncStatus } from "../../../../types/SyncStatus";
 
 export const SyncCreate: core.serialization.Schema<serializers.SyncCreate.Raw, AirweaveSDK.SyncCreate> =
     core.serialization.object({
@@ -20,6 +21,7 @@ export const SyncCreate: core.serialization.Schema<serializers.SyncCreate.Raw, A
             core.serialization.string().optional(),
         ),
         cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
+        nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
         whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
         whiteLabelUserIdentifier: core.serialization.property(
             "white_label_user_identifier",
@@ -29,6 +31,7 @@ export const SyncCreate: core.serialization.Schema<serializers.SyncCreate.Raw, A
             "sync_metadata",
             core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         ),
+        status: SyncStatus.optional(),
         runImmediately: core.serialization.property("run_immediately", core.serialization.boolean().optional()),
     });
 
@@ -40,9 +43,11 @@ export declare namespace SyncCreate {
         destination_connection_id?: string | null;
         embedding_model_connection_id?: string | null;
         cron_schedule?: string | null;
+        next_scheduled_run?: string | null;
         white_label_id?: string | null;
         white_label_user_identifier?: string | null;
         sync_metadata?: Record<string, unknown> | null;
+        status?: SyncStatus.Raw | null;
         run_immediately?: boolean | null;
     }
 }

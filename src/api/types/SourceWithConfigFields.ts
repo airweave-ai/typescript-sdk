@@ -14,6 +14,9 @@ export interface SourceWithConfigFields {
     authConfigClass?: string;
     shortName: string;
     className: string;
+    outputEntityDefinitionIds?: string[];
+    organizationId?: string;
+    configSchema?: Record<string, unknown>;
     id: string;
     createdAt: Date;
     modifiedAt: Date;

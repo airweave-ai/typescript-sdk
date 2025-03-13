@@ -14,14 +14,15 @@ export interface Sync {
     destinationConnectionId?: string;
     embeddingModelConnectionId?: string;
     cronSchedule?: string;
+    nextScheduledRun?: Date;
     whiteLabelId?: string;
     whiteLabelUserIdentifier?: string;
     syncMetadata?: Record<string, unknown>;
+    status: AirweaveSDK.SyncStatus;
     id: string;
     organizationId: string;
     createdAt: Date;
     modifiedAt: Date;
     createdByEmail: string;
     modifiedByEmail: string;
-    status: AirweaveSDK.SyncStatus;
 }

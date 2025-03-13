@@ -1,10 +1,18 @@
 export * as sync from "./sync";
 export * from "./sync/types";
+export * as entities from "./entities";
+export * from "./entities/types";
 export * as sources from "./sources";
 export * as destinations from "./destinations";
 export * as embeddingModels from "./embeddingModels";
 export * as connections from "./connections";
 export * as whiteLabels from "./whiteLabels";
+export * as transformers from "./transformers";
+export * as cursorDevelopment from "./cursorDevelopment";
 export * from "./connections/client/requests";
 export * from "./sync/client/requests";
 export * from "./whiteLabels/client/requests";
+export * as dag from "./dag";
+export * from "./dag/client/requests";
+export * from "./entities/client/requests";
+export * from "./transformers/client/requests";
