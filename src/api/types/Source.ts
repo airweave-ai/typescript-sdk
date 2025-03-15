@@ -17,6 +17,7 @@ export interface Source {
     outputEntityDefinitionIds?: string[];
     organizationId?: string;
     configSchema?: Record<string, unknown>;
+    labels?: string[];
     id: string;
     createdAt: Date;
     modifiedAt: Date;

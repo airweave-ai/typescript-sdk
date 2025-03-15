@@ -24,6 +24,7 @@ export const Source: core.serialization.ObjectSchema<serializers.Source.Raw, Air
             "config_schema",
             core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
         ),
+        labels: core.serialization.list(core.serialization.string()).optional(),
         id: core.serialization.string(),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
@@ -40,6 +41,7 @@ export declare namespace Source {
         output_entity_definition_ids?: string[] | null;
         organization_id?: string | null;
         config_schema?: Record<string, unknown> | null;
+        labels?: string[] | null;
         id: string;
         created_at: string;
         modified_at: string;

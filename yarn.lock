@@ -1308,9 +1308,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.116"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.116.tgz#b779d73cd0cc75305d12ae4f061d7f7bcee4c761"
-  integrity sha512-mufxTCJzLBQVvSdZzX1s5YAuXsN1M4tTyYxOOL1TcSKtIzQ9rjIrm7yFK80rN5dwGTePgdoABDSHpuVtRQh0Zw==
+  version "1.5.119"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.119.tgz#4e105e419209b33e1c44b4d1b5fc6fb27fac0209"
+  integrity sha512-Ku4NMzUjz3e3Vweh7PhApPrZSS4fyiCIbcIrG9eKrriYVLmbMepETR/v6SU7xPm98QTqMSYiCwfO89QNjXLkbQ==
 
 emittery@^0.13.1:
   version "0.13.1"

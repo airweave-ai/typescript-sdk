@@ -8,7 +8,6 @@ export * as embeddingModels from "./embeddingModels";
 export * as connections from "./connections";
 export * as whiteLabels from "./whiteLabels";
 export * as transformers from "./transformers";
-export * as cursorDevelopment from "./cursorDevelopment";
 export * from "./connections/client/requests";
 export * from "./sync/client/requests";
 export * from "./whiteLabels/client/requests";

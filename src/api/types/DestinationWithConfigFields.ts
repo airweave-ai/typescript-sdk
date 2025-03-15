@@ -17,6 +17,7 @@ export interface DestinationWithConfigFields {
     inputEntityDefinitionIds?: string[];
     organizationId?: string;
     configSchema?: Record<string, unknown>;
+    labels?: string[];
     id: string;
     createdAt: Date;
     modifiedAt: Date;
