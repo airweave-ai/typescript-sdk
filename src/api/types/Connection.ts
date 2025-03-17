@@ -14,7 +14,7 @@ export interface Connection {
     status: AirweaveSDK.ConnectionStatus;
     shortName: string;
     id: string;
-    organizationId: string;
-    createdByEmail: string;
-    modifiedByEmail: string;
+    organizationId?: string;
+    createdByEmail?: string;
+    modifiedByEmail?: string;
 }

@@ -10,10 +10,6 @@ import * as AirweaveSDK from "../../../../index";
  */
 export interface SyncUpdate {
     name?: string;
-    schedule?: string;
-    sourceConnectionId?: string;
-    destinationConnectionId?: string;
-    embeddingModelConnectionId?: string;
     cronSchedule?: string;
     nextScheduledRun?: Date;
     whiteLabelId?: string;

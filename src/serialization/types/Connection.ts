@@ -19,9 +19,9 @@ export const Connection: core.serialization.ObjectSchema<serializers.Connection.
         status: ConnectionStatus,
         shortName: core.serialization.property("short_name", core.serialization.string()),
         id: core.serialization.string(),
-        organizationId: core.serialization.property("organization_id", core.serialization.string()),
-        createdByEmail: core.serialization.property("created_by_email", core.serialization.string()),
-        modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string()),
+        organizationId: core.serialization.property("organization_id", core.serialization.string().optional()),
+        createdByEmail: core.serialization.property("created_by_email", core.serialization.string().optional()),
+        modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string().optional()),
     });
 
 export declare namespace Connection {
@@ -32,8 +32,8 @@ export declare namespace Connection {
         status: ConnectionStatus.Raw;
         short_name: string;
         id: string;
-        organization_id: string;
-        created_by_email: string;
-        modified_by_email: string;
+        organization_id?: string | null;
+        created_by_email?: string | null;
+        modified_by_email?: string | null;
     }
 }

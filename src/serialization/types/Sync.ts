@@ -9,16 +9,16 @@ import { SyncStatus } from "./SyncStatus";
 
 export const Sync: core.serialization.ObjectSchema<serializers.Sync.Raw, AirweaveSDK.Sync> = core.serialization.object({
     name: core.serialization.string(),
-    description: core.serialization.string().optional(),
     sourceConnectionId: core.serialization.property("source_connection_id", core.serialization.string()),
-    destinationConnectionId: core.serialization.property(
-        "destination_connection_id",
-        core.serialization.string().optional(),
-    ),
     embeddingModelConnectionId: core.serialization.property(
         "embedding_model_connection_id",
         core.serialization.string().optional(),
     ),
+    destinationConnectionIds: core.serialization.property(
+        "destination_connection_ids",
+        core.serialization.list(core.serialization.string()),
+    ),
+    description: core.serialization.string().optional(),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
     nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
     whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
@@ -42,10 +42,10 @@ export const Sync: core.serialization.ObjectSchema<serializers.Sync.Raw, Airweav
 export declare namespace Sync {
     export interface Raw {
         name: string;
-        description?: string | null;
         source_connection_id: string;
-        destination_connection_id?: string | null;
         embedding_model_connection_id?: string | null;
+        destination_connection_ids: string[];
+        description?: string | null;
         cron_schedule?: string | null;
         next_scheduled_run?: string | null;
         white_label_id?: string | null;

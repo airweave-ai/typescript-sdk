@@ -10,16 +10,6 @@ import { SyncStatus } from "../../../../types/SyncStatus";
 export const SyncUpdate: core.serialization.Schema<serializers.SyncUpdate.Raw, AirweaveSDK.SyncUpdate> =
     core.serialization.object({
         name: core.serialization.string().optional(),
-        schedule: core.serialization.string().optional(),
-        sourceConnectionId: core.serialization.property("source_connection_id", core.serialization.string().optional()),
-        destinationConnectionId: core.serialization.property(
-            "destination_connection_id",
-            core.serialization.string().optional(),
-        ),
-        embeddingModelConnectionId: core.serialization.property(
-            "embedding_model_connection_id",
-            core.serialization.string().optional(),
-        ),
         cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
         nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
         whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
@@ -37,10 +27,6 @@ export const SyncUpdate: core.serialization.Schema<serializers.SyncUpdate.Raw, A
 export declare namespace SyncUpdate {
     export interface Raw {
         name?: string | null;
-        schedule?: string | null;
-        source_connection_id?: string | null;
-        destination_connection_id?: string | null;
-        embedding_model_connection_id?: string | null;
         cron_schedule?: string | null;
         next_scheduled_run?: string | null;
         white_label_id?: string | null;

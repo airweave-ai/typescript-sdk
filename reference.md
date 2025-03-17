@@ -1522,6 +1522,7 @@ Create a new sync configuration.
 await client.sync.createSync({
     name: "name",
     sourceConnectionId: "source_connection_id",
+    destinationConnectionIds: ["destination_connection_ids"],
 });
 ```
 
