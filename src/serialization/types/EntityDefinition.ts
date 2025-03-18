@@ -20,9 +20,7 @@ export const EntityDefinition: core.serialization.ObjectSchema<
     moduleName: core.serialization.property("module_name", core.serialization.string()),
     className: core.serialization.property("class_name", core.serialization.string()),
     id: core.serialization.string(),
-    organizationId: core.serialization.property("organization_id", core.serialization.string()),
-    createdByEmail: core.serialization.property("created_by_email", core.serialization.string()),
-    modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string()),
+    organizationId: core.serialization.property("organization_id", core.serialization.string().optional()),
 });
 
 export declare namespace EntityDefinition {
@@ -35,8 +33,6 @@ export declare namespace EntityDefinition {
         module_name: string;
         class_name: string;
         id: string;
-        organization_id: string;
-        created_by_email: string;
-        modified_by_email: string;
+        organization_id?: string | null;
     }
 }

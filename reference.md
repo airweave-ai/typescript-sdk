@@ -1558,6 +1558,80 @@ await client.sync.createSync({
 </dl>
 </details>
 
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">listAllJobs</a>({ ...params }) -> AirweaveSDK.SyncJob[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+List all sync jobs across all syncs.
+
+## Args:
+
+    db: The database session
+    skip: The number of jobs to skip
+    limit: The number of jobs to return
+    user: The current user
+
+## Returns:
+
+    list[schemas.SyncJob]: A list of all sync jobs
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.sync.listAllJobs();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListAllJobsSyncJobsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Sync.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSync</a>(syncId) -> AirweaveSDK.Sync</code></summary>
 <dl>
 <dd>
@@ -1942,7 +2016,7 @@ await client.sync.listSyncJobs("sync_id");
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncJob</a>(jobId, { ...params }) -> AirweaveSDK.SyncJob</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncJob</a>(syncId, jobId) -> AirweaveSDK.SyncJob</code></summary>
 <dl>
 <dd>
 
@@ -1981,9 +2055,7 @@ Get details of a specific sync job.
 <dd>
 
 ```typescript
-await client.sync.getSyncJob("job_id", {
-    syncId: "sync_id",
-});
+await client.sync.getSyncJob("sync_id", "job_id");
 ```
 
 </dd>
@@ -1999,7 +2071,7 @@ await client.sync.getSyncJob("job_id", {
 <dl>
 <dd>
 
-**jobId:** `string`
+**syncId:** `string`
 
 </dd>
 </dl>
@@ -2007,7 +2079,7 @@ await client.sync.getSyncJob("job_id", {
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.GetSyncJobSyncJobJobIdGetRequest`
+**jobId:** `string`
 
 </dd>
 </dl>
@@ -3505,6 +3577,71 @@ await client.entities.getEntityDefinitionsByIds(["string"]);
 <dd>
 
 **request:** `string[]`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Entities.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">getEntityDefinitionsBySourceShortName</a>({ ...params }) -> AirweaveSDK.EntityDefinition[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all entity definitions for a given source.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.entities.getEntityDefinitionsBySourceShortName({
+    sourceShortName: "source_short_name",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetEntityDefinitionsBySourceShortNameEntitiesDefinitionsBySourceGetRequest`
 
 </dd>
 </dl>

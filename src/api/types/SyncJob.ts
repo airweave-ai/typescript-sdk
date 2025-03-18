@@ -24,4 +24,6 @@ export interface SyncJob {
     startedAt?: Date;
     completedAt?: Date;
     failedAt?: Date;
+    /** Name of the sync, populated from join query */
+    syncName?: string;
 }

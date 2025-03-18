@@ -16,7 +16,5 @@ export interface EntityDefinition {
     moduleName: string;
     className: string;
     id: string;
-    organizationId: string;
-    createdByEmail: string;
-    modifiedByEmail: string;
+    organizationId?: string;
 }

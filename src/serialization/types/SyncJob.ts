@@ -25,6 +25,7 @@ export const SyncJob: core.serialization.ObjectSchema<serializers.SyncJob.Raw, A
         startedAt: core.serialization.property("started_at", core.serialization.date().optional()),
         completedAt: core.serialization.property("completed_at", core.serialization.date().optional()),
         failedAt: core.serialization.property("failed_at", core.serialization.date().optional()),
+        syncName: core.serialization.property("sync_name", core.serialization.string().optional()),
     });
 
 export declare namespace SyncJob {
@@ -45,5 +46,6 @@ export declare namespace SyncJob {
         started_at?: string | null;
         completed_at?: string | null;
         failed_at?: string | null;
+        sync_name?: string | null;
     }
 }
