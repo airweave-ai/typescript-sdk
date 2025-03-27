@@ -9,7 +9,7 @@ import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 
-export declare namespace Users {
+export declare namespace Search {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Override the x-api-key header */
@@ -30,32 +30,46 @@ export declare namespace Users {
     }
 }
 
-export class Users {
-    constructor(protected readonly _options: Users.Options = {}) {}
+export class Search {
+    constructor(protected readonly _options: Search.Options = {}) {}
 
     /**
-     * Get current user.
+     * Search for documents within a specific sync.
      *
      * Args:
-     * ----
-     *     current_user (User): The current user.
+     * -----
+     *     db: The database session
+     *     sync_id: The ID of the sync to search within
+     *     query: The search query text
+     *     user: The current user
      *
      * Returns:
-     * -------
-     *     schemas.User: The user object.
+     * --------
+     *     list[dict]: A list of search results
      *
-     * @param {Users.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.SearchSearchGetRequest} request
+     * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.users.readUser()
+     *     await client.search.search({
+     *         syncId: "sync_id",
+     *         query: "query"
+     *     })
      */
-    public async readUser(requestOptions?: Users.RequestOptions): Promise<AirweaveSDK.User> {
+    public async search(
+        request: AirweaveSDK.SearchSearchGetRequest,
+        requestOptions?: Search.RequestOptions,
+    ): Promise<Record<string, unknown>[]> {
+        const { syncId, query } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["sync_id"] = syncId;
+        _queryParams["query"] = query;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "users/",
+                "search/",
             ),
             method: "GET",
             headers: {
@@ -72,13 +86,14 @@ export class Users {
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.User.parseOrThrow(_response.body, {
+            return serializers.search.search.Response.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -112,7 +127,7 @@ export class Users {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /users/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

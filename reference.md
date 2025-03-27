@@ -2233,6 +2233,85 @@ await client.sync.getSyncDag("sync_id");
 </dl>
 </details>
 
+## Search
+
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> Record<string, unknown>[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search for documents within a specific sync.
+
+## Args:
+
+    db: The database session
+    sync_id: The ID of the sync to search within
+    query: The search query text
+    user: The current user
+
+## Returns:
+
+    list[dict]: A list of search results
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.search.search({
+    syncId: "sync_id",
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchSearchGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Search.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## WhiteLabels
 
 <details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>() -> AirweaveSDK.WhiteLabel[]</code></summary>
@@ -3853,6 +3932,159 @@ await client.transformers.updateTransformer("transformer_id", {
 <dd>
 
 **requestOptions:** `Transformers.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+## CursorDevelopment
+
+<details><summary><code>client.cursorDevelopment.<a href="/src/api/resources/cursorDevelopment/client/Client.ts">checkConnectionStatus</a>(shortName) -> AirweaveSDK.Connection[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Check if a source connection exists for the given short_name.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source to check
+    user: The admin user
+
+## Returns:
+
+    List[schemas.Connection]: List of source connections for the given short_name
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cursorDevelopment.checkConnectionStatus("short_name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**shortName:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CursorDevelopment.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.cursorDevelopment.<a href="/src/api/resources/cursorDevelopment/client/Client.ts">testSync</a>(shortName) -> AirweaveSDK.SyncJob</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Run a sync for a specific source by short_name.
+
+This endpoint is used for testing source integrations during development.
+It finds the first available source connection for the given short_name and
+runs a sync on it.
+
+## Args:
+
+    db: The database session
+    short_name: The short name of the source to sync
+    background_tasks: The background tasks
+    user: The admin user
+
+## Returns:
+
+    schemas.SyncJob: The created sync job
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.cursorDevelopment.testSync("short_name");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**shortName:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `CursorDevelopment.RequestOptions`
 
 </dd>
 </dl>

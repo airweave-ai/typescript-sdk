@@ -10,10 +10,12 @@ import { Destinations } from "./api/resources/destinations/client/Client";
 import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
 import { Sync } from "./api/resources/sync/client/Client";
+import { Search } from "./api/resources/search/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 import { Dag } from "./api/resources/dag/client/Client";
 import { Entities } from "./api/resources/entities/client/Client";
 import { Transformers } from "./api/resources/transformers/client/Client";
+import { CursorDevelopment } from "./api/resources/cursorDevelopment/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -43,10 +45,12 @@ export class AirweaveSDKClient {
     protected _embeddingModels: EmbeddingModels | undefined;
     protected _connections: Connections | undefined;
     protected _sync: Sync | undefined;
+    protected _search: Search | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
     protected _dag: Dag | undefined;
     protected _entities: Entities | undefined;
     protected _transformers: Transformers | undefined;
+    protected _cursorDevelopment: CursorDevelopment | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
@@ -74,6 +78,10 @@ export class AirweaveSDKClient {
         return (this._sync ??= new Sync(this._options));
     }
 
+    public get search(): Search {
+        return (this._search ??= new Search(this._options));
+    }
+
     public get whiteLabels(): WhiteLabels {
         return (this._whiteLabels ??= new WhiteLabels(this._options));
     }
@@ -88,5 +96,9 @@ export class AirweaveSDKClient {
 
     public get transformers(): Transformers {
         return (this._transformers ??= new Transformers(this._options));
+    }
+
+    public get cursorDevelopment(): CursorDevelopment {
+        return (this._cursorDevelopment ??= new CursorDevelopment(this._options));
     }
 }
