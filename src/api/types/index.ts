@@ -30,6 +30,8 @@ export * from "./Source";
 export * from "./SourceWithConfigFields";
 export * from "./Sync";
 export * from "./SyncDag";
+export * from "./SyncDagCreate";
+export * from "./SyncDagUpdate";
 export * from "./SyncJob";
 export * from "./SyncJobStatus";
 export * from "./SyncStatus";
