@@ -10,7 +10,6 @@ export * as connections from "./connections";
 export * as search from "./search";
 export * as whiteLabels from "./whiteLabels";
 export * as transformers from "./transformers";
-export * as cursorDevelopment from "./cursorDevelopment";
 export * from "./connections/client/requests";
 export * from "./sync/client/requests";
 export * from "./search/client/requests";

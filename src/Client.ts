@@ -14,7 +14,6 @@ import { Search } from "./api/resources/search/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 import { Entities } from "./api/resources/entities/client/Client";
 import { Transformers } from "./api/resources/transformers/client/Client";
-import { CursorDevelopment } from "./api/resources/cursorDevelopment/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -48,7 +47,6 @@ export class AirweaveSDKClient {
     protected _whiteLabels: WhiteLabels | undefined;
     protected _entities: Entities | undefined;
     protected _transformers: Transformers | undefined;
-    protected _cursorDevelopment: CursorDevelopment | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
@@ -90,9 +88,5 @@ export class AirweaveSDKClient {
 
     public get transformers(): Transformers {
         return (this._transformers ??= new Transformers(this._options));
-    }
-
-    public get cursorDevelopment(): CursorDevelopment {
-        return (this._cursorDevelopment ??= new CursorDevelopment(this._options));
     }
 }
