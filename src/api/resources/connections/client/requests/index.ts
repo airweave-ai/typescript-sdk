@@ -1,3 +1,2 @@
 export { type BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost } from "./BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost";
-export { type GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest } from "./GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest";
 export { type BodySendOauth2CodeConnectionsOauth2SourceCodePost } from "./BodySendOauth2CodeConnectionsOauth2SourceCodePost";

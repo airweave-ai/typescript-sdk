@@ -71,8 +71,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -163,8 +163,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -256,8 +256,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -370,8 +370,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -469,8 +469,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -566,8 +566,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -634,7 +634,7 @@ export class Connections {
      *
      * Returns:
      * --------
-     *     connection_schema (schemas.Connection): The disconnected connection
+     *     connection (schemas.Connection): The disconnected connection
      *
      * @param {string} connectionId
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
@@ -661,8 +661,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -719,198 +719,6 @@ export class Connections {
     }
 
     /**
-     * Disconnect from a destination connection.
-     *
-     * Args:
-     * -----
-     *     db (AsyncSession): The database session
-     *     connection_id (UUID): The ID of the connection to disconnect
-     *     user (schemas.User): The current user
-     *
-     * Returns:
-     * --------
-     *     connection_schema (schemas.Connection): The disconnected connection
-     *
-     * @param {string} connectionId
-     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.connections.disconnectDestinationConnection("connection_id")
-     */
-    public async disconnectDestinationConnection(
-        connectionId: string,
-        requestOptions?: Connections.RequestOptions,
-    ): Promise<AirweaveSDK.Connection> {
-        const _response = await core.fetcher({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                `connections/disconnect/destination/${encodeURIComponent(connectionId)}`,
-            ),
-            method: "PUT",
-            headers: {
-                "x-api-key":
-                    (await core.Supplier.get(this._options.apiKey)) != null
-                        ? await core.Supplier.get(this._options.apiKey)
-                        : undefined,
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            requestType: "json",
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.Connection.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling PUT /connections/disconnect/destination/{connection_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
-     * Get the OAuth2 authorization URL for a source.
-     *
-     * Args:
-     * -----
-     *     db: The database session
-     *     short_name: The short name of the source
-     *     user: The current user
-     *
-     * @param {AirweaveSDK.GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest} request
-     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.connections.getOauth2AuthUrl({
-     *         shortName: "short_name"
-     *     })
-     */
-    public async getOauth2AuthUrl(
-        request: AirweaveSDK.GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest,
-        requestOptions?: Connections.RequestOptions,
-    ): Promise<string> {
-        const { shortName } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["short_name"] = shortName;
-        const _response = await core.fetcher({
-            url: urlJoin(
-                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "connections/oauth2/source/auth_url",
-            ),
-            method: "GET",
-            headers: {
-                "x-api-key":
-                    (await core.Supplier.get(this._options.apiKey)) != null
-                        ? await core.Supplier.get(this._options.apiKey)
-                        : undefined,
-                "X-Fern-Language": "JavaScript",
-                "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
-                "X-Fern-Runtime": core.RUNTIME.type,
-                "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...requestOptions?.headers,
-            },
-            contentType: "application/json",
-            queryParameters: _queryParams,
-            requestType: "json",
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return serializers.connections.getOauth2AuthUrl.Response.parseOrThrow(_response.body, {
-                unrecognizedObjectKeys: "passthrough",
-                allowUnrecognizedUnionMembers: true,
-                allowUnrecognizedEnumValues: true,
-                breadcrumbsPrefix: ["response"],
-            });
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
-                            unrecognizedObjectKeys: "passthrough",
-                            allowUnrecognizedUnionMembers: true,
-                            allowUnrecognizedEnumValues: true,
-                            breadcrumbsPrefix: ["response"],
-                        }),
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /connections/oauth2/source/auth_url.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                });
-        }
-    }
-
-    /**
      * Send the OAuth2 authorization code for a source.
      *
      * This will:
@@ -957,8 +765,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -1059,8 +867,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -1157,8 +965,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.0.89",
-                "User-Agent": "@airweave/sdk/0.0.89",
+                "X-Fern-SDK-Version": "0.0.90",
+                "User-Agent": "@airweave/sdk/0.0.90",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

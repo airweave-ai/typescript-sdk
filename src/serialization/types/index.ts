@@ -2,6 +2,7 @@ export * from "./ApiKey";
 export * from "./ApiKeyCreate";
 export * from "./ApiKeyWithPlainKey";
 export * from "./AuthType";
+export * from "./BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost";
 export * from "./Chat";
 export * from "./ChatCreate";
 export * from "./ChatMessage";
