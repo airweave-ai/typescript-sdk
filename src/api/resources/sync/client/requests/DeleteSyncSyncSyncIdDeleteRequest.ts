@@ -4,8 +4,11 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         creds: "creds"
+ *     }
  */
 export interface DeleteSyncSyncSyncIdDeleteRequest {
     deleteData?: boolean;
+    creds: string;
 }

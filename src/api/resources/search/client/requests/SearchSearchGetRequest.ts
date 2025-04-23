@@ -6,7 +6,8 @@
  * @example
  *     {
  *         syncId: "sync_id",
- *         query: "query"
+ *         query: "query",
+ *         creds: "creds"
  *     }
  */
 export interface SearchSearchGetRequest {
@@ -18,4 +19,5 @@ export interface SearchSearchGetRequest {
      * Search query text
      */
     query: string;
+    creds: string;
 }

@@ -47,17 +47,24 @@ export class EmbeddingModels {
      *     schemas.EmbeddingModel: The embedding model object.
      *
      * @param {string} shortName
+     * @param {AirweaveSDK.ReadEmbeddingModelEmbeddingModelsDetailShortNameGetRequest} request
      * @param {EmbeddingModels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.embeddingModels.readEmbeddingModel("short_name")
+     *     await client.embeddingModels.readEmbeddingModel("short_name", {
+     *         creds: "creds"
+     *     })
      */
     public async readEmbeddingModel(
         shortName: string,
+        request: AirweaveSDK.ReadEmbeddingModelEmbeddingModelsDetailShortNameGetRequest,
         requestOptions?: EmbeddingModels.RequestOptions,
     ): Promise<AirweaveSDK.EmbeddingModelWithConfigFields> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -71,13 +78,14 @@ export class EmbeddingModels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -140,16 +148,23 @@ export class EmbeddingModels {
      * -------
      *     list[schemas.EmbeddingModel]: The list of embedding models.
      *
+     * @param {AirweaveSDK.ReadEmbeddingModelsEmbeddingModelsListGetRequest} request
      * @param {EmbeddingModels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.embeddingModels.readEmbeddingModels()
+     *     await client.embeddingModels.readEmbeddingModels({
+     *         creds: "creds"
+     *     })
      */
     public async readEmbeddingModels(
+        request: AirweaveSDK.ReadEmbeddingModelsEmbeddingModelsListGetRequest,
         requestOptions?: EmbeddingModels.RequestOptions,
     ): Promise<AirweaveSDK.EmbeddingModel[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -163,13 +178,14 @@ export class EmbeddingModels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

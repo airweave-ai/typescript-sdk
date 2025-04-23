@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const WhiteLabelCreate: core.serialization.Schema<
     serializers.WhiteLabelCreate.Raw,
-    AirweaveSDK.WhiteLabelCreate
+    Omit<AirweaveSDK.WhiteLabelCreate, "creds">
 > = core.serialization.object({
     name: core.serialization.string(),
     sourceShortName: core.serialization.property("source_short_name", core.serialization.string()),

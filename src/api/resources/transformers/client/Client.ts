@@ -36,14 +36,23 @@ export class Transformers {
     /**
      * List all transformers for the current user's organization.
      *
+     * @param {AirweaveSDK.ListTransformersTransformersGetRequest} request
      * @param {Transformers.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.transformers.listTransformers()
+     *     await client.transformers.listTransformers({
+     *         creds: "creds"
+     *     })
      */
-    public async listTransformers(requestOptions?: Transformers.RequestOptions): Promise<AirweaveSDK.Transformer[]> {
+    public async listTransformers(
+        request: AirweaveSDK.ListTransformersTransformersGetRequest,
+        requestOptions?: Transformers.RequestOptions,
+    ): Promise<AirweaveSDK.Transformer[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -57,13 +66,14 @@ export class Transformers {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -122,17 +132,23 @@ export class Transformers {
      *
      * @example
      *     await client.transformers.createTransformer({
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         methodName: "method_name",
      *         moduleName: "module_name",
-     *         inputEntityDefinitionIds: ["input_entity_definition_ids"],
-     *         outputEntityDefinitionIds: ["output_entity_definition_ids"]
+     *         inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
+     *         outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
+     *         configSchema: undefined
      *     })
      */
     public async createTransformer(
         request: AirweaveSDK.TransformerCreate,
         requestOptions?: Transformers.RequestOptions,
     ): Promise<AirweaveSDK.Transformer> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -146,15 +162,16 @@ export class Transformers {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.TransformerCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.TransformerCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -213,11 +230,14 @@ export class Transformers {
      *
      * @example
      *     await client.transformers.updateTransformer("transformer_id", {
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         methodName: "method_name",
      *         moduleName: "module_name",
-     *         inputEntityDefinitionIds: ["input_entity_definition_ids"],
-     *         outputEntityDefinitionIds: ["output_entity_definition_ids"]
+     *         inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
+     *         outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
+     *         configSchema: undefined
      *     })
      */
     public async updateTransformer(
@@ -225,6 +245,9 @@ export class Transformers {
         request: AirweaveSDK.TransformerUpdate,
         requestOptions?: Transformers.RequestOptions,
     ): Promise<AirweaveSDK.Transformer> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -238,15 +261,16 @@ export class Transformers {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.TransformerUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.TransformerUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

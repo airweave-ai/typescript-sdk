@@ -45,14 +45,23 @@ export class Destinations {
      * --------
      *     List[schemas.Destination]: A list of destinations
      *
+     * @param {AirweaveSDK.ListDestinationsDestinationsListGetRequest} request
      * @param {Destinations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.destinations.listDestinations()
+     *     await client.destinations.listDestinations({
+     *         creds: "creds"
+     *     })
      */
-    public async listDestinations(requestOptions?: Destinations.RequestOptions): Promise<AirweaveSDK.Destination[]> {
+    public async listDestinations(
+        request: AirweaveSDK.ListDestinationsDestinationsListGetRequest,
+        requestOptions?: Destinations.RequestOptions,
+    ): Promise<AirweaveSDK.Destination[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -66,13 +75,14 @@ export class Destinations {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -135,17 +145,24 @@ export class Destinations {
      *     destination (schemas.Destination): The destination
      *
      * @param {string} shortName
+     * @param {AirweaveSDK.ReadDestinationDestinationsDetailShortNameGetRequest} request
      * @param {Destinations.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.destinations.readDestination("short_name")
+     *     await client.destinations.readDestination("short_name", {
+     *         creds: "creds"
+     *     })
      */
     public async readDestination(
         shortName: string,
+        request: AirweaveSDK.ReadDestinationDestinationsDetailShortNameGetRequest,
         requestOptions?: Destinations.RequestOptions,
     ): Promise<AirweaveSDK.DestinationWithConfigFields> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -159,13 +176,14 @@ export class Destinations {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

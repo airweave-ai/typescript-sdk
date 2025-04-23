@@ -7,14 +7,18 @@ import * as AirweaveSDK from "../../../../index";
 /**
  * @example
  *     {
+ *         creds: "creds",
  *         name: "name",
+ *         description: undefined,
  *         type: "file",
- *         entitySchema: ["entity_schema"],
+ *         entitySchema: ["entity_schema", "entity_schema"],
+ *         parentId: undefined,
  *         moduleName: "module_name",
  *         className: "class_name"
  *     }
  */
 export interface EntityDefinitionCreate {
+    creds: string;
     name: string;
     description?: string;
     type: AirweaveSDK.EntityType;

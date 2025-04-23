@@ -4,9 +4,12 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         creds: "creds"
+ *     }
  */
 export interface ListAllJobsSyncJobsGetRequest {
     skip?: number;
     limit?: number;
+    creds: string;
 }

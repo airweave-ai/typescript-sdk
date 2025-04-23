@@ -54,13 +54,15 @@ export class Sync {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.listSyncs()
+     *     await client.sync.listSyncs({
+     *         creds: "creds"
+     *     })
      */
     public async listSyncs(
-        request: AirweaveSDK.ListSyncsSyncGetRequest = {},
+        request: AirweaveSDK.ListSyncsSyncGetRequest,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.ListSyncsSyncGetResponse> {
-        const { skip, limit, withSourceConnection } = request;
+        const { skip, limit, withSourceConnection, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (skip != null) {
             _queryParams["skip"] = skip.toString();
@@ -74,6 +76,7 @@ export class Sync {
             _queryParams["with_source_connection"] = withSourceConnection.toString();
         }
 
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -87,8 +90,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -164,15 +167,28 @@ export class Sync {
      *
      * @example
      *     await client.sync.createSync({
+     *         creds: "creds",
      *         name: "name",
      *         sourceConnectionId: "source_connection_id",
-     *         destinationConnectionIds: ["destination_connection_ids"]
+     *         embeddingModelConnectionId: undefined,
+     *         destinationConnectionIds: ["destination_connection_ids", "destination_connection_ids"],
+     *         description: undefined,
+     *         cronSchedule: undefined,
+     *         nextScheduledRun: undefined,
+     *         whiteLabelId: undefined,
+     *         whiteLabelUserIdentifier: undefined,
+     *         syncMetadata: undefined,
+     *         status: undefined,
+     *         runImmediately: undefined
      *     })
      */
     public async createSync(
         request: AirweaveSDK.SyncCreate,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.Sync> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -186,15 +202,16 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.SyncCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.SyncCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -262,13 +279,15 @@ export class Sync {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.listAllJobs()
+     *     await client.sync.listAllJobs({
+     *         creds: "creds"
+     *     })
      */
     public async listAllJobs(
-        request: AirweaveSDK.ListAllJobsSyncJobsGetRequest = {},
+        request: AirweaveSDK.ListAllJobsSyncJobsGetRequest,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.SyncJob[]> {
-        const { skip, limit } = request;
+        const { skip, limit, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (skip != null) {
             _queryParams["skip"] = skip.toString();
@@ -278,6 +297,7 @@ export class Sync {
             _queryParams["limit"] = limit.toString();
         }
 
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -291,8 +311,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -361,14 +381,24 @@ export class Sync {
      *     sync (schemas.Sync): The sync
      *
      * @param {string} syncId
+     * @param {AirweaveSDK.GetSyncSyncSyncIdGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.getSync("sync_id")
+     *     await client.sync.getSync("sync_id", {
+     *         creds: "creds"
+     *     })
      */
-    public async getSync(syncId: string, requestOptions?: Sync.RequestOptions): Promise<AirweaveSDK.Sync> {
+    public async getSync(
+        syncId: string,
+        request: AirweaveSDK.GetSyncSyncSyncIdGetRequest,
+        requestOptions?: Sync.RequestOptions,
+    ): Promise<AirweaveSDK.Sync> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -382,13 +412,14 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -458,19 +489,22 @@ export class Sync {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.deleteSync("sync_id")
+     *     await client.sync.deleteSync("sync_id", {
+     *         creds: "creds"
+     *     })
      */
     public async deleteSync(
         syncId: string,
-        request: AirweaveSDK.DeleteSyncSyncSyncIdDeleteRequest = {},
+        request: AirweaveSDK.DeleteSyncSyncSyncIdDeleteRequest,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.Sync> {
-        const { deleteData } = request;
+        const { deleteData, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (deleteData != null) {
             _queryParams["delete_data"] = deleteData.toString();
         }
 
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -484,8 +518,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -561,13 +595,25 @@ export class Sync {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.updateSync("sync_id")
+     *     await client.sync.updateSync("sync_id", {
+     *         creds: "creds",
+     *         name: undefined,
+     *         cronSchedule: undefined,
+     *         nextScheduledRun: undefined,
+     *         whiteLabelId: undefined,
+     *         whiteLabelUserIdentifier: undefined,
+     *         syncMetadata: undefined,
+     *         status: undefined
+     *     })
      */
     public async updateSync(
         syncId: string,
-        request: AirweaveSDK.SyncUpdate = {},
+        request: AirweaveSDK.SyncUpdate,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.Sync> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -581,15 +627,16 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.SyncUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.SyncUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -652,14 +699,24 @@ export class Sync {
      *     sync_job (schemas.SyncJob): The sync job
      *
      * @param {string} syncId
+     * @param {AirweaveSDK.RunSyncSyncSyncIdRunPostRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.runSync("sync_id")
+     *     await client.sync.runSync("sync_id", {
+     *         creds: "creds"
+     *     })
      */
-    public async runSync(syncId: string, requestOptions?: Sync.RequestOptions): Promise<AirweaveSDK.SyncJob> {
+    public async runSync(
+        syncId: string,
+        request: AirweaveSDK.RunSyncSyncSyncIdRunPostRequest,
+        requestOptions?: Sync.RequestOptions,
+    ): Promise<AirweaveSDK.SyncJob> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -673,13 +730,14 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -742,14 +800,24 @@ export class Sync {
      *     list[schemas.SyncJob]: A list of sync jobs
      *
      * @param {string} syncId
+     * @param {AirweaveSDK.ListSyncJobsSyncSyncIdJobsGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.listSyncJobs("sync_id")
+     *     await client.sync.listSyncJobs("sync_id", {
+     *         creds: "creds"
+     *     })
      */
-    public async listSyncJobs(syncId: string, requestOptions?: Sync.RequestOptions): Promise<AirweaveSDK.SyncJob[]> {
+    public async listSyncJobs(
+        syncId: string,
+        request: AirweaveSDK.ListSyncJobsSyncSyncIdJobsGetRequest,
+        requestOptions?: Sync.RequestOptions,
+    ): Promise<AirweaveSDK.SyncJob[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -763,13 +831,14 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -834,18 +903,25 @@ export class Sync {
      *
      * @param {string} syncId
      * @param {string} jobId
+     * @param {AirweaveSDK.GetSyncJobSyncSyncIdJobJobIdGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.getSyncJob("sync_id", "job_id")
+     *     await client.sync.getSyncJob("sync_id", "job_id", {
+     *         creds: "creds"
+     *     })
      */
     public async getSyncJob(
         syncId: string,
         jobId: string,
+        request: AirweaveSDK.GetSyncJobSyncSyncIdJobJobIdGetRequest,
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.SyncJob> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -859,13 +935,14 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -922,7 +999,8 @@ export class Sync {
      * Args:
      * -----
      *     job_id: The ID of the job to subscribe to
-     *     user: The current user
+     *     request: The request object
+     *     db: The database session
      *
      * Returns:
      * --------
@@ -950,8 +1028,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -1006,14 +1084,24 @@ export class Sync {
      * Get the DAG for a specific sync.
      *
      * @param {string} syncId
+     * @param {AirweaveSDK.GetSyncDagSyncSyncIdDagGetRequest} request
      * @param {Sync.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sync.getSyncDag("sync_id")
+     *     await client.sync.getSyncDag("sync_id", {
+     *         creds: "creds"
+     *     })
      */
-    public async getSyncDag(syncId: string, requestOptions?: Sync.RequestOptions): Promise<AirweaveSDK.SyncDag> {
+    public async getSyncDag(
+        syncId: string,
+        request: AirweaveSDK.GetSyncDagSyncSyncIdDagGetRequest,
+        requestOptions?: Sync.RequestOptions,
+    ): Promise<AirweaveSDK.SyncDag> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -1027,13 +1115,14 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

@@ -36,16 +36,23 @@ export class Entities {
     /**
      * List all entity definitions for the current user's organization.
      *
+     * @param {AirweaveSDK.ListEntityDefinitionsEntitiesDefinitionsGetRequest} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.entities.listEntityDefinitions()
+     *     await client.entities.listEntityDefinitions({
+     *         creds: "creds"
+     *     })
      */
     public async listEntityDefinitions(
+        request: AirweaveSDK.ListEntityDefinitionsEntitiesDefinitionsGetRequest,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityDefinition[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -59,13 +66,14 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -124,9 +132,12 @@ export class Entities {
      *
      * @example
      *     await client.entities.createEntityDefinition({
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         type: "file",
-     *         entitySchema: ["entity_schema"],
+     *         entitySchema: ["entity_schema", "entity_schema"],
+     *         parentId: undefined,
      *         moduleName: "module_name",
      *         className: "class_name"
      *     })
@@ -135,6 +146,9 @@ export class Entities {
         request: AirweaveSDK.EntityDefinitionCreate,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityDefinition> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -148,15 +162,16 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.EntityDefinitionCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.EntityDefinitionCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -215,9 +230,12 @@ export class Entities {
      *
      * @example
      *     await client.entities.updateEntityDefinition("definition_id", {
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         type: "file",
-     *         entitySchema: ["entity_schema"],
+     *         entitySchema: ["entity_schema", "entity_schema"],
+     *         parentId: undefined,
      *         moduleName: "module_name",
      *         className: "class_name"
      *     })
@@ -227,6 +245,9 @@ export class Entities {
         request: AirweaveSDK.EntityDefinitionUpdate,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityDefinition> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -240,15 +261,16 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.EntityDefinitionUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.EntityDefinitionUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -301,14 +323,23 @@ export class Entities {
     /**
      * List all entity relations for the current user's organization.
      *
+     * @param {AirweaveSDK.ListEntityRelationsEntitiesRelationsGetRequest} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.entities.listEntityRelations()
+     *     await client.entities.listEntityRelations({
+     *         creds: "creds"
+     *     })
      */
-    public async listEntityRelations(requestOptions?: Entities.RequestOptions): Promise<AirweaveSDK.EntityRelation[]> {
+    public async listEntityRelations(
+        request: AirweaveSDK.ListEntityRelationsEntitiesRelationsGetRequest,
+        requestOptions?: Entities.RequestOptions,
+    ): Promise<AirweaveSDK.EntityRelation[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -322,13 +353,14 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -387,7 +419,9 @@ export class Entities {
      *
      * @example
      *     await client.entities.createEntityRelation({
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         fromEntityId: "from_entity_id",
      *         toEntityId: "to_entity_id"
      *     })
@@ -396,6 +430,9 @@ export class Entities {
         request: AirweaveSDK.EntityRelationCreate,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityRelation> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -409,15 +446,16 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.EntityRelationCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.EntityRelationCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -476,7 +514,9 @@ export class Entities {
      *
      * @example
      *     await client.entities.updateEntityRelation("relation_id", {
+     *         creds: "creds",
      *         name: "name",
+     *         description: undefined,
      *         fromEntityId: "from_entity_id",
      *         toEntityId: "to_entity_id"
      *     })
@@ -486,6 +526,9 @@ export class Entities {
         request: AirweaveSDK.EntityRelationUpdate,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityRelation> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -499,15 +542,16 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.EntityRelationUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.EntityRelationUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -568,18 +612,24 @@ export class Entities {
      * Returns:
      *     List of entity definitions matching the provided IDs
      *
-     * @param {string[]} request
+     * @param {AirweaveSDK.GetEntityDefinitionsByIdsEntitiesDefinitionsByIdsPostRequest} request
      * @param {Entities.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.entities.getEntityDefinitionsByIds(["string"])
+     *     await client.entities.getEntityDefinitionsByIds({
+     *         creds: "creds",
+     *         body: ["string", "string"]
+     *     })
      */
     public async getEntityDefinitionsByIds(
-        request: string[],
+        request: AirweaveSDK.GetEntityDefinitionsByIdsEntitiesDefinitionsByIdsPostRequest,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityDefinition[]> {
+        const { creds, body: _body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -593,15 +643,16 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.entities.getEntityDefinitionsByIds.Request.jsonOrThrow(request, {
+            body: serializers.entities.getEntityDefinitionsByIds.Request.jsonOrThrow(_body, {
                 unrecognizedObjectKeys: "strip",
             }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -663,16 +714,18 @@ export class Entities {
      *
      * @example
      *     await client.entities.getEntityDefinitionsBySourceShortName({
-     *         sourceShortName: "source_short_name"
+     *         sourceShortName: "source_short_name",
+     *         creds: "creds"
      *     })
      */
     public async getEntityDefinitionsBySourceShortName(
         request: AirweaveSDK.GetEntityDefinitionsBySourceShortNameEntitiesDefinitionsBySourceGetRequest,
         requestOptions?: Entities.RequestOptions,
     ): Promise<AirweaveSDK.EntityDefinition[]> {
-        const { sourceShortName } = request;
+        const { sourceShortName, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["source_short_name"] = sourceShortName;
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -686,8 +739,8 @@ export class Entities {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

@@ -1,5 +1,10 @@
 export { type ListSyncsSyncGetRequest } from "./ListSyncsSyncGetRequest";
 export { type SyncCreate } from "./SyncCreate";
 export { type ListAllJobsSyncJobsGetRequest } from "./ListAllJobsSyncJobsGetRequest";
+export { type GetSyncSyncSyncIdGetRequest } from "./GetSyncSyncSyncIdGetRequest";
 export { type DeleteSyncSyncSyncIdDeleteRequest } from "./DeleteSyncSyncSyncIdDeleteRequest";
 export { type SyncUpdate } from "./SyncUpdate";
+export { type RunSyncSyncSyncIdRunPostRequest } from "./RunSyncSyncSyncIdRunPostRequest";
+export { type ListSyncJobsSyncSyncIdJobsGetRequest } from "./ListSyncJobsSyncSyncIdJobsGetRequest";
+export { type GetSyncJobSyncSyncIdJobJobIdGetRequest } from "./GetSyncJobSyncSyncIdJobJobIdGetRequest";
+export { type GetSyncDagSyncSyncIdDagGetRequest } from "./GetSyncDagSyncSyncIdDagGetRequest";

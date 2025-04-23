@@ -2,7 +2,7 @@
 
 ## Users
 
-<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">readUser</a>() -> AirweaveSDK.User</code></summary>
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">readUser</a>({ ...params }) -> AirweaveSDK.User</code></summary>
 <dl>
 <dd>
 
@@ -38,7 +38,9 @@ Get current user.
 <dd>
 
 ```typescript
-await client.users.readUser();
+await client.users.readUser({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -50,6 +52,95 @@ await client.users.readUser();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ReadUserUsersGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Users.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.users.<a href="/src/api/resources/users/client/Client.ts">createOrUpdateUser</a>({ ...params }) -> AirweaveSDK.User</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create new user in database if it does not exist.
+
+Can only create user with the same email as the authenticated user.
+
+Args:
+user_data (schemas.UserCreate): The user object to be created.
+db (AsyncSession): Database session dependency to handle database operations.
+auth0_user (Auth0User): Authenticated auth0 user.
+
+Returns:
+schemas.User: The created user object.
+
+Raises:
+HTTPException: If the user is not authorized to create this user.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.users.createOrUpdateUser({
+    creds: "creds",
+    email: "email",
+    fullName: undefined,
+    organizationId: undefined,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.UserCreate`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -67,7 +158,7 @@ await client.users.readUser();
 
 ## Sources
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.SourceWithConfigFields</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName, { ...params }) -> AirweaveSDK.SourceWithConfigFields</code></summary>
 <dl>
 <dd>
 
@@ -105,7 +196,9 @@ Get source by id.
 <dd>
 
 ```typescript
-await client.sources.readSource("short_name");
+await client.sources.readSource("short_name", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -129,6 +222,14 @@ await client.sources.readSource("short_name");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ReadSourceSourcesDetailShortNameGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Sources.RequestOptions`
 
 </dd>
@@ -140,7 +241,7 @@ await client.sources.readSource("short_name");
 </dl>
 </details>
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSources</a>() -> AirweaveSDK.Source[]</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSources</a>({ ...params }) -> AirweaveSDK.Source[]</code></summary>
 <dl>
 <dd>
 
@@ -177,7 +278,9 @@ Get all sources for the current user.
 <dd>
 
 ```typescript
-await client.sources.readSources();
+await client.sources.readSources({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -189,6 +292,14 @@ await client.sources.readSources();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ReadSourcesSourcesListGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -206,7 +317,7 @@ await client.sources.readSources();
 
 ## Destinations
 
-<details><summary><code>client.destinations.<a href="/src/api/resources/destinations/client/Client.ts">listDestinations</a>() -> AirweaveSDK.Destination[]</code></summary>
+<details><summary><code>client.destinations.<a href="/src/api/resources/destinations/client/Client.ts">listDestinations</a>({ ...params }) -> AirweaveSDK.Destination[]</code></summary>
 <dl>
 <dd>
 
@@ -243,7 +354,9 @@ Get all available destinations.
 <dd>
 
 ```typescript
-await client.destinations.listDestinations();
+await client.destinations.listDestinations({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -259,6 +372,14 @@ await client.destinations.listDestinations();
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ListDestinationsDestinationsListGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Destinations.RequestOptions`
 
 </dd>
@@ -270,7 +391,7 @@ await client.destinations.listDestinations();
 </dl>
 </details>
 
-<details><summary><code>client.destinations.<a href="/src/api/resources/destinations/client/Client.ts">readDestination</a>(shortName) -> AirweaveSDK.DestinationWithConfigFields</code></summary>
+<details><summary><code>client.destinations.<a href="/src/api/resources/destinations/client/Client.ts">readDestination</a>(shortName, { ...params }) -> AirweaveSDK.DestinationWithConfigFields</code></summary>
 <dl>
 <dd>
 
@@ -308,7 +429,9 @@ Get destination by short name.
 <dd>
 
 ```typescript
-await client.destinations.readDestination("short_name");
+await client.destinations.readDestination("short_name", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -332,6 +455,14 @@ await client.destinations.readDestination("short_name");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ReadDestinationDestinationsDetailShortNameGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Destinations.RequestOptions`
 
 </dd>
@@ -345,7 +476,7 @@ await client.destinations.readDestination("short_name");
 
 ## EmbeddingModels
 
-<details><summary><code>client.embeddingModels.<a href="/src/api/resources/embeddingModels/client/Client.ts">readEmbeddingModel</a>(shortName) -> AirweaveSDK.EmbeddingModelWithConfigFields</code></summary>
+<details><summary><code>client.embeddingModels.<a href="/src/api/resources/embeddingModels/client/Client.ts">readEmbeddingModel</a>(shortName, { ...params }) -> AirweaveSDK.EmbeddingModelWithConfigFields</code></summary>
 <dl>
 <dd>
 
@@ -383,7 +514,9 @@ Get embedding model by id.
 <dd>
 
 ```typescript
-await client.embeddingModels.readEmbeddingModel("short_name");
+await client.embeddingModels.readEmbeddingModel("short_name", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -407,6 +540,14 @@ await client.embeddingModels.readEmbeddingModel("short_name");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ReadEmbeddingModelEmbeddingModelsDetailShortNameGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `EmbeddingModels.RequestOptions`
 
 </dd>
@@ -418,7 +559,7 @@ await client.embeddingModels.readEmbeddingModel("short_name");
 </dl>
 </details>
 
-<details><summary><code>client.embeddingModels.<a href="/src/api/resources/embeddingModels/client/Client.ts">readEmbeddingModels</a>() -> AirweaveSDK.EmbeddingModel[]</code></summary>
+<details><summary><code>client.embeddingModels.<a href="/src/api/resources/embeddingModels/client/Client.ts">readEmbeddingModels</a>({ ...params }) -> AirweaveSDK.EmbeddingModel[]</code></summary>
 <dl>
 <dd>
 
@@ -455,7 +596,9 @@ Get all embedding models.
 <dd>
 
 ```typescript
-await client.embeddingModels.readEmbeddingModels();
+await client.embeddingModels.readEmbeddingModels({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -467,6 +610,14 @@ await client.embeddingModels.readEmbeddingModels();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ReadEmbeddingModelsEmbeddingModelsListGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -484,7 +635,7 @@ await client.embeddingModels.readEmbeddingModels();
 
 ## Connections
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getConnection</a>(connectionId) -> AirweaveSDK.Connection</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getConnection</a>(connectionId, { ...params }) -> AirweaveSDK.Connection</code></summary>
 <dl>
 <dd>
 
@@ -522,7 +673,9 @@ Get a specific connection.
 <dd>
 
 ```typescript
-await client.connections.getConnection("connection_id");
+await client.connections.getConnection("connection_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -546,6 +699,14 @@ await client.connections.getConnection("connection_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.GetConnectionConnectionsDetailConnectionIdGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Connections.RequestOptions`
 
 </dd>
@@ -557,7 +718,7 @@ await client.connections.getConnection("connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">listAllConnectedIntegrations</a>() -> AirweaveSDK.Connection[]</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">listAllConnectedIntegrations</a>({ ...params }) -> AirweaveSDK.Connection[]</code></summary>
 <dl>
 <dd>
 
@@ -594,7 +755,9 @@ Get all active connections for the current user across all integration types.
 <dd>
 
 ```typescript
-await client.connections.listAllConnectedIntegrations();
+await client.connections.listAllConnectedIntegrations({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -610,6 +773,14 @@ await client.connections.listAllConnectedIntegrations();
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ListAllConnectedIntegrationsConnectionsListGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Connections.RequestOptions`
 
 </dd>
@@ -621,7 +792,7 @@ await client.connections.listAllConnectedIntegrations();
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">listConnectedIntegrations</a>(integrationType) -> AirweaveSDK.Connection[]</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">listConnectedIntegrations</a>(integrationType, { ...params }) -> AirweaveSDK.Connection[]</code></summary>
 <dl>
 <dd>
 
@@ -659,7 +830,9 @@ Get all integrations of specified type connected to the current user.
 <dd>
 
 ```typescript
-await client.connections.listConnectedIntegrations("source");
+await client.connections.listConnectedIntegrations("source", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -676,6 +849,14 @@ await client.connections.listConnectedIntegrations("source");
 <dd>
 
 **integrationType:** `AirweaveSDK.IntegrationType`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListConnectedIntegrationsConnectionsListIntegrationTypeGetRequest`
 
 </dd>
 </dl>
@@ -745,8 +926,12 @@ Expects a POST body with:
 
 ```typescript
 await client.connections.connectIntegration("source", "short_name", {
+    creds: "creds",
+    name: undefined,
     configFields: {
-        key: "value",
+        config_fields: {
+            key: "value",
+        },
     },
 });
 ```
@@ -799,7 +984,7 @@ await client.connections.connectIntegration("source", "short_name", {
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getConnectionCredentials</a>(connectionId) -> Record<string, unknown></code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getConnectionCredentials</a>(connectionId, { ...params }) -> Record<string, unknown></code></summary>
 <dl>
 <dd>
 
@@ -837,7 +1022,9 @@ Get the credentials for a connection.
 <dd>
 
 ```typescript
-await client.connections.getConnectionCredentials("connection_id");
+await client.connections.getConnectionCredentials("connection_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -861,6 +1048,14 @@ await client.connections.getConnectionCredentials("connection_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.GetConnectionCredentialsConnectionsCredentialsConnectionIdGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Connections.RequestOptions`
 
 </dd>
@@ -872,7 +1067,7 @@ await client.connections.getConnectionCredentials("connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">deleteConnection</a>(connectionId) -> AirweaveSDK.Connection</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">deleteConnection</a>(connectionId, { ...params }) -> AirweaveSDK.Connection</code></summary>
 <dl>
 <dd>
 
@@ -912,7 +1107,9 @@ Deletes the connection and integration credential.
 <dd>
 
 ```typescript
-await client.connections.deleteConnection("connection_id");
+await client.connections.deleteConnection("connection_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -936,6 +1133,14 @@ await client.connections.deleteConnection("connection_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.DeleteConnectionConnectionsDeleteSourceConnectionIdDeleteRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Connections.RequestOptions`
 
 </dd>
@@ -947,7 +1152,7 @@ await client.connections.deleteConnection("connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">disconnectSourceConnection</a>(connectionId) -> AirweaveSDK.Connection</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">disconnectSourceConnection</a>(connectionId, { ...params }) -> AirweaveSDK.Connection</code></summary>
 <dl>
 <dd>
 
@@ -985,7 +1190,9 @@ Disconnect from a source connection.
 <dd>
 
 ```typescript
-await client.connections.disconnectSourceConnection("connection_id");
+await client.connections.disconnectSourceConnection("connection_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1002,6 +1209,14 @@ await client.connections.disconnectSourceConnection("connection_id");
 <dd>
 
 **connectionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.DisconnectSourceConnectionConnectionsDisconnectSourceConnectionIdPutRequest`
 
 </dd>
 </dl>
@@ -1066,6 +1281,7 @@ This will:
 
 ```typescript
 await client.connections.sendOauth2Code({
+    creds: "creds",
     shortName: "short_name",
     code: "code",
 });
@@ -1143,7 +1359,10 @@ Exchange the OAuth2 authorization code for a white label integration.
 <dd>
 
 ```typescript
-await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string");
+await client.connections.sendOauth2WhiteLabelCode("white_label_id", {
+    creds: "creds",
+    body: "string",
+});
 ```
 
 </dd>
@@ -1167,7 +1386,7 @@ await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string");
 <dl>
 <dd>
 
-**request:** `string`
+**request:** `AirweaveSDK.SendOauth2WhiteLabelCodeConnectionsOauth2WhiteLabelWhiteLabelIdCodePostRequest`
 
 </dd>
 </dl>
@@ -1186,7 +1405,7 @@ await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string");
 </dl>
 </details>
 
-<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getOauth2WhiteLabelAuthUrl</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.connections.<a href="/src/api/resources/connections/client/Client.ts">getOauth2WhiteLabelAuthUrl</a>(whiteLabelId, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 
@@ -1224,7 +1443,9 @@ Get the OAuth2 authorization URL for a white label integration.
 <dd>
 
 ```typescript
-await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id");
+await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1241,6 +1462,14 @@ await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id");
 <dd>
 
 **whiteLabelId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetOauth2WhiteLabelAuthUrlConnectionsOauth2WhiteLabelWhiteLabelIdAuthUrlGetRequest`
 
 </dd>
 </dl>
@@ -1301,7 +1530,9 @@ List all syncs for the current user.
 <dd>
 
 ```typescript
-await client.sync.listSyncs();
+await client.sync.listSyncs({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1376,9 +1607,19 @@ Create a new sync configuration.
 
 ```typescript
 await client.sync.createSync({
+    creds: "creds",
     name: "name",
     sourceConnectionId: "source_connection_id",
-    destinationConnectionIds: ["destination_connection_ids"],
+    embeddingModelConnectionId: undefined,
+    destinationConnectionIds: ["destination_connection_ids", "destination_connection_ids"],
+    description: undefined,
+    cronSchedule: undefined,
+    nextScheduledRun: undefined,
+    whiteLabelId: undefined,
+    whiteLabelUserIdentifier: undefined,
+    syncMetadata: undefined,
+    status: undefined,
+    runImmediately: undefined,
 });
 ```
 
@@ -1453,7 +1694,9 @@ List all sync jobs across all syncs.
 <dd>
 
 ```typescript
-await client.sync.listAllJobs();
+await client.sync.listAllJobs({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1488,7 +1731,7 @@ await client.sync.listAllJobs();
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSync</a>(syncId) -> AirweaveSDK.Sync</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSync</a>(syncId, { ...params }) -> AirweaveSDK.Sync</code></summary>
 <dl>
 <dd>
 
@@ -1526,7 +1769,9 @@ Get a specific sync by ID.
 <dd>
 
 ```typescript
-await client.sync.getSync("sync_id");
+await client.sync.getSync("sync_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1543,6 +1788,14 @@ await client.sync.getSync("sync_id");
 <dd>
 
 **syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetSyncSyncSyncIdGetRequest`
 
 </dd>
 </dl>
@@ -1600,7 +1853,9 @@ Delete a sync configuration and optionally its associated data.
 <dd>
 
 ```typescript
-await client.sync.deleteSync("sync_id");
+await client.sync.deleteSync("sync_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1682,7 +1937,16 @@ Update a sync configuration.
 <dd>
 
 ```typescript
-await client.sync.updateSync("sync_id");
+await client.sync.updateSync("sync_id", {
+    creds: "creds",
+    name: undefined,
+    cronSchedule: undefined,
+    nextScheduledRun: undefined,
+    whiteLabelId: undefined,
+    whiteLabelUserIdentifier: undefined,
+    syncMetadata: undefined,
+    status: undefined,
+});
 ```
 
 </dd>
@@ -1725,7 +1989,7 @@ await client.sync.updateSync("sync_id");
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">runSync</a>(syncId) -> AirweaveSDK.SyncJob</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">runSync</a>(syncId, { ...params }) -> AirweaveSDK.SyncJob</code></summary>
 <dl>
 <dd>
 
@@ -1764,7 +2028,9 @@ Trigger a sync run.
 <dd>
 
 ```typescript
-await client.sync.runSync("sync_id");
+await client.sync.runSync("sync_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1788,6 +2054,14 @@ await client.sync.runSync("sync_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.RunSyncSyncSyncIdRunPostRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Sync.RequestOptions`
 
 </dd>
@@ -1799,7 +2073,7 @@ await client.sync.runSync("sync_id");
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">listSyncJobs</a>(syncId) -> AirweaveSDK.SyncJob[]</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">listSyncJobs</a>(syncId, { ...params }) -> AirweaveSDK.SyncJob[]</code></summary>
 <dl>
 <dd>
 
@@ -1837,7 +2111,9 @@ List all jobs for a specific sync.
 <dd>
 
 ```typescript
-await client.sync.listSyncJobs("sync_id");
+await client.sync.listSyncJobs("sync_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1861,6 +2137,14 @@ await client.sync.listSyncJobs("sync_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ListSyncJobsSyncSyncIdJobsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `Sync.RequestOptions`
 
 </dd>
@@ -1872,7 +2156,7 @@ await client.sync.listSyncJobs("sync_id");
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncJob</a>(syncId, jobId) -> AirweaveSDK.SyncJob</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncJob</a>(syncId, jobId, { ...params }) -> AirweaveSDK.SyncJob</code></summary>
 <dl>
 <dd>
 
@@ -1911,7 +2195,9 @@ Get details of a specific sync job.
 <dd>
 
 ```typescript
-await client.sync.getSyncJob("sync_id", "job_id");
+await client.sync.getSyncJob("sync_id", "job_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -1936,6 +2222,14 @@ await client.sync.getSyncJob("sync_id", "job_id");
 <dd>
 
 **jobId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetSyncJobSyncSyncIdJobJobIdGetRequest`
 
 </dd>
 </dl>
@@ -1971,7 +2265,8 @@ Server-Sent Events (SSE) endpoint to subscribe to a sync job's progress.
 ## Args:
 
     job_id: The ID of the job to subscribe to
-    user: The current user
+    request: The request object
+    db: The database session
 
 ## Returns:
 
@@ -2026,7 +2321,7 @@ await client.sync.subscribeSyncJob("job_id");
 </dl>
 </details>
 
-<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncDag</a>(syncId) -> AirweaveSDK.SyncDag</code></summary>
+<details><summary><code>client.sync.<a href="/src/api/resources/sync/client/Client.ts">getSyncDag</a>(syncId, { ...params }) -> AirweaveSDK.SyncDag</code></summary>
 <dl>
 <dd>
 
@@ -2054,7 +2349,9 @@ Get the DAG for a specific sync.
 <dd>
 
 ```typescript
-await client.sync.getSyncDag("sync_id");
+await client.sync.getSyncDag("sync_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2071,6 +2368,14 @@ await client.sync.getSyncDag("sync_id");
 <dd>
 
 **syncId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetSyncDagSyncSyncIdDagGetRequest`
 
 </dd>
 </dl>
@@ -2133,6 +2438,7 @@ Search for documents within a specific sync.
 await client.search.search({
     syncId: "sync_id",
     query: "query",
+    creds: "creds",
 });
 ```
 
@@ -2170,7 +2476,7 @@ await client.search.search({
 
 ## WhiteLabels
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>() -> AirweaveSDK.WhiteLabel[]</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>({ ...params }) -> AirweaveSDK.WhiteLabel[]</code></summary>
 <dl>
 <dd>
 
@@ -2207,7 +2513,9 @@ List all white labels for the current user's organization.
 <dd>
 
 ```typescript
-await client.whiteLabels.listWhiteLabels();
+await client.whiteLabels.listWhiteLabels({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2219,6 +2527,14 @@ await client.whiteLabels.listWhiteLabels();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListWhiteLabelsWhiteLabelsListGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -2273,6 +2589,7 @@ Create new white label integration.
 
 ```typescript
 await client.whiteLabels.createWhiteLabel({
+    creds: "creds",
     name: "name",
     sourceShortName: "source_short_name",
     redirectUrl: "redirect_url",
@@ -2313,7 +2630,7 @@ await client.whiteLabels.createWhiteLabel({
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabel</a>(whiteLabelId, { ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
 <dl>
 <dd>
 
@@ -2351,7 +2668,9 @@ Get a specific white label integration.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabel("white_label_id");
+await client.whiteLabels.getWhiteLabel("white_label_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2368,6 +2687,14 @@ await client.whiteLabels.getWhiteLabel("white_label_id");
 <dd>
 
 **whiteLabelId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetWhiteLabelWhiteLabelsWhiteLabelIdGetRequest`
 
 </dd>
 </dl>
@@ -2425,7 +2752,13 @@ Update a white label integration.
 <dd>
 
 ```typescript
-await client.whiteLabels.updateWhiteLabel("white_label_id");
+await client.whiteLabels.updateWhiteLabel("white_label_id", {
+    creds: "creds",
+    name: undefined,
+    redirectUrl: undefined,
+    clientId: undefined,
+    clientSecret: undefined,
+});
 ```
 
 </dd>
@@ -2468,7 +2801,7 @@ await client.whiteLabels.updateWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">deleteWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">deleteWhiteLabel</a>(whiteLabelId, { ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
 <dl>
 <dd>
 
@@ -2506,7 +2839,9 @@ Delete a white label integration.
 <dd>
 
 ```typescript
-await client.whiteLabels.deleteWhiteLabel("white_label_id");
+await client.whiteLabels.deleteWhiteLabel("white_label_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2530,6 +2865,14 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.DeleteWhiteLabelWhiteLabelsWhiteLabelIdDeleteRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `WhiteLabels.RequestOptions`
 
 </dd>
@@ -2541,7 +2884,7 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId, { ...params }) -> string</code></summary>
 <dl>
 <dd>
 
@@ -2579,7 +2922,9 @@ Generate the OAuth2 authorization URL by delegating to oauth2_service.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2596,6 +2941,14 @@ await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
 <dd>
 
 **whiteLabelId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlGetRequest`
 
 </dd>
 </dl>
@@ -2653,7 +3006,10 @@ Exchange OAuth2 code for tokens and create connection.
 <dd>
 
 ```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", "string");
+await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+    creds: "creds",
+    body: "string",
+});
 ```
 
 </dd>
@@ -2677,7 +3033,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", "string"
 <dl>
 <dd>
 
-**request:** `string`
+**request:** `AirweaveSDK.ExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePostRequest`
 
 </dd>
 </dl>
@@ -2696,7 +3052,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", "string"
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabelSyncs</a>(whiteLabelId) -> AirweaveSDK.Sync[]</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabelSyncs</a>(whiteLabelId, { ...params }) -> AirweaveSDK.Sync[]</code></summary>
 <dl>
 <dd>
 
@@ -2734,7 +3090,9 @@ List all syncs for a specific white label.
 <dd>
 
 ```typescript
-await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
+await client.whiteLabels.listWhiteLabelSyncs("white_label_id", {
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2758,6 +3116,14 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 <dl>
 <dd>
 
+**request:** `AirweaveSDK.ListWhiteLabelSyncsWhiteLabelsWhiteLabelIdSyncsGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
 **requestOptions:** `WhiteLabels.RequestOptions`
 
 </dd>
@@ -2771,7 +3137,7 @@ await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
 
 ## Entities
 
-<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityDefinitions</a>() -> AirweaveSDK.EntityDefinition[]</code></summary>
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityDefinitions</a>({ ...params }) -> AirweaveSDK.EntityDefinition[]</code></summary>
 <dl>
 <dd>
 
@@ -2799,7 +3165,9 @@ List all entity definitions for the current user's organization.
 <dd>
 
 ```typescript
-await client.entities.listEntityDefinitions();
+await client.entities.listEntityDefinitions({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -2811,6 +3179,14 @@ await client.entities.listEntityDefinitions();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListEntityDefinitionsEntitiesDefinitionsGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -2855,9 +3231,12 @@ Create a new entity definition.
 
 ```typescript
 await client.entities.createEntityDefinition({
+    creds: "creds",
     name: "name",
+    description: undefined,
     type: "file",
-    entitySchema: ["entity_schema"],
+    entitySchema: ["entity_schema", "entity_schema"],
+    parentId: undefined,
     moduleName: "module_name",
     className: "class_name",
 });
@@ -2924,9 +3303,12 @@ Update an entity definition.
 
 ```typescript
 await client.entities.updateEntityDefinition("definition_id", {
+    creds: "creds",
     name: "name",
+    description: undefined,
     type: "file",
-    entitySchema: ["entity_schema"],
+    entitySchema: ["entity_schema", "entity_schema"],
+    parentId: undefined,
     moduleName: "module_name",
     className: "class_name",
 });
@@ -2972,7 +3354,7 @@ await client.entities.updateEntityDefinition("definition_id", {
 </dl>
 </details>
 
-<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityRelations</a>() -> AirweaveSDK.EntityRelation[]</code></summary>
+<details><summary><code>client.entities.<a href="/src/api/resources/entities/client/Client.ts">listEntityRelations</a>({ ...params }) -> AirweaveSDK.EntityRelation[]</code></summary>
 <dl>
 <dd>
 
@@ -3000,7 +3382,9 @@ List all entity relations for the current user's organization.
 <dd>
 
 ```typescript
-await client.entities.listEntityRelations();
+await client.entities.listEntityRelations({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -3012,6 +3396,14 @@ await client.entities.listEntityRelations();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListEntityRelationsEntitiesRelationsGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -3056,7 +3448,9 @@ Create a new entity relation.
 
 ```typescript
 await client.entities.createEntityRelation({
+    creds: "creds",
     name: "name",
+    description: undefined,
     fromEntityId: "from_entity_id",
     toEntityId: "to_entity_id",
 });
@@ -3123,7 +3517,9 @@ Update an entity relation.
 
 ```typescript
 await client.entities.updateEntityRelation("relation_id", {
+    creds: "creds",
     name: "name",
+    description: undefined,
     fromEntityId: "from_entity_id",
     toEntityId: "to_entity_id",
 });
@@ -3205,7 +3601,10 @@ List of entity definitions matching the provided IDs
 <dd>
 
 ```typescript
-await client.entities.getEntityDefinitionsByIds(["string"]);
+await client.entities.getEntityDefinitionsByIds({
+    creds: "creds",
+    body: ["string", "string"],
+});
 ```
 
 </dd>
@@ -3221,7 +3620,7 @@ await client.entities.getEntityDefinitionsByIds(["string"]);
 <dl>
 <dd>
 
-**request:** `string[]`
+**request:** `AirweaveSDK.GetEntityDefinitionsByIdsEntitiesDefinitionsByIdsPostRequest`
 
 </dd>
 </dl>
@@ -3270,6 +3669,7 @@ Get all entity definitions for a given source.
 ```typescript
 await client.entities.getEntityDefinitionsBySourceShortName({
     sourceShortName: "source_short_name",
+    creds: "creds",
 });
 ```
 
@@ -3307,7 +3707,7 @@ await client.entities.getEntityDefinitionsBySourceShortName({
 
 ## Transformers
 
-<details><summary><code>client.transformers.<a href="/src/api/resources/transformers/client/Client.ts">listTransformers</a>() -> AirweaveSDK.Transformer[]</code></summary>
+<details><summary><code>client.transformers.<a href="/src/api/resources/transformers/client/Client.ts">listTransformers</a>({ ...params }) -> AirweaveSDK.Transformer[]</code></summary>
 <dl>
 <dd>
 
@@ -3335,7 +3735,9 @@ List all transformers for the current user's organization.
 <dd>
 
 ```typescript
-await client.transformers.listTransformers();
+await client.transformers.listTransformers({
+    creds: "creds",
+});
 ```
 
 </dd>
@@ -3347,6 +3749,14 @@ await client.transformers.listTransformers();
 
 <dl>
 <dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ListTransformersTransformersGetRequest`
+
+</dd>
+</dl>
 
 <dl>
 <dd>
@@ -3391,11 +3801,14 @@ Create a new transformer.
 
 ```typescript
 await client.transformers.createTransformer({
+    creds: "creds",
     name: "name",
+    description: undefined,
     methodName: "method_name",
     moduleName: "module_name",
-    inputEntityDefinitionIds: ["input_entity_definition_ids"],
-    outputEntityDefinitionIds: ["output_entity_definition_ids"],
+    inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
+    outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
+    configSchema: undefined,
 });
 ```
 
@@ -3460,11 +3873,14 @@ Update a transformer.
 
 ```typescript
 await client.transformers.updateTransformer("transformer_id", {
+    creds: "creds",
     name: "name",
+    description: undefined,
     methodName: "method_name",
     moduleName: "module_name",
-    inputEntityDefinitionIds: ["input_entity_definition_ids"],
-    outputEntityDefinitionIds: ["output_entity_definition_ids"],
+    inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
+    outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
+    configSchema: undefined,
 });
 ```
 

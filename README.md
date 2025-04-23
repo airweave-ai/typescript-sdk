@@ -23,10 +23,11 @@ Instantiate and use the client with the following:
 import { AirweaveSDKClient } from "@airweave/sdk";
 
 const client = new AirweaveSDKClient({ apiKey: "YOUR_API_KEY" });
-await client.connections.connectIntegration("source", "short_name", {
-    configFields: {
-        key: "value",
-    },
+await client.users.createOrUpdateUser({
+    creds: "creds",
+    email: "email",
+    fullName: undefined,
+    organizationId: undefined,
 });
 ```
 
@@ -38,7 +39,7 @@ following namespace:
 ```typescript
 import { AirweaveSDK } from "@airweave/sdk";
 
-const request: AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost = {
+const request: AirweaveSDK.ReadUserUsersGetRequest = {
     ...
 };
 ```
@@ -52,7 +53,7 @@ will be thrown.
 import { AirweaveSDKError } from "@airweave/sdk";
 
 try {
-    await client.connections.connectIntegration(...);
+    await client.users.createOrUpdateUser(...);
 } catch (err) {
     if (err instanceof AirweaveSDKError) {
         console.log(err.statusCode);
@@ -69,7 +70,7 @@ try {
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-const response = await client.connections.connectIntegration(..., {
+const response = await client.users.createOrUpdateUser(..., {
     headers: {
         'X-Custom-Header': 'custom value'
     }
@@ -91,7 +92,7 @@ A request is deemed retriable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.connections.connectIntegration(..., {
+const response = await client.users.createOrUpdateUser(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -101,7 +102,7 @@ const response = await client.connections.connectIntegration(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.connections.connectIntegration(..., {
+const response = await client.users.createOrUpdateUser(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -112,7 +113,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.connections.connectIntegration(..., {
+const response = await client.users.createOrUpdateUser(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request

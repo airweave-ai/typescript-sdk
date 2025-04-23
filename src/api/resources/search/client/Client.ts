@@ -55,17 +55,19 @@ export class Search {
      * @example
      *     await client.search.search({
      *         syncId: "sync_id",
-     *         query: "query"
+     *         query: "query",
+     *         creds: "creds"
      *     })
      */
     public async search(
         request: AirweaveSDK.SearchSearchGetRequest,
         requestOptions?: Search.RequestOptions,
     ): Promise<Record<string, unknown>[]> {
-        const { syncId, query } = request;
+        const { syncId, query, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["sync_id"] = syncId;
         _queryParams["query"] = query;
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -79,8 +81,8 @@ export class Search {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

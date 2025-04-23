@@ -5,11 +5,13 @@
 /**
  * @example
  *     {
+ *         creds: "creds",
  *         shortName: "short_name",
  *         code: "code"
  *     }
  */
 export interface BodySendOauth2CodeConnectionsOauth2SourceCodePost {
+    creds: string;
     shortName: string;
     code: string;
 }

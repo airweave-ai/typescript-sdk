@@ -5,12 +5,15 @@
 /**
  * @example
  *     {
+ *         creds: "creds",
  *         name: "name",
+ *         description: undefined,
  *         fromEntityId: "from_entity_id",
  *         toEntityId: "to_entity_id"
  *     }
  */
 export interface EntityRelationUpdate {
+    creds: string;
     name: string;
     description?: string;
     fromEntityId: string;

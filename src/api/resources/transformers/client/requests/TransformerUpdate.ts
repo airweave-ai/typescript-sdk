@@ -5,14 +5,18 @@
 /**
  * @example
  *     {
+ *         creds: "creds",
  *         name: "name",
+ *         description: undefined,
  *         methodName: "method_name",
  *         moduleName: "module_name",
- *         inputEntityDefinitionIds: ["input_entity_definition_ids"],
- *         outputEntityDefinitionIds: ["output_entity_definition_ids"]
+ *         inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
+ *         outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
+ *         configSchema: undefined
  *     }
  */
 export interface TransformerUpdate {
+    creds: string;
     name: string;
     description?: string;
     methodName: string;

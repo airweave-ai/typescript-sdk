@@ -47,17 +47,24 @@ export class Connections {
      *     schemas.Connection: The connection.
      *
      * @param {string} connectionId
+     * @param {AirweaveSDK.GetConnectionConnectionsDetailConnectionIdGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.getConnection("connection_id")
+     *     await client.connections.getConnection("connection_id", {
+     *         creds: "creds"
+     *     })
      */
     public async getConnection(
         connectionId: string,
+        request: AirweaveSDK.GetConnectionConnectionsDetailConnectionIdGetRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -71,13 +78,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -140,16 +148,23 @@ export class Connections {
      * -------
      *     list[schemas.Connection]: The list of connections.
      *
+     * @param {AirweaveSDK.ListAllConnectedIntegrationsConnectionsListGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.listAllConnectedIntegrations()
+     *     await client.connections.listAllConnectedIntegrations({
+     *         creds: "creds"
+     *     })
      */
     public async listAllConnectedIntegrations(
+        request: AirweaveSDK.ListAllConnectedIntegrationsConnectionsListGetRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -163,13 +178,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -232,17 +248,24 @@ export class Connections {
      *     list[schemas.Connection]: The list of connections.
      *
      * @param {AirweaveSDK.IntegrationType} integrationType
+     * @param {AirweaveSDK.ListConnectedIntegrationsConnectionsListIntegrationTypeGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.listConnectedIntegrations("source")
+     *     await client.connections.listConnectedIntegrations("source", {
+     *         creds: "creds"
+     *     })
      */
     public async listConnectedIntegrations(
         integrationType: AirweaveSDK.IntegrationType,
+        request: AirweaveSDK.ListConnectedIntegrationsConnectionsListIntegrationTypeGetRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection[]> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -256,13 +279,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -346,8 +370,12 @@ export class Connections {
      *
      * @example
      *     await client.connections.connectIntegration("source", "short_name", {
+     *         creds: "creds",
+     *         name: undefined,
      *         configFields: {
-     *             "key": "value"
+     *             "config_fields": {
+     *                 "key": "value"
+     *             }
      *         }
      *     })
      */
@@ -357,6 +385,9 @@ export class Connections {
         request: AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -370,18 +401,18 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost.jsonOrThrow(
-                request,
-                { unrecognizedObjectKeys: "strip" },
-            ),
+            body: serializers.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost.jsonOrThrow(_body, {
+                unrecognizedObjectKeys: "strip",
+            }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -445,17 +476,24 @@ export class Connections {
      *     decrypted_credentials (dict): The credentials for the connection
      *
      * @param {string} connectionId
+     * @param {AirweaveSDK.GetConnectionCredentialsConnectionsCredentialsConnectionIdGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.getConnectionCredentials("connection_id")
+     *     await client.connections.getConnectionCredentials("connection_id", {
+     *         creds: "creds"
+     *     })
      */
     public async getConnectionCredentials(
         connectionId: string,
+        request: AirweaveSDK.GetConnectionCredentialsConnectionsCredentialsConnectionIdGetRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<Record<string, unknown>> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -469,13 +507,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -542,17 +581,24 @@ export class Connections {
      *     connection (schemas.Connection): The deleted connection
      *
      * @param {string} connectionId
+     * @param {AirweaveSDK.DeleteConnectionConnectionsDeleteSourceConnectionIdDeleteRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.deleteConnection("connection_id")
+     *     await client.connections.deleteConnection("connection_id", {
+     *         creds: "creds"
+     *     })
      */
     public async deleteConnection(
         connectionId: string,
+        request: AirweaveSDK.DeleteConnectionConnectionsDeleteSourceConnectionIdDeleteRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -566,13 +612,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -637,17 +684,24 @@ export class Connections {
      *     connection (schemas.Connection): The disconnected connection
      *
      * @param {string} connectionId
+     * @param {AirweaveSDK.DisconnectSourceConnectionConnectionsDisconnectSourceConnectionIdPutRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.disconnectSourceConnection("connection_id")
+     *     await client.connections.disconnectSourceConnection("connection_id", {
+     *         creds: "creds"
+     *     })
      */
     public async disconnectSourceConnection(
         connectionId: string,
+        request: AirweaveSDK.DisconnectSourceConnectionConnectionsDisconnectSourceConnectionIdPutRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -661,13 +715,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -744,6 +799,7 @@ export class Connections {
      *
      * @example
      *     await client.connections.sendOauth2Code({
+     *         creds: "creds",
      *         shortName: "short_name",
      *         code: "code"
      *     })
@@ -752,6 +808,9 @@ export class Connections {
         request: AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds, ..._body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -765,15 +824,16 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.BodySendOauth2CodeConnectionsOauth2SourceCodePost.jsonOrThrow(request, {
+            body: serializers.BodySendOauth2CodeConnectionsOauth2SourceCodePost.jsonOrThrow(_body, {
                 unrecognizedObjectKeys: "strip",
             }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -841,19 +901,25 @@ export class Connections {
      *     connection (schemas.Connection): The created connection
      *
      * @param {string} whiteLabelId
-     * @param {string} request
+     * @param {AirweaveSDK.SendOauth2WhiteLabelCodeConnectionsOauth2WhiteLabelWhiteLabelIdCodePostRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string")
+     *     await client.connections.sendOauth2WhiteLabelCode("white_label_id", {
+     *         creds: "creds",
+     *         body: "string"
+     *     })
      */
     public async sendOauth2WhiteLabelCode(
         whiteLabelId: string,
-        request: string,
+        request: AirweaveSDK.SendOauth2WhiteLabelCodeConnectionsOauth2WhiteLabelWhiteLabelIdCodePostRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
+        const { creds, body: _body } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -867,15 +933,16 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.connections.sendOauth2WhiteLabelCode.Request.jsonOrThrow(request, {
+            body: serializers.connections.sendOauth2WhiteLabelCode.Request.jsonOrThrow(_body, {
                 unrecognizedObjectKeys: "strip",
             }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -941,17 +1008,24 @@ export class Connections {
      *     str: The OAuth2 authorization URL
      *
      * @param {string} whiteLabelId
+     * @param {AirweaveSDK.GetOauth2WhiteLabelAuthUrlConnectionsOauth2WhiteLabelWhiteLabelIdAuthUrlGetRequest} request
      * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id")
+     *     await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id", {
+     *         creds: "creds"
+     *     })
      */
     public async getOauth2WhiteLabelAuthUrl(
         whiteLabelId: string,
+        request: AirweaveSDK.GetOauth2WhiteLabelAuthUrlConnectionsOauth2WhiteLabelWhiteLabelIdAuthUrlGetRequest,
         requestOptions?: Connections.RequestOptions,
     ): Promise<string> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -965,13 +1039,14 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.8",
-                "User-Agent": "@airweave/sdk/v0.2.8",
+                "X-Fern-SDK-Version": "v0.2.9",
+                "User-Agent": "@airweave/sdk/v0.2.9",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
+            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost: core.serialization.Schema<
     serializers.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost.Raw,
-    AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost
+    Omit<AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost, "creds">
 > = core.serialization.object({
     name: core.serialization.string().optional(),
     configFields: core.serialization.property(

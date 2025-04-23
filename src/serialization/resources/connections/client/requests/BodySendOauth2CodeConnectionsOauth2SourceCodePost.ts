@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const BodySendOauth2CodeConnectionsOauth2SourceCodePost: core.serialization.Schema<
     serializers.BodySendOauth2CodeConnectionsOauth2SourceCodePost.Raw,
-    AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost
+    Omit<AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost, "creds">
 > = core.serialization.object({
     shortName: core.serialization.property("short_name", core.serialization.string()),
     code: core.serialization.string(),

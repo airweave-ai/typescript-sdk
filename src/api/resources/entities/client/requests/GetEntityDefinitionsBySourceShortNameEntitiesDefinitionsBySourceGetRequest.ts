@@ -5,9 +5,11 @@
 /**
  * @example
  *     {
- *         sourceShortName: "source_short_name"
+ *         sourceShortName: "source_short_name",
+ *         creds: "creds"
  *     }
  */
 export interface GetEntityDefinitionsBySourceShortNameEntitiesDefinitionsBySourceGetRequest {
     sourceShortName: string;
+    creds: string;
 }

@@ -7,33 +7,35 @@ import * as AirweaveSDK from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { SyncStatus } from "../../../../types/SyncStatus";
 
-export const SyncCreate: core.serialization.Schema<serializers.SyncCreate.Raw, AirweaveSDK.SyncCreate> =
-    core.serialization.object({
-        name: core.serialization.string(),
-        sourceConnectionId: core.serialization.property("source_connection_id", core.serialization.string()),
-        embeddingModelConnectionId: core.serialization.property(
-            "embedding_model_connection_id",
-            core.serialization.string().optional(),
-        ),
-        destinationConnectionIds: core.serialization.property(
-            "destination_connection_ids",
-            core.serialization.list(core.serialization.string()),
-        ),
-        description: core.serialization.string().optional(),
-        cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
-        nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
-        whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
-        whiteLabelUserIdentifier: core.serialization.property(
-            "white_label_user_identifier",
-            core.serialization.string().optional(),
-        ),
-        syncMetadata: core.serialization.property(
-            "sync_metadata",
-            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-        ),
-        status: SyncStatus.optional(),
-        runImmediately: core.serialization.property("run_immediately", core.serialization.boolean().optional()),
-    });
+export const SyncCreate: core.serialization.Schema<
+    serializers.SyncCreate.Raw,
+    Omit<AirweaveSDK.SyncCreate, "creds">
+> = core.serialization.object({
+    name: core.serialization.string(),
+    sourceConnectionId: core.serialization.property("source_connection_id", core.serialization.string()),
+    embeddingModelConnectionId: core.serialization.property(
+        "embedding_model_connection_id",
+        core.serialization.string().optional(),
+    ),
+    destinationConnectionIds: core.serialization.property(
+        "destination_connection_ids",
+        core.serialization.list(core.serialization.string()),
+    ),
+    description: core.serialization.string().optional(),
+    cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
+    nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
+    whiteLabelUserIdentifier: core.serialization.property(
+        "white_label_user_identifier",
+        core.serialization.string().optional(),
+    ),
+    syncMetadata: core.serialization.property(
+        "sync_metadata",
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    ),
+    status: SyncStatus.optional(),
+    runImmediately: core.serialization.property("run_immediately", core.serialization.boolean().optional()),
+});
 
 export declare namespace SyncCreate {
     export interface Raw {

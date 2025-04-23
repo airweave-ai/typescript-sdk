@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const TransformerCreate: core.serialization.Schema<
     serializers.TransformerCreate.Raw,
-    AirweaveSDK.TransformerCreate
+    Omit<AirweaveSDK.TransformerCreate, "creds">
 > = core.serialization.object({
     name: core.serialization.string(),
     description: core.serialization.string().optional(),

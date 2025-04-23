@@ -7,22 +7,24 @@ import * as AirweaveSDK from "../../../../../api/index";
 import * as core from "../../../../../core";
 import { SyncStatus } from "../../../../types/SyncStatus";
 
-export const SyncUpdate: core.serialization.Schema<serializers.SyncUpdate.Raw, AirweaveSDK.SyncUpdate> =
-    core.serialization.object({
-        name: core.serialization.string().optional(),
-        cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
-        nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
-        whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
-        whiteLabelUserIdentifier: core.serialization.property(
-            "white_label_user_identifier",
-            core.serialization.string().optional(),
-        ),
-        syncMetadata: core.serialization.property(
-            "sync_metadata",
-            core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-        ),
-        status: SyncStatus.optional(),
-    });
+export const SyncUpdate: core.serialization.Schema<
+    serializers.SyncUpdate.Raw,
+    Omit<AirweaveSDK.SyncUpdate, "creds">
+> = core.serialization.object({
+    name: core.serialization.string().optional(),
+    cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
+    nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
+    whiteLabelUserIdentifier: core.serialization.property(
+        "white_label_user_identifier",
+        core.serialization.string().optional(),
+    ),
+    syncMetadata: core.serialization.property(
+        "sync_metadata",
+        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
+    ),
+    status: SyncStatus.optional(),
+});
 
 export declare namespace SyncUpdate {
     export interface Raw {

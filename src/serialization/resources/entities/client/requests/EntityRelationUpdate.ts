@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const EntityRelationUpdate: core.serialization.Schema<
     serializers.EntityRelationUpdate.Raw,
-    AirweaveSDK.EntityRelationUpdate
+    Omit<AirweaveSDK.EntityRelationUpdate, "creds">
 > = core.serialization.object({
     name: core.serialization.string(),
     description: core.serialization.string().optional(),

@@ -10,7 +10,7 @@ import { EntityDefinitionUpdateEntitySchema } from "../../types/EntityDefinition
 
 export const EntityDefinitionUpdate: core.serialization.Schema<
     serializers.EntityDefinitionUpdate.Raw,
-    AirweaveSDK.EntityDefinitionUpdate
+    Omit<AirweaveSDK.EntityDefinitionUpdate, "creds">
 > = core.serialization.object({
     name: core.serialization.string(),
     description: core.serialization.string().optional(),
