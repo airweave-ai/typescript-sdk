@@ -2396,7 +2396,7 @@ await client.sync.getSyncDag("sync_id", {
 
 ## Search
 
-<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> Record<string, unknown>[]</code></summary>
+<details><summary><code>client.search.<a href="/src/api/resources/search/client/Client.ts">search</a>({ ...params }) -> Record<string, unknown></code></summary>
 <dl>
 <dd>
 
@@ -2415,11 +2415,12 @@ Search for documents within a specific sync.
     db: The database session
     sync_id: The ID of the sync to search within
     query: The search query text
+    response_type: Type of response (raw results or AI completion)
     user: The current user
 
 ## Returns:
 
-    list[dict]: A list of search results
+    dict: A dictionary containing search results or AI completion
 
 </dd>
 </dl>

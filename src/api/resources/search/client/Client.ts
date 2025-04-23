@@ -41,11 +41,12 @@ export class Search {
      *     db: The database session
      *     sync_id: The ID of the sync to search within
      *     query: The search query text
+     *     response_type: Type of response (raw results or AI completion)
      *     user: The current user
      *
      * Returns:
      * --------
-     *     list[dict]: A list of search results
+     *     dict: A dictionary containing search results or AI completion
      *
      * @param {AirweaveSDK.SearchSearchGetRequest} request
      * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
@@ -62,11 +63,15 @@ export class Search {
     public async search(
         request: AirweaveSDK.SearchSearchGetRequest,
         requestOptions?: Search.RequestOptions,
-    ): Promise<Record<string, unknown>[]> {
-        const { syncId, query, creds } = request;
+    ): Promise<Record<string, unknown>> {
+        const { syncId, query, responseType, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["sync_id"] = syncId;
         _queryParams["query"] = query;
+        if (responseType != null) {
+            _queryParams["response_type"] = responseType;
+        }
+
         _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
@@ -81,8 +86,8 @@ export class Search {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.13",
-                "User-Agent": "@airweave/sdk/v0.2.13",
+                "X-Fern-SDK-Version": "v0.2.14",
+                "User-Agent": "@airweave/sdk/v0.2.14",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
