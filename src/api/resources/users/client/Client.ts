@@ -38,7 +38,6 @@ export class Users {
      *
      * Args:
      * ----
-     *     request (Request): The current request.
      *     current_user (User): The current user.
      *
      * Returns:
@@ -75,8 +74,8 @@ export class Users {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.16",
-                "User-Agent": "@airweave/sdk/v0.2.16",
+                "X-Fern-SDK-Version": "v0.2.17",
+                "User-Agent": "@airweave/sdk/v0.2.17",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -137,7 +136,6 @@ export class Users {
      * Can only create user with the same email as the authenticated user.
      *
      * Args:
-     *     request (Request): The request object
      *     user_data (schemas.UserCreate): The user object to be created.
      *     db (AsyncSession): Database session dependency to handle database operations.
      *     auth0_user (Auth0User): Authenticated auth0 user.
@@ -181,8 +179,8 @@ export class Users {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.16",
-                "User-Agent": "@airweave/sdk/v0.2.16",
+                "X-Fern-SDK-Version": "v0.2.17",
+                "User-Agent": "@airweave/sdk/v0.2.17",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

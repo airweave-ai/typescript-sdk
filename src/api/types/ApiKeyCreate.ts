@@ -3,13 +3,8 @@
  */
 
 /**
- * @example
- *     {
- *         creds: "creds",
- *         expirationDate: undefined
- *     }
+ * Schema for creating an APIKey object.
  */
 export interface ApiKeyCreate {
-    creds: string;
     expirationDate?: Date;
 }

@@ -1,4 +1,5 @@
 export * from "./ApiKey";
+export * from "./ApiKeyCreate";
 export * from "./ApiKeyWithPlainKey";
 export * from "./AuthType";
 export * from "./BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost";
