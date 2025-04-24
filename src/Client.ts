@@ -4,6 +4,7 @@
 
 import * as environments from "./environments";
 import * as core from "./core";
+import { ApiKeys } from "./api/resources/apiKeys/client/Client";
 import { Users } from "./api/resources/users/client/Client";
 import { Sources } from "./api/resources/sources/client/Client";
 import { Destinations } from "./api/resources/destinations/client/Client";
@@ -37,6 +38,7 @@ export declare namespace AirweaveSDKClient {
 }
 
 export class AirweaveSDKClient {
+    protected _apiKeys: ApiKeys | undefined;
     protected _users: Users | undefined;
     protected _sources: Sources | undefined;
     protected _destinations: Destinations | undefined;
@@ -49,6 +51,10 @@ export class AirweaveSDKClient {
     protected _transformers: Transformers | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
+
+    public get apiKeys(): ApiKeys {
+        return (this._apiKeys ??= new ApiKeys(this._options));
+    }
 
     public get users(): Users {
         return (this._users ??= new Users(this._options));

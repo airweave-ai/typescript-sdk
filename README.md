@@ -23,11 +23,9 @@ Instantiate and use the client with the following:
 import { AirweaveSDKClient } from "@airweave/sdk";
 
 const client = new AirweaveSDKClient({ apiKey: "YOUR_API_KEY" });
-await client.users.createOrUpdateUser({
+await client.apiKeys.createApiKey({
     creds: "creds",
-    email: "email",
-    fullName: undefined,
-    organizationId: undefined,
+    expirationDate: undefined,
 });
 ```
 
@@ -39,7 +37,7 @@ following namespace:
 ```typescript
 import { AirweaveSDK } from "@airweave/sdk";
 
-const request: AirweaveSDK.ReadUserUsersGetRequest = {
+const request: AirweaveSDK.ReadApiKeysApiKeysGetRequest = {
     ...
 };
 ```
@@ -53,7 +51,7 @@ will be thrown.
 import { AirweaveSDKError } from "@airweave/sdk";
 
 try {
-    await client.users.createOrUpdateUser(...);
+    await client.apiKeys.createApiKey(...);
 } catch (err) {
     if (err instanceof AirweaveSDKError) {
         console.log(err.statusCode);
@@ -70,7 +68,7 @@ try {
 If you would like to send additional headers as part of the request, use the `headers` request option.
 
 ```typescript
-const response = await client.users.createOrUpdateUser(..., {
+const response = await client.apiKeys.createApiKey(..., {
     headers: {
         'X-Custom-Header': 'custom value'
     }
@@ -92,7 +90,7 @@ A request is deemed retriable when any of the following HTTP status codes is ret
 Use the `maxRetries` request option to configure this behavior.
 
 ```typescript
-const response = await client.users.createOrUpdateUser(..., {
+const response = await client.apiKeys.createApiKey(..., {
     maxRetries: 0 // override maxRetries at the request level
 });
 ```
@@ -102,7 +100,7 @@ const response = await client.users.createOrUpdateUser(..., {
 The SDK defaults to a 60 second timeout. Use the `timeoutInSeconds` option to configure this behavior.
 
 ```typescript
-const response = await client.users.createOrUpdateUser(..., {
+const response = await client.apiKeys.createApiKey(..., {
     timeoutInSeconds: 30 // override timeout to 30s
 });
 ```
@@ -113,7 +111,7 @@ The SDK allows users to abort requests at any point by passing in an abort signa
 
 ```typescript
 const controller = new AbortController();
-const response = await client.users.createOrUpdateUser(..., {
+const response = await client.apiKeys.createApiKey(..., {
     abortSignal: controller.signal
 });
 controller.abort(); // aborts the request

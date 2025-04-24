@@ -4,7 +4,9 @@
 
 export const AirweaveSDKEnvironment = {
     Production: "https://api.airweave.ai",
-    Local: "http://localhost:8001",
+    Development: "https://api.dev-airweave.com",
 } as const;
 
-export type AirweaveSDKEnvironment = typeof AirweaveSDKEnvironment.Production | typeof AirweaveSDKEnvironment.Local;
+export type AirweaveSDKEnvironment =
+    | typeof AirweaveSDKEnvironment.Production
+    | typeof AirweaveSDKEnvironment.Development;

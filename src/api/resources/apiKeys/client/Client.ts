@@ -9,7 +9,7 @@ import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 
-export declare namespace Transformers {
+export declare namespace ApiKeys {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Override the x-api-key header */
@@ -30,33 +30,52 @@ export declare namespace Transformers {
     }
 }
 
-export class Transformers {
-    constructor(protected readonly _options: Transformers.Options = {}) {}
+export class ApiKeys {
+    constructor(protected readonly _options: ApiKeys.Options = {}) {}
 
     /**
-     * List all transformers for the current user's organization.
+     * Retrieve all API keys for the current user.
      *
-     * @param {AirweaveSDK.ListTransformersTransformersGetRequest} request
-     * @param {Transformers.RequestOptions} requestOptions - Request-specific configuration.
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     skip (int): Number of records to skip for pagination.
+     *     limit (int): Maximum number of records to return.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     List[schemas.APIKey]: A list of API keys.
+     *
+     * @param {AirweaveSDK.ReadApiKeysApiKeysGetRequest} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.transformers.listTransformers({
+     *     await client.apiKeys.readApiKeys({
      *         creds: "creds"
      *     })
      */
-    public async listTransformers(
-        request: AirweaveSDK.ListTransformersTransformersGetRequest,
-        requestOptions?: Transformers.RequestOptions,
-    ): Promise<AirweaveSDK.Transformer[]> {
-        const { creds } = request;
+    public async readApiKeys(
+        request: AirweaveSDK.ReadApiKeysApiKeysGetRequest,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKey[]> {
+        const { skip, limit, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        if (skip != null) {
+            _queryParams["skip"] = skip.toString();
+        }
+
+        if (limit != null) {
+            _queryParams["limit"] = limit.toString();
+        }
+
         _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "transformers/",
+                "api-keys/",
             ),
             method: "GET",
             headers: {
@@ -80,7 +99,7 @@ export class Transformers {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.transformers.listTransformers.Response.parseOrThrow(_response.body, {
+            return serializers.apiKeys.readApiKeys.Response.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -114,7 +133,7 @@ export class Transformers {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /transformers/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -123,36 +142,43 @@ export class Transformers {
     }
 
     /**
-     * Create a new transformer.
+     * Create a new API key for the current user.
      *
-     * @param {AirweaveSDK.TransformerCreate} request
-     * @param {Transformers.RequestOptions} requestOptions - Request-specific configuration.
+     * Returns a temporary plain key for the user to store securely.
+     * This is not stored in the database.
+     *
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     api_key_in (schemas.APIKeyCreate): The API key creation data.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKeyWithPlainKey: The created API key object, including the key.
+     *
+     * @param {AirweaveSDK.ApiKeyCreate} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.transformers.createTransformer({
+     *     await client.apiKeys.createApiKey({
      *         creds: "creds",
-     *         name: "name",
-     *         description: undefined,
-     *         methodName: "method_name",
-     *         moduleName: "module_name",
-     *         inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
-     *         outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
-     *         configSchema: undefined
+     *         expirationDate: undefined
      *     })
      */
-    public async createTransformer(
-        request: AirweaveSDK.TransformerCreate,
-        requestOptions?: Transformers.RequestOptions,
-    ): Promise<AirweaveSDK.Transformer> {
+    public async createApiKey(
+        request: AirweaveSDK.ApiKeyCreate,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKeyWithPlainKey> {
         const { creds, ..._body } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "transformers/",
+                "api-keys/",
             ),
             method: "POST",
             headers: {
@@ -171,13 +197,13 @@ export class Transformers {
             contentType: "application/json",
             queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.TransformerCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.ApiKeyCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.Transformer.parseOrThrow(_response.body, {
+            return serializers.ApiKeyWithPlainKey.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -211,7 +237,7 @@ export class Transformers {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /transformers/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /api-keys/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -220,40 +246,47 @@ export class Transformers {
     }
 
     /**
-     * Update a transformer.
+     * Delete an API key.
      *
-     * @param {string} transformerId
-     * @param {AirweaveSDK.TransformerUpdate} request
-     * @param {Transformers.RequestOptions} requestOptions - Request-specific configuration.
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     id (UUID): The ID of the API key.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKey: The revoked API key object.
+     *
+     * Raises:
+     * ------
+     *     HTTPException: If the API key is not found.
+     *
+     * @param {AirweaveSDK.DeleteApiKeyApiKeysDeleteRequest} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.transformers.updateTransformer("transformer_id", {
-     *         creds: "creds",
-     *         name: "name",
-     *         description: undefined,
-     *         methodName: "method_name",
-     *         moduleName: "module_name",
-     *         inputEntityDefinitionIds: ["input_entity_definition_ids", "input_entity_definition_ids"],
-     *         outputEntityDefinitionIds: ["output_entity_definition_ids", "output_entity_definition_ids"],
-     *         configSchema: undefined
+     *     await client.apiKeys.deleteApiKey({
+     *         id: "id",
+     *         creds: "creds"
      *     })
      */
-    public async updateTransformer(
-        transformerId: string,
-        request: AirweaveSDK.TransformerUpdate,
-        requestOptions?: Transformers.RequestOptions,
-    ): Promise<AirweaveSDK.Transformer> {
-        const { creds, ..._body } = request;
+    public async deleteApiKey(
+        request: AirweaveSDK.DeleteApiKeyApiKeysDeleteRequest,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKey> {
+        const { id, creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["id"] = id;
         _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                `transformers/${encodeURIComponent(transformerId)}`,
+                "api-keys/",
             ),
-            method: "PUT",
+            method: "DELETE",
             headers: {
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
@@ -270,13 +303,12 @@ export class Transformers {
             contentType: "application/json",
             queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.TransformerUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.Transformer.parseOrThrow(_response.body, {
+            return serializers.ApiKey.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -310,9 +342,112 @@ export class Transformers {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling PUT /transformers/{transformer_id}.",
-                );
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling DELETE /api-keys/.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Retrieve an API key by ID.
+     *
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     id (UUID): The ID of the API key.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKey: The API key object.
+     *
+     * Raises:
+     * ------
+     *     HTTPException: If the API key is not found.
+     *
+     * @param {string} id
+     * @param {AirweaveSDK.ReadApiKeyApiKeysIdGetRequest} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.apiKeys.readApiKey("id", {
+     *         creds: "creds"
+     *     })
+     */
+    public async readApiKey(
+        id: string,
+        request: AirweaveSDK.ReadApiKeyApiKeysIdGetRequest,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKey> {
+        const { creds } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["creds"] = creds;
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `api-keys/${encodeURIComponent(id)}`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.2.16",
+                "User-Agent": "@airweave/sdk/v0.2.16",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.ApiKey.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys/{id}.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
