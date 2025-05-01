@@ -11,10 +11,14 @@ export const SyncJob: core.serialization.ObjectSchema<serializers.SyncJob.Raw, A
     core.serialization.object({
         syncId: core.serialization.property("sync_id", core.serialization.string()),
         status: SyncJobStatus.optional(),
-        entitiesDetected: core.serialization.property("entities_detected", core.serialization.number().optional()),
         entitiesInserted: core.serialization.property("entities_inserted", core.serialization.number().optional()),
+        entitiesUpdated: core.serialization.property("entities_updated", core.serialization.number().optional()),
         entitiesDeleted: core.serialization.property("entities_deleted", core.serialization.number().optional()),
+        entitiesKept: core.serialization.property("entities_kept", core.serialization.number().optional()),
         entitiesSkipped: core.serialization.property("entities_skipped", core.serialization.number().optional()),
+        startedAt: core.serialization.property("started_at", core.serialization.date().optional()),
+        completedAt: core.serialization.property("completed_at", core.serialization.date().optional()),
+        failedAt: core.serialization.property("failed_at", core.serialization.date().optional()),
         error: core.serialization.string().optional(),
         id: core.serialization.string(),
         organizationId: core.serialization.property("organization_id", core.serialization.string()),
@@ -22,9 +26,6 @@ export const SyncJob: core.serialization.ObjectSchema<serializers.SyncJob.Raw, A
         modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string()),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
-        startedAt: core.serialization.property("started_at", core.serialization.date().optional()),
-        completedAt: core.serialization.property("completed_at", core.serialization.date().optional()),
-        failedAt: core.serialization.property("failed_at", core.serialization.date().optional()),
         syncName: core.serialization.property("sync_name", core.serialization.string().optional()),
     });
 
@@ -32,10 +33,14 @@ export declare namespace SyncJob {
     export interface Raw {
         sync_id: string;
         status?: SyncJobStatus.Raw | null;
-        entities_detected?: number | null;
         entities_inserted?: number | null;
+        entities_updated?: number | null;
         entities_deleted?: number | null;
+        entities_kept?: number | null;
         entities_skipped?: number | null;
+        started_at?: string | null;
+        completed_at?: string | null;
+        failed_at?: string | null;
         error?: string | null;
         id: string;
         organization_id: string;
@@ -43,9 +48,6 @@ export declare namespace SyncJob {
         modified_by_email: string;
         created_at: string;
         modified_at: string;
-        started_at?: string | null;
-        completed_at?: string | null;
-        failed_at?: string | null;
         sync_name?: string | null;
     }
 }

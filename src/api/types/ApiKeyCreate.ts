@@ -6,5 +6,6 @@
  * Schema for creating an APIKey object.
  */
 export interface ApiKeyCreate {
+    /** Expiration date for the API key, defaults to 180 days from now */
     expirationDate?: Date;
 }

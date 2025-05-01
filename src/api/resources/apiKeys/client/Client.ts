@@ -9,7 +9,7 @@ import urlJoin from "url-join";
 import * as serializers from "../../../../serialization/index";
 import * as errors from "../../../../errors/index";
 
-export declare namespace Search {
+export declare namespace ApiKeys {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Override the x-api-key header */
@@ -30,53 +30,49 @@ export declare namespace Search {
     }
 }
 
-export class Search {
-    constructor(protected readonly _options: Search.Options = {}) {}
+export class ApiKeys {
+    constructor(protected readonly _options: ApiKeys.Options = {}) {}
 
     /**
-     * Search for documents within a specific sync.
+     * Retrieve an API key by ID.
      *
      * Args:
-     * -----
-     *     db: The database session
-     *     sync_id: The ID of the sync to search within
-     *     query: The search query text
-     *     response_type: Type of response (raw results or AI completion)
-     *     user: The current user
+     * ----
+     *     db (AsyncSession): The database session.
+     *     id (UUID): The ID of the API key.
+     *     user (schemas.User): The current user.
      *
      * Returns:
-     * --------
-     *     dict: A dictionary containing search results or AI completion
+     * -------
+     *     schemas.APIKey: The API key object.
      *
-     * @param {AirweaveSDK.SearchSearchGetRequest} request
-     * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
+     * Raises:
+     * ------
+     *     HTTPException: If the API key is not found.
+     *
+     * @param {string} id
+     * @param {AirweaveSDK.ReadApiKeyApiKeysIdGetRequest} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.search.search({
-     *         syncId: "sync_id",
-     *         query: "query",
+     *     await client.apiKeys.readApiKey("id", {
      *         creds: "creds"
      *     })
      */
-    public async search(
-        request: AirweaveSDK.SearchSearchGetRequest,
-        requestOptions?: Search.RequestOptions,
-    ): Promise<Record<string, unknown>> {
-        const { syncId, query, responseType, creds } = request;
+    public async readApiKey(
+        id: string,
+        request: AirweaveSDK.ReadApiKeyApiKeysIdGetRequest,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKey> {
+        const { creds } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["sync_id"] = syncId;
-        _queryParams["query"] = query;
-        if (responseType != null) {
-            _queryParams["response_type"] = responseType;
-        }
-
         _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "search/",
+                `api-keys/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
@@ -100,7 +96,7 @@ export class Search {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.search.search.Response.parseOrThrow(_response.body, {
+            return serializers.ApiKey.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -134,7 +130,7 @@ export class Search {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys/{id}.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

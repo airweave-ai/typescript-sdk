@@ -4,16 +4,13 @@
 
 import * as environments from "./environments";
 import * as core from "./core";
-import { Users } from "./api/resources/users/client/Client";
+import { ApiKeys } from "./api/resources/apiKeys/client/Client";
 import { Sources } from "./api/resources/sources/client/Client";
-import { Destinations } from "./api/resources/destinations/client/Client";
 import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
 import { Sync } from "./api/resources/sync/client/Client";
 import { Search } from "./api/resources/search/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
-import { Entities } from "./api/resources/entities/client/Client";
-import { Transformers } from "./api/resources/transformers/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -37,29 +34,22 @@ export declare namespace AirweaveSDKClient {
 }
 
 export class AirweaveSDKClient {
-    protected _users: Users | undefined;
+    protected _apiKeys: ApiKeys | undefined;
     protected _sources: Sources | undefined;
-    protected _destinations: Destinations | undefined;
     protected _embeddingModels: EmbeddingModels | undefined;
     protected _connections: Connections | undefined;
     protected _sync: Sync | undefined;
     protected _search: Search | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
-    protected _entities: Entities | undefined;
-    protected _transformers: Transformers | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
-    public get users(): Users {
-        return (this._users ??= new Users(this._options));
+    public get apiKeys(): ApiKeys {
+        return (this._apiKeys ??= new ApiKeys(this._options));
     }
 
     public get sources(): Sources {
         return (this._sources ??= new Sources(this._options));
-    }
-
-    public get destinations(): Destinations {
-        return (this._destinations ??= new Destinations(this._options));
     }
 
     public get embeddingModels(): EmbeddingModels {
@@ -80,13 +70,5 @@ export class AirweaveSDKClient {
 
     public get whiteLabels(): WhiteLabels {
         return (this._whiteLabels ??= new WhiteLabels(this._options));
-    }
-
-    public get entities(): Entities {
-        return (this._entities ??= new Entities(this._options));
-    }
-
-    public get transformers(): Transformers {
-        return (this._transformers ??= new Transformers(this._options));
     }
 }
