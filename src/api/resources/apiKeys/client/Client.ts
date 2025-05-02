@@ -72,7 +72,7 @@ export class ApiKeys {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "api_keys/",
+                "api-keys",
             ),
             method: "GET",
             headers: {
@@ -82,8 +82,8 @@ export class ApiKeys {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.23",
-                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-SDK-Version": "v0.2.23",
+                "User-Agent": "@airweave/sdk/v0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -130,7 +130,7 @@ export class ApiKeys {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api_keys/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -169,7 +169,7 @@ export class ApiKeys {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "api_keys/",
+                "api-keys",
             ),
             method: "POST",
             headers: {
@@ -179,8 +179,8 @@ export class ApiKeys {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.23",
-                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-SDK-Version": "v0.2.23",
+                "User-Agent": "@airweave/sdk/v0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -227,7 +227,7 @@ export class ApiKeys {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /api_keys/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /api-keys.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -272,7 +272,7 @@ export class ApiKeys {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "api_keys/",
+                "api-keys",
             ),
             method: "DELETE",
             headers: {
@@ -282,8 +282,8 @@ export class ApiKeys {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.23",
-                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-SDK-Version": "v0.2.23",
+                "User-Agent": "@airweave/sdk/v0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -330,7 +330,7 @@ export class ApiKeys {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling DELETE /api_keys/.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling DELETE /api-keys.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -367,7 +367,7 @@ export class ApiKeys {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                `api_keys/${encodeURIComponent(id)}`,
+                `api-keys/${encodeURIComponent(id)}`,
             ),
             method: "GET",
             headers: {
@@ -377,8 +377,8 @@ export class ApiKeys {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.23",
-                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-SDK-Version": "v0.2.23",
+                "User-Agent": "@airweave/sdk/v0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -424,7 +424,7 @@ export class ApiKeys {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api_keys/{id}.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys/{id}.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

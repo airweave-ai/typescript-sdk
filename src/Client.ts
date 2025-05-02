@@ -5,12 +5,17 @@
 import * as environments from "./environments";
 import * as core from "./core";
 import { ApiKeys } from "./api/resources/apiKeys/client/Client";
+import { Users } from "./api/resources/users/client/Client";
 import { Sources } from "./api/resources/sources/client/Client";
 import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
 import { Sync } from "./api/resources/sync/client/Client";
 import { Search } from "./api/resources/search/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
+import { Chat } from "./api/resources/chat/client/Client";
+import { Dag } from "./api/resources/dag/client/Client";
+import { Entities } from "./api/resources/entities/client/Client";
+import { Transformers } from "./api/resources/transformers/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -35,17 +40,26 @@ export declare namespace AirweaveSDKClient {
 
 export class AirweaveSDKClient {
     protected _apiKeys: ApiKeys | undefined;
+    protected _users: Users | undefined;
     protected _sources: Sources | undefined;
     protected _embeddingModels: EmbeddingModels | undefined;
     protected _connections: Connections | undefined;
     protected _sync: Sync | undefined;
     protected _search: Search | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
+    protected _chat: Chat | undefined;
+    protected _dag: Dag | undefined;
+    protected _entities: Entities | undefined;
+    protected _transformers: Transformers | undefined;
 
     constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
     public get apiKeys(): ApiKeys {
         return (this._apiKeys ??= new ApiKeys(this._options));
+    }
+
+    public get users(): Users {
+        return (this._users ??= new Users(this._options));
     }
 
     public get sources(): Sources {
@@ -70,5 +84,21 @@ export class AirweaveSDKClient {
 
     public get whiteLabels(): WhiteLabels {
         return (this._whiteLabels ??= new WhiteLabels(this._options));
+    }
+
+    public get chat(): Chat {
+        return (this._chat ??= new Chat(this._options));
+    }
+
+    public get dag(): Dag {
+        return (this._dag ??= new Dag(this._options));
+    }
+
+    public get entities(): Entities {
+        return (this._entities ??= new Entities(this._options));
+    }
+
+    public get transformers(): Transformers {
+        return (this._transformers ??= new Transformers(this._options));
     }
 }
