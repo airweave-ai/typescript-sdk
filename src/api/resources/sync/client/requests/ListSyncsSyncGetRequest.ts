@@ -4,13 +4,10 @@
 
 /**
  * @example
- *     {
- *         creds: "creds"
- *     }
+ *     {}
  */
 export interface ListSyncsSyncGetRequest {
     skip?: number;
     limit?: number;
     withSourceConnection?: boolean;
-    creds: string;
 }

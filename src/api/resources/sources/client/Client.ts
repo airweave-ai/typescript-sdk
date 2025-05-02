@@ -47,24 +47,17 @@ export class Sources {
      *     schemas.Source: The source object.
      *
      * @param {string} shortName
-     * @param {AirweaveSDK.ReadSourceSourcesDetailShortNameGetRequest} request
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSource("short_name", {
-     *         creds: "creds"
-     *     })
+     *     await client.sources.readSource("short_name")
      */
     public async readSource(
         shortName: string,
-        request: AirweaveSDK.ReadSourceSourcesDetailShortNameGetRequest,
         requestOptions?: Sources.RequestOptions,
     ): Promise<AirweaveSDK.SourceWithConfigFields> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -78,14 +71,13 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -148,23 +140,14 @@ export class Sources {
      * --------
      *     list[schemas.Source]: The list of sources.
      *
-     * @param {AirweaveSDK.ReadSourcesSourcesListGetRequest} request
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSources({
-     *         creds: "creds"
-     *     })
+     *     await client.sources.readSources()
      */
-    public async readSources(
-        request: AirweaveSDK.ReadSourcesSourcesListGetRequest,
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<AirweaveSDK.Source[]> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
+    public async readSources(requestOptions?: Sources.RequestOptions): Promise<AirweaveSDK.Source[]> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -178,14 +161,13 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

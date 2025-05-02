@@ -4,16 +4,9 @@
 
 /**
  * @example
- *     {
- *         creds: "creds",
- *         name: undefined,
- *         redirectUrl: undefined,
- *         clientId: undefined,
- *         clientSecret: undefined
- *     }
+ *     {}
  */
 export interface WhiteLabelUpdate {
-    creds: string;
     name?: string;
     redirectUrl?: string;
     clientId?: string;

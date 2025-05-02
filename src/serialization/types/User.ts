@@ -9,7 +9,7 @@ import * as core from "../../core";
 export const User: core.serialization.ObjectSchema<serializers.User.Raw, AirweaveSDK.User> = core.serialization.object({
     email: core.serialization.string(),
     fullName: core.serialization.property("full_name", core.serialization.string().optional()),
-    organizationId: core.serialization.property("organization_id", core.serialization.string().optional()),
+    organizationId: core.serialization.property("organization_id", core.serialization.string()),
     id: core.serialization.string(),
     permissions: core.serialization.list(core.serialization.string()).optional(),
 });
@@ -18,7 +18,7 @@ export declare namespace User {
     export interface Raw {
         email: string;
         full_name?: string | null;
-        organization_id?: string | null;
+        organization_id: string;
         id: string;
         permissions?: string[] | null;
     }

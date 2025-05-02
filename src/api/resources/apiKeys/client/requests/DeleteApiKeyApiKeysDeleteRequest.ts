@@ -5,9 +5,9 @@
 /**
  * @example
  *     {
- *         creds: "creds"
+ *         id: "id"
  *     }
  */
-export interface ReadEmbeddingModelsEmbeddingModelsListGetRequest {
-    creds: string;
+export interface DeleteApiKeyApiKeysDeleteRequest {
+    id: string;
 }

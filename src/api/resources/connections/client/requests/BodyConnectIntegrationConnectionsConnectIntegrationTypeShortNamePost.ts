@@ -5,17 +5,12 @@
 /**
  * @example
  *     {
- *         creds: "creds",
- *         name: undefined,
  *         configFields: {
- *             "config_fields": {
- *                 "key": "value"
- *             }
+ *             "key": "value"
  *         }
  *     }
  */
 export interface BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost {
-    creds: string;
     name?: string;
     configFields: Record<string, unknown>;
 }

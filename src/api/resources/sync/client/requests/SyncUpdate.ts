@@ -6,19 +6,9 @@ import * as AirweaveSDK from "../../../../index";
 
 /**
  * @example
- *     {
- *         creds: "creds",
- *         name: undefined,
- *         cronSchedule: undefined,
- *         nextScheduledRun: undefined,
- *         whiteLabelId: undefined,
- *         whiteLabelUserIdentifier: undefined,
- *         syncMetadata: undefined,
- *         status: undefined
- *     }
+ *     {}
  */
 export interface SyncUpdate {
-    creds: string;
     name?: string;
     cronSchedule?: string;
     nextScheduledRun?: Date;

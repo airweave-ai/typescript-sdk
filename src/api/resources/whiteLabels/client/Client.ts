@@ -45,23 +45,14 @@ export class WhiteLabels {
      * --------
      *     list[schemas.WhiteLabel]: A list of white labels
      *
-     * @param {AirweaveSDK.ListWhiteLabelsWhiteLabelsListGetRequest} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.listWhiteLabels({
-     *         creds: "creds"
-     *     })
+     *     await client.whiteLabels.listWhiteLabels()
      */
-    public async listWhiteLabels(
-        request: AirweaveSDK.ListWhiteLabelsWhiteLabelsListGetRequest,
-        requestOptions?: WhiteLabels.RequestOptions,
-    ): Promise<AirweaveSDK.WhiteLabel[]> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
+    public async listWhiteLabels(requestOptions?: WhiteLabels.RequestOptions): Promise<AirweaveSDK.WhiteLabel[]> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -75,14 +66,13 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -151,7 +141,6 @@ export class WhiteLabels {
      *
      * @example
      *     await client.whiteLabels.createWhiteLabel({
-     *         creds: "creds",
      *         name: "name",
      *         sourceShortName: "source_short_name",
      *         redirectUrl: "redirect_url",
@@ -163,9 +152,6 @@ export class WhiteLabels {
         request: AirweaveSDK.WhiteLabelCreate,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.WhiteLabel> {
-        const { creds, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -179,16 +165,15 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.WhiteLabelCreate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.WhiteLabelCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -250,24 +235,17 @@ export class WhiteLabels {
      *     white_label (schemas.WhiteLabel): The white label
      *
      * @param {string} whiteLabelId
-     * @param {AirweaveSDK.GetWhiteLabelWhiteLabelsWhiteLabelIdGetRequest} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.getWhiteLabel("white_label_id", {
-     *         creds: "creds"
-     *     })
+     *     await client.whiteLabels.getWhiteLabel("white_label_id")
      */
     public async getWhiteLabel(
         whiteLabelId: string,
-        request: AirweaveSDK.GetWhiteLabelWhiteLabelsWhiteLabelIdGetRequest,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.WhiteLabel> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -281,14 +259,13 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -360,22 +337,13 @@ export class WhiteLabels {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.updateWhiteLabel("white_label_id", {
-     *         creds: "creds",
-     *         name: undefined,
-     *         redirectUrl: undefined,
-     *         clientId: undefined,
-     *         clientSecret: undefined
-     *     })
+     *     await client.whiteLabels.updateWhiteLabel("white_label_id")
      */
     public async updateWhiteLabel(
         whiteLabelId: string,
-        request: AirweaveSDK.WhiteLabelUpdate,
+        request: AirweaveSDK.WhiteLabelUpdate = {},
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.WhiteLabel> {
-        const { creds, ..._body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -389,16 +357,15 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.WhiteLabelUpdate.jsonOrThrow(_body, { unrecognizedObjectKeys: "strip" }),
+            body: serializers.WhiteLabelUpdate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -462,24 +429,17 @@ export class WhiteLabels {
      *     white_label (schemas.WhiteLabel): The deleted white label
      *
      * @param {string} whiteLabelId
-     * @param {AirweaveSDK.DeleteWhiteLabelWhiteLabelsWhiteLabelIdDeleteRequest} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.deleteWhiteLabel("white_label_id", {
-     *         creds: "creds"
-     *     })
+     *     await client.whiteLabels.deleteWhiteLabel("white_label_id")
      */
     public async deleteWhiteLabel(
         whiteLabelId: string,
-        request: AirweaveSDK.DeleteWhiteLabelWhiteLabelsWhiteLabelIdDeleteRequest,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.WhiteLabel> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -493,14 +453,13 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -565,24 +524,17 @@ export class WhiteLabels {
      *     str: The OAuth2 authorization URL
      *
      * @param {string} whiteLabelId
-     * @param {AirweaveSDK.GetWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlGetRequest} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id", {
-     *         creds: "creds"
-     *     })
+     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id")
      */
     public async getWhiteLabelOauth2AuthUrl(
         whiteLabelId: string,
-        request: AirweaveSDK.GetWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlGetRequest,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<string> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -596,14 +548,13 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
@@ -669,25 +620,19 @@ export class WhiteLabels {
      *     connection (schemas.Connection): The created connection
      *
      * @param {string} whiteLabelId
-     * @param {AirweaveSDK.ExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePostRequest} request
+     * @param {string} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
-     *         creds: "creds",
-     *         body: "string"
-     *     })
+     *     await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", "string")
      */
     public async exchangeWhiteLabelOauth2Code(
         whiteLabelId: string,
-        request: AirweaveSDK.ExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePostRequest,
+        request: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.Connection> {
-        const { creds, body: _body } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -701,16 +646,15 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
-            body: serializers.whiteLabels.exchangeWhiteLabelOauth2Code.Request.jsonOrThrow(_body, {
+            body: serializers.whiteLabels.exchangeWhiteLabelOauth2Code.Request.jsonOrThrow(request, {
                 unrecognizedObjectKeys: "strip",
             }),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -776,24 +720,17 @@ export class WhiteLabels {
      *     list[schemas.Sync]: A list of syncs
      *
      * @param {string} whiteLabelId
-     * @param {AirweaveSDK.ListWhiteLabelSyncsWhiteLabelsWhiteLabelIdSyncsGetRequest} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.listWhiteLabelSyncs("white_label_id", {
-     *         creds: "creds"
-     *     })
+     *     await client.whiteLabels.listWhiteLabelSyncs("white_label_id")
      */
     public async listWhiteLabelSyncs(
         whiteLabelId: string,
-        request: AirweaveSDK.ListWhiteLabelSyncsWhiteLabelsWhiteLabelIdSyncsGetRequest,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<AirweaveSDK.Sync[]> {
-        const { creds } = request;
-        const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -807,14 +744,13 @@ export class WhiteLabels {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
-            queryParameters: _queryParams,
             requestType: "json",
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,

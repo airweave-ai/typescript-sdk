@@ -1,6 +1,6 @@
 {
     "name": "@airweave/sdk",
-    "version": "v0.2.22",
+    "version": "0.2.23",
     "private": false,
     "repository": "https://github.com/airweave-ai/typescript-sdk",
     "main": "./index.js",

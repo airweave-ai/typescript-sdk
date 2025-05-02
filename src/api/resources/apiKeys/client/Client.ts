@@ -34,45 +34,45 @@ export class ApiKeys {
     constructor(protected readonly _options: ApiKeys.Options = {}) {}
 
     /**
-     * Retrieve an API key by ID.
+     * Retrieve all API keys for the current user.
      *
      * Args:
      * ----
      *     db (AsyncSession): The database session.
-     *     id (UUID): The ID of the API key.
+     *     skip (int): Number of records to skip for pagination.
+     *     limit (int): Maximum number of records to return.
      *     user (schemas.User): The current user.
      *
      * Returns:
      * -------
-     *     schemas.APIKey: The API key object.
+     *     List[schemas.APIKey]: A list of API keys.
      *
-     * Raises:
-     * ------
-     *     HTTPException: If the API key is not found.
-     *
-     * @param {string} id
-     * @param {AirweaveSDK.ReadApiKeyApiKeysIdGetRequest} request
+     * @param {AirweaveSDK.ReadApiKeysApiKeysGetRequest} request
      * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.apiKeys.readApiKey("id", {
-     *         creds: "creds"
-     *     })
+     *     await client.apiKeys.readApiKeys()
      */
-    public async readApiKey(
-        id: string,
-        request: AirweaveSDK.ReadApiKeyApiKeysIdGetRequest,
+    public async readApiKeys(
+        request: AirweaveSDK.ReadApiKeysApiKeysGetRequest = {},
         requestOptions?: ApiKeys.RequestOptions,
-    ): Promise<AirweaveSDK.ApiKey> {
-        const { creds } = request;
+    ): Promise<AirweaveSDK.ApiKey[]> {
+        const { skip, limit } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
-        _queryParams["creds"] = creds;
+        if (skip != null) {
+            _queryParams["skip"] = skip.toString();
+        }
+
+        if (limit != null) {
+            _queryParams["limit"] = limit.toString();
+        }
+
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                `api-keys/${encodeURIComponent(id)}`,
+                "api_keys/",
             ),
             method: "GET",
             headers: {
@@ -82,8 +82,208 @@ export class ApiKeys {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.22",
-                "User-Agent": "@airweave/sdk/v0.2.22",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.apiKeys.readApiKeys.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api_keys/.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Create a new API key for the current user.
+     *
+     * Returns a temporary plain key for the user to store securely.
+     * This is not stored in the database.
+     *
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     api_key_in (schemas.APIKeyCreate): The API key creation data.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKeyWithPlainKey: The created API key object, including the key.
+     *
+     * @param {AirweaveSDK.ApiKeyCreate} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.apiKeys.createApiKey()
+     */
+    public async createApiKey(
+        request: AirweaveSDK.ApiKeyCreate = {},
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKeyWithPlainKey> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                "api_keys/",
+            ),
+            method: "POST",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.ApiKeyCreate.jsonOrThrow(request, { unrecognizedObjectKeys: "strip" }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.ApiKeyWithPlainKey.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /api_keys/.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Delete an API key.
+     *
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     id (UUID): The ID of the API key.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKey: The revoked API key object.
+     *
+     * Raises:
+     * ------
+     *     HTTPException: If the API key is not found.
+     *
+     * @param {AirweaveSDK.DeleteApiKeyApiKeysDeleteRequest} request
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.apiKeys.deleteApiKey({
+     *         id: "id"
+     *     })
+     */
+    public async deleteApiKey(
+        request: AirweaveSDK.DeleteApiKeyApiKeysDeleteRequest,
+        requestOptions?: ApiKeys.RequestOptions,
+    ): Promise<AirweaveSDK.ApiKey> {
+        const { id } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["id"] = id;
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                "api_keys/",
+            ),
+            method: "DELETE",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -130,7 +330,101 @@ export class ApiKeys {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api-keys/{id}.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling DELETE /api_keys/.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Retrieve an API key by ID.
+     *
+     * Args:
+     * ----
+     *     db (AsyncSession): The database session.
+     *     id (UUID): The ID of the API key.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.APIKey: The API key object.
+     *
+     * Raises:
+     * ------
+     *     HTTPException: If the API key is not found.
+     *
+     * @param {string} id
+     * @param {ApiKeys.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.apiKeys.readApiKey("id")
+     */
+    public async readApiKey(id: string, requestOptions?: ApiKeys.RequestOptions): Promise<AirweaveSDK.ApiKey> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `api_keys/${encodeURIComponent(id)}`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "0.2.23",
+                "User-Agent": "@airweave/sdk/0.2.23",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.ApiKey.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /api_keys/{id}.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

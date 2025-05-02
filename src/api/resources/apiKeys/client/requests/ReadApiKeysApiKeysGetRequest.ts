@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface ListAllJobsSyncJobsGetRequest {
+export interface ReadApiKeysApiKeysGetRequest {
     skip?: number;
     limit?: number;
 }

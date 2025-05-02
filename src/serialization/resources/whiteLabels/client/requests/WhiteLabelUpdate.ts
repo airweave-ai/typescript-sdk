@@ -8,7 +8,7 @@ import * as core from "../../../../../core";
 
 export const WhiteLabelUpdate: core.serialization.Schema<
     serializers.WhiteLabelUpdate.Raw,
-    Omit<AirweaveSDK.WhiteLabelUpdate, "creds">
+    AirweaveSDK.WhiteLabelUpdate
 > = core.serialization.object({
     name: core.serialization.string().optional(),
     redirectUrl: core.serialization.property("redirect_url", core.serialization.string().optional()),

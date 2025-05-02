@@ -7,8 +7,6 @@ export * as connections from "./connections";
 export * as search from "./search";
 export * as whiteLabels from "./whiteLabels";
 export * from "./apiKeys/client/requests";
-export * from "./sources/client/requests";
-export * from "./embeddingModels/client/requests";
 export * from "./connections/client/requests";
 export * from "./sync/client/requests";
 export * from "./search/client/requests";

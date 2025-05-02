@@ -12,7 +12,7 @@ export const ApiKeyWithPlainKey: core.serialization.ObjectSchema<
 > = core.serialization.object({
     id: core.serialization.string(),
     keyPrefix: core.serialization.property("key_prefix", core.serialization.string()),
-    organization: core.serialization.string(),
+    organization: core.serialization.string().optional(),
     createdAt: core.serialization.property("created_at", core.serialization.date()),
     modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
     lastUsedDate: core.serialization.property("last_used_date", core.serialization.date().optional()),
@@ -26,7 +26,7 @@ export declare namespace ApiKeyWithPlainKey {
     export interface Raw {
         id: string;
         key_prefix: string;
-        organization: string;
+        organization?: string | null;
         created_at: string;
         modified_at: string;
         last_used_date?: string | null;

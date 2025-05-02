@@ -7,23 +7,12 @@ import * as AirweaveSDK from "../../../../index";
 /**
  * @example
  *     {
- *         creds: "creds",
  *         name: "name",
  *         sourceConnectionId: "source_connection_id",
- *         embeddingModelConnectionId: undefined,
- *         destinationConnectionIds: ["destination_connection_ids", "destination_connection_ids"],
- *         description: undefined,
- *         cronSchedule: undefined,
- *         nextScheduledRun: undefined,
- *         whiteLabelId: undefined,
- *         whiteLabelUserIdentifier: undefined,
- *         syncMetadata: undefined,
- *         status: undefined,
- *         runImmediately: undefined
+ *         destinationConnectionIds: ["destination_connection_ids"]
  *     }
  */
 export interface SyncCreate {
-    creds: string;
     name: string;
     sourceConnectionId: string;
     embeddingModelConnectionId?: string;

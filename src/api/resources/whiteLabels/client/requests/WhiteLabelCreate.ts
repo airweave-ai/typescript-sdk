@@ -5,7 +5,6 @@
 /**
  * @example
  *     {
- *         creds: "creds",
  *         name: "name",
  *         sourceShortName: "source_short_name",
  *         redirectUrl: "redirect_url",
@@ -14,7 +13,6 @@
  *     }
  */
 export interface WhiteLabelCreate {
-    creds: string;
     name: string;
     sourceShortName: string;
     redirectUrl: string;

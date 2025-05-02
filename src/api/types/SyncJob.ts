@@ -10,14 +10,10 @@ import * as AirweaveSDK from "../index";
 export interface SyncJob {
     syncId: string;
     status?: AirweaveSDK.SyncJobStatus;
+    entitiesDetected?: number;
     entitiesInserted?: number;
-    entitiesUpdated?: number;
     entitiesDeleted?: number;
-    entitiesKept?: number;
     entitiesSkipped?: number;
-    startedAt?: Date;
-    completedAt?: Date;
-    failedAt?: Date;
     error?: string;
     id: string;
     organizationId: string;
@@ -25,6 +21,9 @@ export interface SyncJob {
     modifiedByEmail: string;
     createdAt: Date;
     modifiedAt: Date;
+    startedAt?: Date;
+    completedAt?: Date;
+    failedAt?: Date;
     /** Name of the sync, populated from join query */
     syncName?: string;
 }
