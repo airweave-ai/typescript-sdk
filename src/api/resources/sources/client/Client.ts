@@ -13,8 +13,6 @@ export declare namespace Sources {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         apiKey: core.Supplier<string>;
-        /** Override the x-api-key header */
-        apiKey?: core.Supplier<string | undefined>;
     }
 
     export interface RequestOptions {
@@ -24,8 +22,6 @@ export declare namespace Sources {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the x-api-key header */
-        apiKey?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string>;
     }
@@ -66,10 +62,6 @@ export class Sources {
             ),
             method: "GET",
             headers: {
-                "x-api-key":
-                    (await core.Supplier.get(this._options.apiKey)) != null
-                        ? await core.Supplier.get(this._options.apiKey)
-                        : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
                 "X-Fern-SDK-Version": "v0.1.41",
@@ -157,10 +149,6 @@ export class Sources {
             ),
             method: "GET",
             headers: {
-                "x-api-key":
-                    (await core.Supplier.get(this._options.apiKey)) != null
-                        ? await core.Supplier.get(this._options.apiKey)
-                        : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
                 "X-Fern-SDK-Version": "v0.1.41",

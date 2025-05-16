@@ -13,8 +13,6 @@ export declare namespace AirweaveSDKClient {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         apiKey: core.Supplier<string>;
-        /** Override the x-api-key header */
-        apiKey?: core.Supplier<string | undefined>;
     }
 
     export interface RequestOptions {
@@ -24,8 +22,6 @@ export declare namespace AirweaveSDKClient {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the x-api-key header */
-        apiKey?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string>;
     }
