@@ -6,7 +6,6 @@ import * as environments from "./environments";
 import * as core from "./core";
 import { Sources } from "./api/resources/sources/client/Client";
 import { Collections } from "./api/resources/collections/client/Client";
-import { Connections } from "./api/resources/connections/client/Client";
 import { SourceConnections } from "./api/resources/sourceConnections/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 
@@ -35,7 +34,6 @@ export declare namespace AirweaveSDKClient {
 export class AirweaveSDKClient {
     protected _sources: Sources | undefined;
     protected _collections: Collections | undefined;
-    protected _connections: Connections | undefined;
     protected _sourceConnections: SourceConnections | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
 
@@ -47,10 +45,6 @@ export class AirweaveSDKClient {
 
     public get collections(): Collections {
         return (this._collections ??= new Collections(this._options));
-    }
-
-    public get connections(): Connections {
-        return (this._connections ??= new Connections(this._options));
     }
 
     public get sourceConnections(): SourceConnections {

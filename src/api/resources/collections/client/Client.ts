@@ -73,8 +73,8 @@ export class Collections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.36",
-                "User-Agent": "@airweave/sdk/v0.1.36",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -160,8 +160,8 @@ export class Collections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.36",
-                "User-Agent": "@airweave/sdk/v0.1.36",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -245,8 +245,8 @@ export class Collections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.36",
-                "User-Agent": "@airweave/sdk/v0.1.36",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -348,8 +348,8 @@ export class Collections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.36",
-                "User-Agent": "@airweave/sdk/v0.1.36",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -407,6 +407,114 @@ export class Collections {
     }
 
     /**
+     * Search within a collection identified by readable ID.
+     *
+     * Args:
+     *     readable_id: The readable ID of the collection to search
+     *     query: The search query
+     *     response_type: Type of response (raw results or AI completion)
+     *     db: The database session
+     *     current_user: The current user
+     *
+     * Returns:
+     *     dict: Search results or AI completion response
+     *
+     * @param {string} readableId
+     * @param {AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.searchCollection("readable_id", {
+     *         query: "query"
+     *     })
+     */
+    public async searchCollection(
+        readableId: string,
+        request: AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<AirweaveSDK.SearchResponse> {
+        const { query, responseType } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["query"] = query;
+        if (responseType != null) {
+            _queryParams["response_type"] = responseType;
+        }
+
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search`,
+            ),
+            method: "GET",
+            headers: {
+                Authorization: await this._getAuthorizationHeader(),
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.SearchResponse.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /collections/{readable_id}/search.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
      * Start sync jobs for all source connections in the collection.
      *
      * Args:
@@ -444,8 +552,8 @@ export class Collections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.36",
-                "User-Agent": "@airweave/sdk/v0.1.36",
+                "X-Fern-SDK-Version": "v0.1.37",
+                "User-Agent": "@airweave/sdk/v0.1.37",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
