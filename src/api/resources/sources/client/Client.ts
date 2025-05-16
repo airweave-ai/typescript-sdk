@@ -64,8 +64,8 @@ export class Sources {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.41",
-                "User-Agent": "@airweave/sdk/v0.1.41",
+                "X-Fern-SDK-Version": "v0.1.45",
+                "User-Agent": "@airweave/sdk/v0.1.45",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
@@ -151,8 +151,8 @@ export class Sources {
             headers: {
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.41",
-                "User-Agent": "@airweave/sdk/v0.1.41",
+                "X-Fern-SDK-Version": "v0.1.45",
+                "User-Agent": "@airweave/sdk/v0.1.45",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...(await this._getCustomAuthorizationHeaders()),
