@@ -4,17 +4,16 @@
 
 import * as environments from "./environments";
 import * as core from "./core";
-import { ApiKeys } from "./api/resources/apiKeys/client/Client";
 import { Sources } from "./api/resources/sources/client/Client";
-import { EmbeddingModels } from "./api/resources/embeddingModels/client/Client";
+import { Collections } from "./api/resources/collections/client/Client";
 import { Connections } from "./api/resources/connections/client/Client";
-import { Sync } from "./api/resources/sync/client/Client";
-import { Search } from "./api/resources/search/client/Client";
+import { SourceConnections } from "./api/resources/sourceConnections/client/Client";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
+        token: core.Supplier<core.BearerToken>;
         /** Override the x-api-key header */
         apiKey?: core.Supplier<string | undefined>;
     }
@@ -34,38 +33,28 @@ export declare namespace AirweaveSDKClient {
 }
 
 export class AirweaveSDKClient {
-    protected _apiKeys: ApiKeys | undefined;
     protected _sources: Sources | undefined;
-    protected _embeddingModels: EmbeddingModels | undefined;
+    protected _collections: Collections | undefined;
     protected _connections: Connections | undefined;
-    protected _sync: Sync | undefined;
-    protected _search: Search | undefined;
+    protected _sourceConnections: SourceConnections | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
 
-    constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
-
-    public get apiKeys(): ApiKeys {
-        return (this._apiKeys ??= new ApiKeys(this._options));
-    }
+    constructor(protected readonly _options: AirweaveSDKClient.Options) {}
 
     public get sources(): Sources {
         return (this._sources ??= new Sources(this._options));
     }
 
-    public get embeddingModels(): EmbeddingModels {
-        return (this._embeddingModels ??= new EmbeddingModels(this._options));
+    public get collections(): Collections {
+        return (this._collections ??= new Collections(this._options));
     }
 
     public get connections(): Connections {
         return (this._connections ??= new Connections(this._options));
     }
 
-    public get sync(): Sync {
-        return (this._sync ??= new Sync(this._options));
-    }
-
-    public get search(): Search {
-        return (this._search ??= new Search(this._options));
+    public get sourceConnections(): SourceConnections {
+        return (this._sourceConnections ??= new SourceConnections(this._options));
     }
 
     public get whiteLabels(): WhiteLabels {

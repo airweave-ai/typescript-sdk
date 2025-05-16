@@ -1,13 +1,8 @@
-export * as sync from "./sync";
-export * from "./sync/types";
-export * as apiKeys from "./apiKeys";
 export * as sources from "./sources";
-export * as embeddingModels from "./embeddingModels";
+export * as collections from "./collections";
 export * as connections from "./connections";
-export * as search from "./search";
+export * as sourceConnections from "./sourceConnections";
 export * as whiteLabels from "./whiteLabels";
-export * from "./apiKeys/client/requests";
-export * from "./connections/client/requests";
-export * from "./sync/client/requests";
-export * from "./search/client/requests";
+export * from "./collections/client/requests";
+export * from "./sourceConnections/client/requests";
 export * from "./whiteLabels/client/requests";

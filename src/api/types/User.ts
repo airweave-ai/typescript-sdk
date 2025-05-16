@@ -8,7 +8,7 @@
 export interface User {
     email: string;
     fullName?: string;
-    organizationId: string;
+    organizationId?: string;
     id: string;
     permissions?: string[];
 }

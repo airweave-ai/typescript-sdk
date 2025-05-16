@@ -1,1 +1,0 @@
-export { type BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost } from "./BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost";
