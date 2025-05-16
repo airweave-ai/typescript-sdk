@@ -9,8 +9,4 @@
 export interface ListAllJobsSyncJobsGetRequest {
     skip?: number;
     limit?: number;
-    /**
-     * Filter by job status
-     */
-    status?: string | string[];
 }

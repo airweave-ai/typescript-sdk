@@ -8,7 +8,7 @@
 export interface ApiKey {
     id: string;
     keyPrefix: string;
-    organization: string;
+    organization?: string;
     createdAt: Date;
     modifiedAt: Date;
     lastUsedDate?: Date;

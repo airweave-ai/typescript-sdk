@@ -5,6 +5,4 @@
 export interface BodySendOauth2CodeConnectionsOauth2SourceCodePost {
     shortName: string;
     code: string;
-    connectionName?: string;
-    authFields?: Record<string, unknown>;
 }

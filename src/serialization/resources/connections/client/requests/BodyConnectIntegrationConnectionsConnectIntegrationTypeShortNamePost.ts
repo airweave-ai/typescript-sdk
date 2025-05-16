@@ -11,8 +11,8 @@ export const BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePos
     AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost
 > = core.serialization.object({
     name: core.serialization.string().optional(),
-    authFields: core.serialization.property(
-        "auth_fields",
+    configFields: core.serialization.property(
+        "config_fields",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()),
     ),
 });
@@ -20,6 +20,6 @@ export const BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePos
 export declare namespace BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost {
     export interface Raw {
         name?: string | null;
-        auth_fields: Record<string, unknown>;
+        config_fields: Record<string, unknown>;
     }
 }

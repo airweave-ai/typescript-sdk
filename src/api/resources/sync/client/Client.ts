@@ -77,7 +77,7 @@ export class Sync {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "sync",
+                "sync/",
             ),
             method: "GET",
             headers: {
@@ -87,8 +87,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -135,7 +135,7 @@ export class Sync {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sync.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sync/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -176,7 +176,7 @@ export class Sync {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "sync",
+                "sync/",
             ),
             method: "POST",
             headers: {
@@ -186,8 +186,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -234,7 +234,7 @@ export class Sync {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /sync.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /sync/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -250,7 +250,6 @@ export class Sync {
      *     db: The database session
      *     skip: The number of jobs to skip
      *     limit: The number of jobs to return
-     *     status: Filter by job status
      *     user: The current user
      *
      * Returns:
@@ -269,7 +268,7 @@ export class Sync {
         request: AirweaveSDK.ListAllJobsSyncJobsGetRequest = {},
         requestOptions?: Sync.RequestOptions,
     ): Promise<AirweaveSDK.SyncJob[]> {
-        const { skip, limit, status } = request;
+        const { skip, limit } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         if (skip != null) {
             _queryParams["skip"] = skip.toString();
@@ -277,14 +276,6 @@ export class Sync {
 
         if (limit != null) {
             _queryParams["limit"] = limit.toString();
-        }
-
-        if (status != null) {
-            if (Array.isArray(status)) {
-                _queryParams["status"] = status.map((item) => item);
-            } else {
-                _queryParams["status"] = status;
-            }
         }
 
         const _response = await core.fetcher({
@@ -300,8 +291,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -391,8 +382,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -493,8 +484,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -590,8 +581,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -682,8 +673,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -772,8 +763,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -868,8 +859,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -931,8 +922,7 @@ export class Sync {
      * Args:
      * -----
      *     job_id: The ID of the job to subscribe to
-     *     request: The request object
-     *     db: The database session
+     *     user: The current user
      *
      * Returns:
      * --------
@@ -960,8 +950,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -1037,8 +1027,8 @@ export class Sync {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

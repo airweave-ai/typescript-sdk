@@ -12,18 +12,11 @@ export const BodySendOauth2CodeConnectionsOauth2SourceCodePost: core.serializati
 > = core.serialization.object({
     shortName: core.serialization.property("short_name", core.serialization.string()),
     code: core.serialization.string(),
-    connectionName: core.serialization.property("connection_name", core.serialization.string().optional()),
-    authFields: core.serialization.property(
-        "auth_fields",
-        core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
-    ),
 });
 
 export declare namespace BodySendOauth2CodeConnectionsOauth2SourceCodePost {
     export interface Raw {
         short_name: string;
         code: string;
-        connection_name?: string | null;
-        auth_fields?: Record<string, unknown> | null;
     }
 }

@@ -5,12 +5,12 @@
 /**
  * @example
  *     {
- *         authFields: {
+ *         configFields: {
  *             "key": "value"
  *         }
  *     }
  */
 export interface BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost {
     name?: string;
-    authFields: Record<string, unknown>;
+    configFields: Record<string, unknown>;
 }

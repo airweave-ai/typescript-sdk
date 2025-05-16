@@ -71,8 +71,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -163,8 +163,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -256,8 +256,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -330,7 +330,7 @@ export class Connections {
      *     integration_type: The type of integration to connect to.
      *     short_name: The short name of the integration to connect to.
      *     name: The name of the connection.
-     *     auth_fields: The config fields for the integration.
+     *     config_fields: The config fields for the integration.
      *     user: The current user.
      *
      * Returns:
@@ -346,7 +346,7 @@ export class Connections {
      *
      * @example
      *     await client.connections.connectIntegration("source", "short_name", {
-     *         authFields: {
+     *         configFields: {
      *             "key": "value"
      *         }
      *     })
@@ -370,8 +370,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -469,8 +469,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -566,8 +566,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -661,8 +661,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -760,8 +760,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -858,8 +858,8 @@ export class Connections {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,

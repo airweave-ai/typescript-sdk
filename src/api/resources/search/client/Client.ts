@@ -41,12 +41,11 @@ export class Search {
      *     db: The database session
      *     sync_id: The ID of the sync to search within
      *     query: The search query text
-     *     response_type: Type of response (raw results or AI completion)
      *     user: The current user
      *
      * Returns:
      * --------
-     *     dict: A dictionary containing search results or AI completion
+     *     list[dict]: A list of search results
      *
      * @param {AirweaveSDK.SearchSearchGetRequest} request
      * @param {Search.RequestOptions} requestOptions - Request-specific configuration.
@@ -62,19 +61,15 @@ export class Search {
     public async search(
         request: AirweaveSDK.SearchSearchGetRequest,
         requestOptions?: Search.RequestOptions,
-    ): Promise<Record<string, unknown>> {
-        const { syncId, query, responseType } = request;
+    ): Promise<Record<string, unknown>[]> {
+        const { syncId, query } = request;
         const _queryParams: Record<string, string | string[] | object | object[]> = {};
         _queryParams["sync_id"] = syncId;
         _queryParams["query"] = query;
-        if (responseType != null) {
-            _queryParams["response_type"] = responseType;
-        }
-
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
-                "search",
+                "search/",
             ),
             method: "GET",
             headers: {
@@ -84,8 +79,8 @@ export class Search {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -132,7 +127,7 @@ export class Search {
                     body: _response.error.rawBody,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /search/.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

@@ -57,7 +57,7 @@ export class Sources {
     public async readSource(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
-    ): Promise<AirweaveSDK.SourceWithAuthenticationFields> {
+    ): Promise<AirweaveSDK.SourceWithConfigFields> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -71,8 +71,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -84,7 +84,7 @@ export class Sources {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.SourceWithAuthenticationFields.parseOrThrow(_response.body, {
+            return serializers.SourceWithConfigFields.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -161,8 +161,8 @@ export class Sources {
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.2.25",
-                "User-Agent": "@airweave/sdk/v0.2.25",
+                "X-Fern-SDK-Version": "0.2.26",
+                "User-Agent": "@airweave/sdk/0.2.26",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
