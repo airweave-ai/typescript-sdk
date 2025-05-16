@@ -9,26 +9,26 @@ import * as core from "../../core";
 export const ApiKey: core.serialization.ObjectSchema<serializers.ApiKey.Raw, AirweaveSDK.ApiKey> =
     core.serialization.object({
         id: core.serialization.string(),
-        organization: core.serialization.string(),
+        keyPrefix: core.serialization.property("key_prefix", core.serialization.string()),
+        organization: core.serialization.string().optional(),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
         lastUsedDate: core.serialization.property("last_used_date", core.serialization.date().optional()),
         expirationDate: core.serialization.property("expiration_date", core.serialization.date()),
         createdByEmail: core.serialization.property("created_by_email", core.serialization.string()),
         modifiedByEmail: core.serialization.property("modified_by_email", core.serialization.string()),
-        decryptedKey: core.serialization.property("decrypted_key", core.serialization.string()),
     });
 
 export declare namespace ApiKey {
     export interface Raw {
         id: string;
-        organization: string;
+        key_prefix: string;
+        organization?: string | null;
         created_at: string;
         modified_at: string;
         last_used_date?: string | null;
         expiration_date: string;
         created_by_email: string;
         modified_by_email: string;
-        decrypted_key: string;
     }
 }

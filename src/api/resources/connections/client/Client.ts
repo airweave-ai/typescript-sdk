@@ -12,7 +12,6 @@ import * as errors from "../../../../errors/index";
 export declare namespace Connections {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
-        token: core.Supplier<core.BearerToken>;
         /** Override the x-api-key header */
         apiKey?: core.Supplier<string | undefined>;
     }
@@ -32,7 +31,7 @@ export declare namespace Connections {
 }
 
 export class Connections {
-    constructor(protected readonly _options: Connections.Options) {}
+    constructor(protected readonly _options: Connections.Options = {}) {}
 
     /**
      * Get a specific connection.
@@ -66,15 +65,14 @@ export class Connections {
             ),
             method: "GET",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.27",
-                "User-Agent": "@airweave/sdk/0.2.27",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -159,15 +157,14 @@ export class Connections {
             ),
             method: "GET",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "0.2.27",
-                "User-Agent": "@airweave/sdk/0.2.27",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
                 ...requestOptions?.headers,
@@ -221,7 +218,1003 @@ export class Connections {
         }
     }
 
-    protected async _getAuthorizationHeader(): Promise<string> {
-        return `Bearer ${await core.Supplier.get(this._options.token)}`;
+    /**
+     * Get all integrations of specified type connected to the current user.
+     *
+     * Args:
+     * -----
+     *     integration_type (IntegrationType): The type of integration to get connections for.
+     *     db (AsyncSession): The database session.
+     *     user (schemas.User): The current user.
+     *
+     * Returns:
+     * -------
+     *     list[schemas.Connection]: The list of connections.
+     *
+     * @param {AirweaveSDK.IntegrationType} integrationType
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.listConnectedIntegrations("source")
+     */
+    public async listConnectedIntegrations(
+        integrationType: AirweaveSDK.IntegrationType,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection[]> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/list/${encodeURIComponent(serializers.IntegrationType.jsonOrThrow(integrationType))}`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.connections.listConnectedIntegrations.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /connections/list/{integration_type}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Connect to a source, destination, or embedding model.
+     *
+     * Expects a POST body with:
+     * ```json
+     * {
+     *     "name": "required connection name",
+     *     ... other config fields specific to the integration type ...
+     * }
+     * ```
+     *
+     * Args:
+     * -----
+     *     db: The database session.
+     *     integration_type: The type of integration to connect to.
+     *     short_name: The short name of the integration to connect to.
+     *     name: The name of the connection.
+     *     config_fields: The config fields for the integration.
+     *     user: The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.Connection: The connection.
+     *
+     * @param {AirweaveSDK.IntegrationType} integrationType
+     * @param {string} shortName
+     * @param {AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost} request
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.connectIntegration("source", "short_name", {
+     *         configFields: {
+     *             "key": "value"
+     *         }
+     *     })
+     */
+    public async connectIntegration(
+        integrationType: AirweaveSDK.IntegrationType,
+        shortName: string,
+        request: AirweaveSDK.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/connect/${encodeURIComponent(serializers.IntegrationType.jsonOrThrow(integrationType))}/${encodeURIComponent(shortName)}`,
+            ),
+            method: "POST",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.BodyConnectIntegrationConnectionsConnectIntegrationTypeShortNamePost.jsonOrThrow(
+                request,
+                { unrecognizedObjectKeys: "strip" },
+            ),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /connections/connect/{integration_type}/{short_name}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Get the credentials for a connection.
+     *
+     * Args:
+     * -----
+     *     connection_id (UUID): The ID of the connection to get credentials for
+     *     db (AsyncSession): The database session
+     *     user (schemas.User): The current user
+     *
+     * Returns:
+     * -------
+     *     decrypted_credentials (dict): The credentials for the connection
+     *
+     * @param {string} connectionId
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.getConnectionCredentials("connection_id")
+     */
+    public async getConnectionCredentials(
+        connectionId: string,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<Record<string, unknown>> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/credentials/${encodeURIComponent(connectionId)}`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.connections.getConnectionCredentials.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /connections/credentials/{connection_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Delete a connection.
+     *
+     * Deletes the connection and integration credential.
+     *
+     * Args:
+     * -----
+     *     db (AsyncSession): The database session
+     *     connection_id (UUID): The ID of the connection to delete
+     *     user (schemas.User): The current user
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The deleted connection
+     *
+     * @param {string} connectionId
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.deleteConnection("connection_id")
+     */
+    public async deleteConnection(
+        connectionId: string,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/delete/source/${encodeURIComponent(connectionId)}`,
+            ),
+            method: "DELETE",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling DELETE /connections/delete/source/{connection_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Disconnect from a source connection.
+     *
+     * Args:
+     * -----
+     *     db (AsyncSession): The database session
+     *     connection_id (UUID): The ID of the connection to disconnect
+     *     user (schemas.User): The current user
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The disconnected connection
+     *
+     * @param {string} connectionId
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.disconnectSourceConnection("connection_id")
+     */
+    public async disconnectSourceConnection(
+        connectionId: string,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/disconnect/source/${encodeURIComponent(connectionId)}`,
+            ),
+            method: "PUT",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling PUT /connections/disconnect/source/{connection_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Get the OAuth2 authorization URL for a source.
+     *
+     * Args:
+     * -----
+     *     short_name: The short name of the source
+     *
+     * @param {AirweaveSDK.GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest} request
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.getOauth2AuthUrl({
+     *         shortName: "short_name"
+     *     })
+     */
+    public async getOauth2AuthUrl(
+        request: AirweaveSDK.GetOauth2AuthUrlConnectionsOauth2SourceAuthUrlGetRequest,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<string> {
+        const { shortName } = request;
+        const _queryParams: Record<string, string | string[] | object | object[]> = {};
+        _queryParams["short_name"] = shortName;
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                "connections/oauth2/source/auth_url",
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            queryParameters: _queryParams,
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.connections.getOauth2AuthUrl.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /connections/oauth2/source/auth_url.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Send the OAuth2 authorization code for a source.
+     *
+     * This will:
+     * 1. Get the OAuth2 settings for the source
+     * 2. Exchange the authorization code for a token
+     * 3. Create an integration credential with the token
+     *
+     * Args:
+     * -----
+     *     db: The database session
+     *     short_name: The short name of the source
+     *     code: The authorization code
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The created connection
+     *
+     * @param {AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost} request
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.sendOauth2Code({
+     *         shortName: "short_name",
+     *         code: "code"
+     *     })
+     */
+    public async sendOauth2Code(
+        request: AirweaveSDK.BodySendOauth2CodeConnectionsOauth2SourceCodePost,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                "connections/oauth2/source/code",
+            ),
+            method: "POST",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.BodySendOauth2CodeConnectionsOauth2SourceCodePost.jsonOrThrow(request, {
+                unrecognizedObjectKeys: "strip",
+            }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /connections/oauth2/source/code.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Exchange the OAuth2 authorization code for a white label integration.
+     *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label integration
+     *     code: The authorization code
+     *     user: The current user
+     *     background_tasks: The background tasks
+     *
+     * Returns:
+     * --------
+     *     connection (schemas.Connection): The created connection
+     *
+     * @param {string} whiteLabelId
+     * @param {string} request
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.sendOauth2WhiteLabelCode("white_label_id", "string")
+     */
+    public async sendOauth2WhiteLabelCode(
+        whiteLabelId: string,
+        request: string,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/oauth2/white-label/${encodeURIComponent(whiteLabelId)}/code`,
+            ),
+            method: "POST",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.connections.sendOauth2WhiteLabelCode.Request.jsonOrThrow(request, {
+                unrecognizedObjectKeys: "strip",
+            }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /connections/oauth2/white-label/{white_label_id}/code.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Get the OAuth2 authorization URL for a white label integration.
+     *
+     * Args:
+     * -----
+     *     db: The database session
+     *     white_label_id: The ID of the white label integration
+     *     user: The current user
+     *
+     * Returns:
+     * --------
+     *     str: The OAuth2 authorization URL
+     *
+     * @param {string} whiteLabelId
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.getOauth2WhiteLabelAuthUrl("white_label_id")
+     */
+    public async getOauth2WhiteLabelAuthUrl(
+        whiteLabelId: string,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<string> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                `connections/oauth2/white-label/${encodeURIComponent(whiteLabelId)}/auth_url`,
+            ),
+            method: "GET",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.connections.getOauth2WhiteLabelAuthUrl.Response.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /connections/oauth2/white-label/{white_label_id}/auth_url.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
+    }
+
+    /**
+     * Connect to Slack using a direct API token (for local development only).
+     *
+     * Args:
+     * -----
+     *     db: The database session.
+     *     token: The Slack API token.
+     *     name: The name of the connection.
+     *     user: The current user.
+     *
+     * Returns:
+     * -------
+     *     schemas.Connection: The connection.
+     *
+     * @param {AirweaveSDK.BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost} request
+     * @param {Connections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.connections.connectSlackWithToken({
+     *         token: "token"
+     *     })
+     */
+    public async connectSlackWithToken(
+        request: AirweaveSDK.BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost,
+        requestOptions?: Connections.RequestOptions,
+    ): Promise<AirweaveSDK.Connection> {
+        const _response = await core.fetcher({
+            url: urlJoin(
+                (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
+                "connections/direct-token/slack",
+            ),
+            method: "POST",
+            headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
+                "X-Fern-Language": "JavaScript",
+                "X-Fern-SDK-Name": "@airweave/sdk",
+                "X-Fern-SDK-Version": "v0.1.34",
+                "User-Agent": "@airweave/sdk/v0.1.34",
+                "X-Fern-Runtime": core.RUNTIME.type,
+                "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...requestOptions?.headers,
+            },
+            contentType: "application/json",
+            requestType: "json",
+            body: serializers.BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost.jsonOrThrow(request, {
+                unrecognizedObjectKeys: "strip",
+            }),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return serializers.Connection.parseOrThrow(_response.body, {
+                unrecognizedObjectKeys: "passthrough",
+                allowUnrecognizedUnionMembers: true,
+                allowUnrecognizedEnumValues: true,
+                breadcrumbsPrefix: ["response"],
+            });
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        serializers.HttpValidationError.parseOrThrow(_response.error.body, {
+                            unrecognizedObjectKeys: "passthrough",
+                            allowUnrecognizedUnionMembers: true,
+                            allowUnrecognizedEnumValues: true,
+                            breadcrumbsPrefix: ["response"],
+                        }),
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /connections/direct-token/slack.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                });
+        }
     }
 }

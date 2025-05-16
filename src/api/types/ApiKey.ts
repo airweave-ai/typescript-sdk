@@ -3,16 +3,16 @@
  */
 
 /**
- * Schema for API keys returned to clients - includes decrypted key.
+ * Schema for APIKey.
  */
 export interface ApiKey {
     id: string;
-    organization: string;
+    keyPrefix: string;
+    organization?: string;
     createdAt: Date;
     modifiedAt: Date;
     lastUsedDate?: Date;
     expirationDate: Date;
     createdByEmail: string;
     modifiedByEmail: string;
-    decryptedKey: string;
 }
