@@ -12,7 +12,7 @@ import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 export declare namespace AirweaveSDKClient {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
-        token: core.Supplier<core.BearerToken>;
+        apiKey: core.Supplier<string>;
         /** Override the x-api-key header */
         apiKey?: core.Supplier<string | undefined>;
     }

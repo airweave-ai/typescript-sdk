@@ -12,7 +12,7 @@ import * as errors from "../../../../errors/index";
 export declare namespace SourceConnections {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
-        token: core.Supplier<core.BearerToken>;
+        apiKey: core.Supplier<string>;
         /** Override the x-api-key header */
         apiKey?: core.Supplier<string | undefined>;
     }
@@ -80,17 +80,17 @@ export class SourceConnections {
             ),
             method: "GET",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -184,17 +184,17 @@ export class SourceConnections {
             ),
             method: "POST",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -286,17 +286,17 @@ export class SourceConnections {
             ),
             method: "GET",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -384,17 +384,17 @@ export class SourceConnections {
             ),
             method: "PUT",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -488,17 +488,17 @@ export class SourceConnections {
             ),
             method: "DELETE",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -584,17 +584,17 @@ export class SourceConnections {
             ),
             method: "POST",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -678,17 +678,17 @@ export class SourceConnections {
             ),
             method: "GET",
             headers: {
-                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
                         : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.38",
-                "User-Agent": "@airweave/sdk/v0.1.38",
+                "X-Fern-SDK-Version": "v0.1.39",
+                "User-Agent": "@airweave/sdk/v0.1.39",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
+                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -742,7 +742,8 @@ export class SourceConnections {
         }
     }
 
-    protected async _getAuthorizationHeader(): Promise<string> {
-        return `Bearer ${await core.Supplier.get(this._options.token)}`;
+    protected async _getCustomAuthorizationHeaders() {
+        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
+        return { "x-api-key": apiKeyValue };
     }
 }

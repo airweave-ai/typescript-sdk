@@ -22,7 +22,7 @@ Instantiate and use the client with the following:
 ```typescript
 import { AirweaveSDKClient } from "@airweave/sdk";
 
-const client = new AirweaveSDKClient({ token: "YOUR_TOKEN", apiKey: "YOUR_API_KEY" });
+const client = new AirweaveSDKClient({ apiKey: "YOUR_API_KEY", apiKey: "YOUR_API_KEY" });
 await client.collections.createCollection({
     name: "name",
 });
