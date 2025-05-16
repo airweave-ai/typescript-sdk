@@ -12,6 +12,7 @@ import * as errors from "../../../../errors/index";
 export declare namespace Sources {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
+        token: core.Supplier<core.BearerToken>;
         /** Override the x-api-key header */
         apiKey?: core.Supplier<string | undefined>;
     }
@@ -31,7 +32,7 @@ export declare namespace Sources {
 }
 
 export class Sources {
-    constructor(protected readonly _options: Sources.Options = {}) {}
+    constructor(protected readonly _options: Sources.Options) {}
 
     /**
      * Get source by id.
@@ -57,7 +58,7 @@ export class Sources {
     public async readSource(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
-    ): Promise<AirweaveSDK.SourceWithConfigFields> {
+    ): Promise<AirweaveSDK.SourceWithAuthenticationFields> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -65,6 +66,7 @@ export class Sources {
             ),
             method: "GET",
             headers: {
+                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
@@ -84,7 +86,7 @@ export class Sources {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.SourceWithConfigFields.parseOrThrow(_response.body, {
+            return serializers.SourceWithAuthenticationFields.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -155,6 +157,7 @@ export class Sources {
             ),
             method: "GET",
             headers: {
+                Authorization: await this._getAuthorizationHeader(),
                 "x-api-key":
                     (await core.Supplier.get(this._options.apiKey)) != null
                         ? await core.Supplier.get(this._options.apiKey)
@@ -214,5 +217,9 @@ export class Sources {
                     message: _response.error.errorMessage,
                 });
         }
+    }
+
+    protected async _getAuthorizationHeader(): Promise<string> {
+        return `Bearer ${await core.Supplier.get(this._options.token)}`;
     }
 }
