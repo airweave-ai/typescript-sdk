@@ -7,15 +7,15 @@ import * as AirweaveSDK from "../../api/index";
 import * as core from "../../core";
 import { SourceConnectionCreate } from "./SourceConnectionCreate";
 
-export const BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions: core.serialization.ObjectSchema<
-    serializers.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions.Raw,
-    AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions
+export const BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost: core.serialization.ObjectSchema<
+    serializers.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost.Raw,
+    AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost
 > = core.serialization.object({
     code: core.serialization.string(),
     sourceConnectionIn: core.serialization.property("source_connection_in", SourceConnectionCreate.optional()),
 });
 
-export declare namespace BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions {
+export declare namespace BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost {
     export interface Raw {
         code: string;
         source_connection_in?: SourceConnectionCreate.Raw | null;

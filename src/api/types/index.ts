@@ -3,7 +3,7 @@ export * from "./ApiKeyCreate";
 export * from "./AuthType";
 export * from "./BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost";
 export * from "./BodyCreateCredentialsFromAuthorizationCodeSourceConnectionsSourceShortNameCodeToTokenCredentialsPost";
-export * from "./BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions";
+export * from "./BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost";
 export * from "./Chat";
 export * from "./ChatCreate";
 export * from "./ChatMessage";

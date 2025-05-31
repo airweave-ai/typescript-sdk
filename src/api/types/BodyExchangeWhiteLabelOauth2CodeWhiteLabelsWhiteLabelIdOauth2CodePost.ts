@@ -4,7 +4,7 @@
 
 import * as AirweaveSDK from "../index";
 
-export interface BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions {
+export interface BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost {
     code: string;
     sourceConnectionIn?: AirweaveSDK.SourceConnectionCreate;
 }
