@@ -3,12 +3,12 @@
  */
 
 /**
- * @example
- *     {}
+ * Schema for updating a WhiteLabel object.
  */
 export interface WhiteLabelUpdate {
     name?: string;
     redirectUrl?: string;
     clientId?: string;
     clientSecret?: string;
+    allowedOrigins?: string;
 }

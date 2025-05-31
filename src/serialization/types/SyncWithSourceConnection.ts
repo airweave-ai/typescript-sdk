@@ -25,11 +25,6 @@ export const SyncWithSourceConnection: core.serialization.ObjectSchema<
     description: core.serialization.string().optional(),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
     nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
-    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
-    whiteLabelUserIdentifier: core.serialization.property(
-        "white_label_user_identifier",
-        core.serialization.string().optional(),
-    ),
     syncMetadata: core.serialization.property(
         "sync_metadata",
         core.serialization.record(core.serialization.string(), core.serialization.unknown()).optional(),
@@ -53,8 +48,6 @@ export declare namespace SyncWithSourceConnection {
         description?: string | null;
         cron_schedule?: string | null;
         next_scheduled_run?: string | null;
-        white_label_id?: string | null;
-        white_label_user_identifier?: string | null;
         sync_metadata?: Record<string, unknown> | null;
         status: SyncStatus.Raw;
         id: string;

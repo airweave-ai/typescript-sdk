@@ -24,6 +24,7 @@ export const SyncJob: core.serialization.ObjectSchema<serializers.SyncJob.Raw, A
         completedAt: core.serialization.property("completed_at", core.serialization.date().optional()),
         failedAt: core.serialization.property("failed_at", core.serialization.date().optional()),
         error: core.serialization.string().optional(),
+        accessToken: core.serialization.property("access_token", core.serialization.string().optional()),
         id: core.serialization.string(),
         organizationId: core.serialization.property("organization_id", core.serialization.string()),
         createdByEmail: core.serialization.property("created_by_email", core.serialization.string()),
@@ -47,6 +48,7 @@ export declare namespace SyncJob {
         completed_at?: string | null;
         failed_at?: string | null;
         error?: string | null;
+        access_token?: string | null;
         id: string;
         organization_id: string;
         created_by_email: string;

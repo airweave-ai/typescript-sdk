@@ -6,13 +6,15 @@ import * as serializers from "../index";
 import * as AirweaveSDK from "../../api/index";
 import * as core from "../../core";
 import { AuthType } from "./AuthType";
+import { Fields } from "./Fields";
 
 export const Source: core.serialization.ObjectSchema<serializers.Source.Raw, AirweaveSDK.Source> =
     core.serialization.object({
         name: core.serialization.string(),
         description: core.serialization.string().optional(),
         authType: core.serialization.property("auth_type", AuthType.optional()),
-        authConfigClass: core.serialization.property("auth_config_class", core.serialization.string().optional()),
+        authConfigClass: core.serialization.property("auth_config_class", core.serialization.string()),
+        configClass: core.serialization.property("config_class", core.serialization.string()),
         shortName: core.serialization.property("short_name", core.serialization.string()),
         className: core.serialization.property("class_name", core.serialization.string()),
         outputEntityDefinitionIds: core.serialization.property(
@@ -28,6 +30,8 @@ export const Source: core.serialization.ObjectSchema<serializers.Source.Raw, Air
         id: core.serialization.string(),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
         modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
+        authFields: core.serialization.property("auth_fields", Fields),
+        configFields: core.serialization.property("config_fields", Fields.optional()),
     });
 
 export declare namespace Source {
@@ -35,7 +39,8 @@ export declare namespace Source {
         name: string;
         description?: string | null;
         auth_type?: AuthType.Raw | null;
-        auth_config_class?: string | null;
+        auth_config_class: string;
+        config_class: string;
         short_name: string;
         class_name: string;
         output_entity_definition_ids?: string[] | null;
@@ -45,5 +50,7 @@ export declare namespace Source {
         id: string;
         created_at: string;
         modified_at: string;
+        auth_fields: Fields.Raw;
+        config_fields?: Fields.Raw | null;
     }
 }

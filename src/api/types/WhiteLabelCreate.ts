@@ -3,14 +3,7 @@
  */
 
 /**
- * @example
- *     {
- *         name: "name",
- *         sourceShortName: "source_short_name",
- *         redirectUrl: "redirect_url",
- *         clientId: "client_id",
- *         clientSecret: "client_secret"
- *     }
+ * Schema for creating a WhiteLabel object.
  */
 export interface WhiteLabelCreate {
     name: string;
@@ -18,4 +11,5 @@ export interface WhiteLabelCreate {
     redirectUrl: string;
     clientId: string;
     clientSecret: string;
+    allowedOrigins: string;
 }

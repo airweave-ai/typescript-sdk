@@ -11,10 +11,10 @@ export const AuthType: core.serialization.Schema<serializers.AuthType.Raw, Airwe
         "oauth2",
         "oauth2_with_refresh",
         "oauth2_with_refresh_rotating",
-        "trello_auth",
         "api_key",
         "native_functionality",
         "config_class",
+        "trello_auth",
         "none",
     ]);
 
@@ -23,9 +23,9 @@ export declare namespace AuthType {
         | "oauth2"
         | "oauth2_with_refresh"
         | "oauth2_with_refresh_rotating"
-        | "trello_auth"
         | "api_key"
         | "native_functionality"
         | "config_class"
+        | "trello_auth"
         | "none";
 }

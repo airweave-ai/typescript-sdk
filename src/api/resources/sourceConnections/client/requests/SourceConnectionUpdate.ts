@@ -12,8 +12,9 @@ export interface SourceConnectionUpdate {
     /** Name of the source connection */
     name?: string;
     description?: string;
-    authFields?: AirweaveSDK.ConfigValues;
+    authFields?: AirweaveSDK.SourceConnectionUpdateAuthFields;
     configFields?: AirweaveSDK.ConfigValues;
     cronSchedule?: string;
     connectionId?: string;
+    whiteLabelId?: string;
 }

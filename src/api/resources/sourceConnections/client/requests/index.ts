@@ -2,3 +2,4 @@ export { type ListSourceConnectionsSourceConnectionsGetRequest } from "./ListSou
 export { type GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest } from "./GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest";
 export { type SourceConnectionUpdate } from "./SourceConnectionUpdate";
 export { type DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest } from "./DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest";
+export { type BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost } from "./BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost";

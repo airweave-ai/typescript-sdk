@@ -18,6 +18,7 @@ export const SourceConnection: core.serialization.ObjectSchema<
     description: core.serialization.string().optional(),
     configFields: core.serialization.property("config_fields", ConfigValues.optional()),
     shortName: core.serialization.property("short_name", core.serialization.string()),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
     id: core.serialization.string(),
     syncId: core.serialization.property("sync_id", core.serialization.string().optional()),
     organizationId: core.serialization.property("organization_id", core.serialization.string()),
@@ -39,6 +40,7 @@ export const SourceConnection: core.serialization.ObjectSchema<
         "latest_sync_job_completed_at",
         core.serialization.date().optional(),
     ),
+    latestSyncJobError: core.serialization.property("latest_sync_job_error", core.serialization.string().optional()),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
     nextScheduledRun: core.serialization.property("next_scheduled_run", core.serialization.date().optional()),
 });
@@ -49,6 +51,7 @@ export declare namespace SourceConnection {
         description?: string | null;
         config_fields?: ConfigValues.Raw | null;
         short_name: string;
+        white_label_id?: string | null;
         id: string;
         sync_id?: string | null;
         organization_id: string;
@@ -64,6 +67,7 @@ export declare namespace SourceConnection {
         latest_sync_job_id?: string | null;
         latest_sync_job_started_at?: string | null;
         latest_sync_job_completed_at?: string | null;
+        latest_sync_job_error?: string | null;
         cron_schedule?: string | null;
         next_scheduled_run?: string | null;
     }

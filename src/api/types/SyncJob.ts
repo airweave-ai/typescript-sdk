@@ -20,6 +20,7 @@ export interface SyncJob {
     completedAt?: Date;
     failedAt?: Date;
     error?: string;
+    accessToken?: string;
     id: string;
     organizationId: string;
     createdByEmail: string;

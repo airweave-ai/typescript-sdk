@@ -15,9 +15,11 @@ export const SourceConnectionCreate: core.serialization.ObjectSchema<
     description: core.serialization.string().optional(),
     configFields: core.serialization.property("config_fields", ConfigValues.optional()),
     shortName: core.serialization.property("short_name", core.serialization.string()),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
     collection: core.serialization.string().optional(),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
     authFields: core.serialization.property("auth_fields", ConfigValues.optional()),
+    credentialId: core.serialization.property("credential_id", core.serialization.string().optional()),
     syncImmediately: core.serialization.property("sync_immediately", core.serialization.boolean().optional()),
 });
 
@@ -27,9 +29,11 @@ export declare namespace SourceConnectionCreate {
         description?: string | null;
         config_fields?: ConfigValues.Raw | null;
         short_name: string;
+        white_label_id?: string | null;
         collection?: string | null;
         cron_schedule?: string | null;
         auth_fields?: ConfigValues.Raw | null;
+        credential_id?: string | null;
         sync_immediately?: boolean | null;
     }
 }

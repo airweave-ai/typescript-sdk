@@ -11,7 +11,8 @@ export interface Source {
     name: string;
     description?: string;
     authType?: AirweaveSDK.AuthType;
-    authConfigClass?: string;
+    authConfigClass: string;
+    configClass: string;
     shortName: string;
     className: string;
     outputEntityDefinitionIds?: string[];
@@ -21,4 +22,6 @@ export interface Source {
     id: string;
     createdAt: Date;
     modifiedAt: Date;
+    authFields: AirweaveSDK.Fields;
+    configFields?: AirweaveSDK.Fields;
 }

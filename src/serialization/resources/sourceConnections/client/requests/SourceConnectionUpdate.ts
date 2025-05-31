@@ -5,6 +5,7 @@
 import * as serializers from "../../../../index";
 import * as AirweaveSDK from "../../../../../api/index";
 import * as core from "../../../../../core";
+import { SourceConnectionUpdateAuthFields } from "../../types/SourceConnectionUpdateAuthFields";
 import { ConfigValues } from "../../../../types/ConfigValues";
 
 export const SourceConnectionUpdate: core.serialization.Schema<
@@ -13,19 +14,21 @@ export const SourceConnectionUpdate: core.serialization.Schema<
 > = core.serialization.object({
     name: core.serialization.string().optional(),
     description: core.serialization.string().optional(),
-    authFields: core.serialization.property("auth_fields", ConfigValues.optional()),
+    authFields: core.serialization.property("auth_fields", SourceConnectionUpdateAuthFields.optional()),
     configFields: core.serialization.property("config_fields", ConfigValues.optional()),
     cronSchedule: core.serialization.property("cron_schedule", core.serialization.string().optional()),
     connectionId: core.serialization.property("connection_id", core.serialization.string().optional()),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
 });
 
 export declare namespace SourceConnectionUpdate {
     export interface Raw {
         name?: string | null;
         description?: string | null;
-        auth_fields?: ConfigValues.Raw | null;
+        auth_fields?: SourceConnectionUpdateAuthFields.Raw | null;
         config_fields?: ConfigValues.Raw | null;
         cron_schedule?: string | null;
         connection_id?: string | null;
+        white_label_id?: string | null;
     }
 }

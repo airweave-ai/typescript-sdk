@@ -12,7 +12,8 @@ import * as errors from "../../../../errors/index";
 export declare namespace Sources {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Override the x-api-key header */
+        apiKey?: core.Supplier<string | undefined>;
     }
 
     export interface RequestOptions {
@@ -22,13 +23,15 @@ export declare namespace Sources {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Override the x-api-key header */
+        apiKey?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string>;
     }
 }
 
 export class Sources {
-    constructor(protected readonly _options: Sources.Options) {}
+    constructor(protected readonly _options: Sources.Options = {}) {}
 
     /**
      * Get source by id.
@@ -43,6 +46,12 @@ export class Sources {
      * -------
      *     schemas.Source: The source object.
      *
+     * Raises:
+     *     HTTPException:
+     *         - 404 if source not found
+     *         - 400 if source missing required configuration classes
+     *         - 500 if there's an error retrieving auth configuration
+     *
      * @param {string} shortName
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -51,10 +60,7 @@ export class Sources {
      * @example
      *     await client.sources.readSource("short_name")
      */
-    public async readSource(
-        shortName: string,
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<AirweaveSDK.SourceWithAuthenticationFields> {
+    public async readSource(shortName: string, requestOptions?: Sources.RequestOptions): Promise<AirweaveSDK.Source> {
         const _response = await core.fetcher({
             url: urlJoin(
                 (await core.Supplier.get(this._options.environment)) ?? environments.AirweaveSDKEnvironment.Production,
@@ -62,13 +68,16 @@ export class Sources {
             ),
             method: "GET",
             headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.45",
-                "User-Agent": "@airweave/sdk/v0.1.45",
+                "X-Fern-SDK-Version": "v0.2.52",
+                "User-Agent": "@airweave/sdk/v0.2.52",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -78,7 +87,7 @@ export class Sources {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return serializers.SourceWithAuthenticationFields.parseOrThrow(_response.body, {
+            return serializers.Source.parseOrThrow(_response.body, {
                 unrecognizedObjectKeys: "passthrough",
                 allowUnrecognizedUnionMembers: true,
                 allowUnrecognizedEnumValues: true,
@@ -123,16 +132,7 @@ export class Sources {
     }
 
     /**
-     * Get all sources for the current user.
-     *
-     * Args:
-     * -----
-     *     db: The database session
-     *     user: The current user
-     *
-     * Returns:
-     * --------
-     *     list[schemas.Source]: The list of sources.
+     * Get all sources with their authentication fields.
      *
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -149,13 +149,16 @@ export class Sources {
             ),
             method: "GET",
             headers: {
+                "x-api-key":
+                    (await core.Supplier.get(this._options.apiKey)) != null
+                        ? await core.Supplier.get(this._options.apiKey)
+                        : undefined,
                 "X-Fern-Language": "JavaScript",
                 "X-Fern-SDK-Name": "@airweave/sdk",
-                "X-Fern-SDK-Version": "v0.1.45",
-                "User-Agent": "@airweave/sdk/v0.1.45",
+                "X-Fern-SDK-Version": "v0.2.52",
+                "User-Agent": "@airweave/sdk/v0.2.52",
                 "X-Fern-Runtime": core.RUNTIME.type,
                 "X-Fern-Runtime-Version": core.RUNTIME.version,
-                ...(await this._getCustomAuthorizationHeaders()),
                 ...requestOptions?.headers,
             },
             contentType: "application/json",
@@ -205,10 +208,5 @@ export class Sources {
                     message: _response.error.errorMessage,
                 });
         }
-    }
-
-    protected async _getCustomAuthorizationHeaders() {
-        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
-        return { "x-api-key": apiKeyValue };
     }
 }

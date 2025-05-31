@@ -20,6 +20,7 @@ export const SourceConnectionListItem: core.serialization.ObjectSchema<
     modifiedAt: core.serialization.property("modified_at", core.serialization.date()),
     syncId: core.serialization.property("sync_id", core.serialization.string()),
     collection: core.serialization.string(),
+    whiteLabelId: core.serialization.property("white_label_id", core.serialization.string().optional()),
 });
 
 export declare namespace SourceConnectionListItem {
@@ -33,5 +34,6 @@ export declare namespace SourceConnectionListItem {
         modified_at: string;
         sync_id: string;
         collection: string;
+        white_label_id?: string | null;
     }
 }

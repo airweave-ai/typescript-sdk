@@ -16,8 +16,10 @@ export interface SourceConnectionCreate {
     description?: string;
     configFields?: AirweaveSDK.ConfigValues;
     shortName: string;
+    whiteLabelId?: string;
     collection?: string;
     cronSchedule?: string;
     authFields?: AirweaveSDK.ConfigValues;
+    credentialId?: string;
     syncImmediately?: boolean;
 }

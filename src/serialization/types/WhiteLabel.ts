@@ -13,6 +13,7 @@ export const WhiteLabel: core.serialization.ObjectSchema<serializers.WhiteLabel.
         redirectUrl: core.serialization.property("redirect_url", core.serialization.string()),
         clientId: core.serialization.property("client_id", core.serialization.string()),
         clientSecret: core.serialization.property("client_secret", core.serialization.string()),
+        allowedOrigins: core.serialization.property("allowed_origins", core.serialization.string()),
         id: core.serialization.string(),
         organizationId: core.serialization.property("organization_id", core.serialization.string()),
         createdAt: core.serialization.property("created_at", core.serialization.date()),
@@ -28,6 +29,7 @@ export declare namespace WhiteLabel {
         redirect_url: string;
         client_id: string;
         client_secret: string;
+        allowed_origins: string;
         id: string;
         organization_id: string;
         created_at: string;

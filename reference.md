@@ -2,7 +2,7 @@
 
 ## Sources
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.SourceWithAuthenticationFields</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.Source</code></summary>
 <dl>
 <dd>
 
@@ -25,6 +25,9 @@ Get source by id.
 ## Returns:
 
     schemas.Source: The source object.
+
+Raises:
+HTTPException: - 404 if source not found - 400 if source missing required configuration classes - 500 if there's an error retrieving auth configuration
 
 </dd>
 </dl>
@@ -87,16 +90,7 @@ await client.sources.readSource("short_name");
 <dl>
 <dd>
 
-Get all sources for the current user.
-
-## Args:
-
-    db: The database session
-    user: The current user
-
-## Returns:
-
-    list[schemas.Source]: The list of sources.
+Get all sources with their authentication fields.
 
 </dd>
 </dl>
@@ -965,7 +959,7 @@ await client.sourceConnections.deleteSourceConnection("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">runSourceConnection</a>(sourceConnectionId) -> AirweaveSDK.SourceConnectionJob</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">runSourceConnection</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
 <dl>
 <dd>
 
@@ -982,6 +976,7 @@ Trigger a sync run for a source connection.
 Args:
 db: The database session
 source_connection_id: The ID of the source connection to run
+access_token: Optional access token to use instead of stored credentials
 user: The current user
 background_tasks: Background tasks for async operations
 
@@ -1019,6 +1014,14 @@ await client.sourceConnections.runSourceConnection("source_connection_id");
 <dd>
 
 **sourceConnectionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost`
 
 </dd>
 </dl>
@@ -1098,452 +1101,6 @@ await client.sourceConnections.listSourceConnectionJobs("source_connection_id");
 <dd>
 
 **requestOptions:** `SourceConnections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-## WhiteLabels
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>() -> AirweaveSDK.WhiteLabel[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all white labels for the current user's organization.
-
-## Args:
-
-    db: The database session
-    current_user: The current user
-
-## Returns:
-
-    list[schemas.WhiteLabel]: A list of white labels
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.listWhiteLabels();
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">createWhiteLabel</a>({ ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create new white label integration.
-
-## Args:
-
-    db: The database session
-    current_user: The current user
-    white_label_in: The white label to create
-
-## Returns:
-
-    white_label (schemas.WhiteLabel): The created white label
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.createWhiteLabel({
-    name: "name",
-    sourceShortName: "source_short_name",
-    redirectUrl: "redirect_url",
-    clientId: "client_id",
-    clientSecret: "client_secret",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.WhiteLabelCreate`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get a specific white label integration.
-
-## Args:
-
-    db: The database session
-    white_label_id: The ID of the white label to get
-    current_user: The current user
-
-## Returns:
-
-    white_label (schemas.WhiteLabel): The white label
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.getWhiteLabel("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">updateWhiteLabel</a>(whiteLabelId, { ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a white label integration.
-
-## Args:
-
-    db: The database session
-    current_user: The current user
-    white_label_id: The ID of the white label to update
-    white_label_in: The white label to update
-
-## Returns:
-
-    white_label (schemas.WhiteLabel): The updated white label
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.updateWhiteLabel("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.WhiteLabelUpdate`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">deleteWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a white label integration.
-
-## Args:
-
-    db: The database session
-    current_user: The current user
-    white_label_id: The ID of the white label to delete
-
-## Returns:
-
-    white_label (schemas.WhiteLabel): The deleted white label
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.deleteWhiteLabel("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabelSyncs</a>(whiteLabelId) -> AirweaveSDK.Sync[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all syncs for a specific white label.
-
-## Args:
-
-    white_label_id: The ID of the white label to list syncs for
-    db: The database session
-    current_user: The current user
-
-## Returns:
-
-    list[schemas.Sync]: A list of syncs
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.listWhiteLabelSyncs("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
 
 </dd>
 </dl>

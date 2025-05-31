@@ -20,4 +20,5 @@ export interface SourceConnectionListItem {
     modifiedAt: Date;
     syncId: string;
     collection: string;
+    whiteLabelId?: string;
 }

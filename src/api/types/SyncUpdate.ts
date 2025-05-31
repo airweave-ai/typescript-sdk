@@ -11,8 +11,6 @@ export interface SyncUpdate {
     name?: string;
     cronSchedule?: string;
     nextScheduledRun?: Date;
-    whiteLabelId?: string;
-    whiteLabelUserIdentifier?: string;
     syncMetadata?: Record<string, unknown>;
     status?: AirweaveSDK.SyncStatus;
 }

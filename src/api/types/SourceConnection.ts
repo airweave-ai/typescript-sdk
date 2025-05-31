@@ -13,6 +13,7 @@ export interface SourceConnection {
     description?: string;
     configFields?: AirweaveSDK.ConfigValues;
     shortName: string;
+    whiteLabelId?: string;
     id: string;
     syncId?: string;
     organizationId: string;
@@ -28,6 +29,7 @@ export interface SourceConnection {
     latestSyncJobId?: string;
     latestSyncJobStartedAt?: Date;
     latestSyncJobCompletedAt?: Date;
+    latestSyncJobError?: string;
     cronSchedule?: string;
     nextScheduledRun?: Date;
 }

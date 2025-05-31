@@ -11,6 +11,7 @@ export interface WhiteLabel {
     redirectUrl: string;
     clientId: string;
     clientSecret: string;
+    allowedOrigins: string;
     id: string;
     organizationId: string;
     createdAt: Date;

@@ -15,8 +15,6 @@ export interface SyncCreate {
     description?: string;
     cronSchedule?: string;
     nextScheduledRun?: Date;
-    whiteLabelId?: string;
-    whiteLabelUserIdentifier?: string;
     syncMetadata?: Record<string, unknown>;
     status?: AirweaveSDK.SyncStatus;
     runImmediately?: boolean;

@@ -7,12 +7,12 @@ import * as core from "./core";
 import { Sources } from "./api/resources/sources/client/Client";
 import { Collections } from "./api/resources/collections/client/Client";
 import { SourceConnections } from "./api/resources/sourceConnections/client/Client";
-import { WhiteLabels } from "./api/resources/whiteLabels/client/Client";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
-        apiKey: core.Supplier<string>;
+        /** Override the x-api-key header */
+        apiKey?: core.Supplier<string | undefined>;
     }
 
     export interface RequestOptions {
@@ -22,6 +22,8 @@ export declare namespace AirweaveSDKClient {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Override the x-api-key header */
+        apiKey?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string>;
     }
@@ -31,9 +33,8 @@ export class AirweaveSDKClient {
     protected _sources: Sources | undefined;
     protected _collections: Collections | undefined;
     protected _sourceConnections: SourceConnections | undefined;
-    protected _whiteLabels: WhiteLabels | undefined;
 
-    constructor(protected readonly _options: AirweaveSDKClient.Options) {}
+    constructor(protected readonly _options: AirweaveSDKClient.Options = {}) {}
 
     public get sources(): Sources {
         return (this._sources ??= new Sources(this._options));
@@ -45,9 +46,5 @@ export class AirweaveSDKClient {
 
     public get sourceConnections(): SourceConnections {
         return (this._sourceConnections ??= new SourceConnections(this._options));
-    }
-
-    public get whiteLabels(): WhiteLabels {
-        return (this._whiteLabels ??= new WhiteLabels(this._options));
     }
 }

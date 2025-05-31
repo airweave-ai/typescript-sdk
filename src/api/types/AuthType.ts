@@ -10,7 +10,6 @@
  *     oauth2: OAuth2 authentication.
  *     oauth2_with_refresh: OAuth2 authentication with refresh token.
  *     oauth2_with_refresh_rotating: OAuth2 authentication with rotating refresh token.
- *     trello_auth: Trello authentication.
  *     api_key: API key authentication.
  *     native_functionality: Native functionality.
  *     url_and_api_key: URL and API key authentication.
@@ -20,18 +19,18 @@ export type AuthType =
     | "oauth2"
     | "oauth2_with_refresh"
     | "oauth2_with_refresh_rotating"
-    | "trello_auth"
     | "api_key"
     | "native_functionality"
     | "config_class"
+    | "trello_auth"
     | "none";
 export const AuthType = {
     Oauth2: "oauth2",
     Oauth2WithRefresh: "oauth2_with_refresh",
     Oauth2WithRefreshRotating: "oauth2_with_refresh_rotating",
-    TrelloAuth: "trello_auth",
     ApiKey: "api_key",
     NativeFunctionality: "native_functionality",
     ConfigClass: "config_class",
+    TrelloAuth: "trello_auth",
     None: "none",
 } as const;
