@@ -7,5 +7,6 @@
  *     {}
  */
 export interface BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost {
-    accessToken?: string;
+    /** This parameter gives you the ability to start a sync job with an access token for an OAuth2.0 source directly instead of using the credentials that Airweave has stored for you. Learn more about direct token injection [here](https://docs.airweave.ai/direct-token-injection). */
+    access_token?: string;
 }

@@ -3,7 +3,7 @@
  */
 
 /**
- * Status for search results.
+ * Status indicators for search operation outcomes.
  */
 export type SearchStatus = "success" | "no_relevant_results" | "no_results";
 export const SearchStatus = {

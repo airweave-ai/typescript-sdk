@@ -5,12 +5,13 @@
 /**
  * @example
  *     {
- *         name: "name"
+ *         name: "Finance Data",
+ *         readable_id: "finance-data-reports"
  *     }
  */
 export interface CollectionCreate {
-    /** Display name for the collection */
+    /** Human-readable display name for the collection. This appears in the UI and should clearly describe the data contained within (e.g., 'Finance Data'). */
     name: string;
-    /** Unique lowercase identifier (e.g., respectable-sparrow, collection-123) */
-    readableId?: string;
+    /** URL-safe unique identifier used in API endpoints. Must contain only lowercase letters, numbers, and hyphens. If not provided, it will be automatically generated from the collection name with a random suffix for uniqueness (e.g., 'finance-data-ab123'). */
+    readable_id?: string;
 }

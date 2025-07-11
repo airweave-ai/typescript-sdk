@@ -6,6 +6,6 @@
  * Schema for creating a DAG edge.
  */
 export interface DagEdgeCreate {
-    fromNodeId: string;
-    toNodeId: string;
+    from_node_id: string;
+    to_node_id: string;
 }

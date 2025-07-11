@@ -7,5 +7,8 @@
  *     {}
  */
 export interface DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest {
-    deleteData?: boolean;
+    /**
+     * Whether to also delete all synced data from destination systems
+     */
+    delete_data?: boolean;
 }

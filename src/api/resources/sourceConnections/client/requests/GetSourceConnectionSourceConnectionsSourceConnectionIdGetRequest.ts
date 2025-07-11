@@ -7,5 +7,8 @@
  *     {}
  */
 export interface GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest {
-    showAuthFields?: boolean;
+    /**
+     * Whether to reveal authentication credentials.
+     */
+    show_auth_fields?: boolean;
 }

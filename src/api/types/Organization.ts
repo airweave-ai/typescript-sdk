@@ -7,8 +7,9 @@
  */
 export interface Organization {
     name: string;
-    description: string;
+    description?: string;
+    auth0_org_id?: string;
     id: string;
-    createdAt: Date;
-    modifiedAt: Date;
+    created_at: string;
+    modified_at: string;
 }

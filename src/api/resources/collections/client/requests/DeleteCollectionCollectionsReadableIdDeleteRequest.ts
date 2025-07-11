@@ -7,5 +7,8 @@
  *     {}
  */
 export interface DeleteCollectionCollectionsReadableIdDeleteRequest {
-    deleteData?: boolean;
+    /**
+     * Whether to also delete all associated data from destination systems
+     */
+    delete_data?: boolean;
 }

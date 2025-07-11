@@ -8,9 +8,9 @@
 export interface TransformerCreate {
     name: string;
     description?: string;
-    methodName: string;
-    moduleName: string;
-    inputEntityDefinitionIds: string[];
-    outputEntityDefinitionIds: string[];
-    configSchema?: Record<string, unknown>;
+    method_name: string;
+    module_name: string;
+    input_entity_definition_ids: string[];
+    output_entity_definition_ids: string[];
+    config_schema?: Record<string, unknown>;
 }

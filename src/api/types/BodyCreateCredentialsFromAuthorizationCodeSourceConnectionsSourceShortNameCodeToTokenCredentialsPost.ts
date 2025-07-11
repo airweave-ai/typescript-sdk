@@ -3,8 +3,12 @@
  */
 
 export interface BodyCreateCredentialsFromAuthorizationCodeSourceConnectionsSourceShortNameCodeToTokenCredentialsPost {
-    credentialName?: string;
-    credentialDescription?: string;
-    clientId?: string;
-    clientSecret?: string;
+    /** Custom name for the stored credential */
+    credential_name?: string;
+    /** Description to help identify this credential */
+    credential_description?: string;
+    /** OAuth client ID (required for bring-your-own-credentials) */
+    client_id?: string;
+    /** OAuth client secret (required for bring-your-own-credentials) */
+    client_secret?: string;
 }

@@ -7,6 +7,6 @@
  */
 export interface UserCreate {
     email: string;
-    fullName?: string;
-    organizationId?: string;
+    full_name?: string;
+    auth0_id?: string;
 }

@@ -1,4 +1,4 @@
-export * as AirweaveSDK from "./api";
-export { AirweaveSDKClient } from "./Client";
-export { AirweaveSDKEnvironment } from "./environments";
-export { AirweaveSDKError, AirweaveSDKTimeoutError } from "./errors";
+export * as AirweaveSDK from "./api/index.js";
+export { AirweaveSDKError, AirweaveSDKTimeoutError } from "./errors/index.js";
+export { AirweaveSDKClient } from "./Client.js";
+export { AirweaveSDKEnvironment } from "./environments.js";

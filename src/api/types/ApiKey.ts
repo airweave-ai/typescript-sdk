@@ -8,11 +8,11 @@
 export interface ApiKey {
     id: string;
     organization: string;
-    createdAt: Date;
-    modifiedAt: Date;
-    lastUsedDate?: Date;
-    expirationDate: Date;
-    createdByEmail: string;
-    modifiedByEmail: string;
-    decryptedKey: string;
+    created_at: string;
+    modified_at: string;
+    last_used_date?: string;
+    expiration_date: string;
+    created_by_email?: string;
+    modified_by_email?: string;
+    decrypted_key: string;
 }

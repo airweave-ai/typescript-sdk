@@ -1,2 +1,2 @@
-export { AirweaveSDKError } from "./AirweaveSDKError";
-export { AirweaveSDKTimeoutError } from "./AirweaveSDKTimeoutError";
+export { AirweaveSDKError } from "./AirweaveSDKError.js";
+export { AirweaveSDKTimeoutError } from "./AirweaveSDKTimeoutError.js";

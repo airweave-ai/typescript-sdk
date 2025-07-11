@@ -3,7 +3,7 @@
  */
 
 /**
- * Response type for search results.
+ * Response format options for search results.
  */
 export type ResponseType = "raw" | "completion";
 export const ResponseType = {

@@ -6,11 +6,11 @@
  * Schema for a DAG edge.
  */
 export interface DagEdge {
-    fromNodeId: string;
-    toNodeId: string;
+    from_node_id: string;
+    to_node_id: string;
     id: string;
-    dagId: string;
-    organizationId: string;
-    createdByEmail: string;
-    modifiedByEmail: string;
+    dag_id: string;
+    organization_id: string;
+    created_by_email?: string;
+    modified_by_email?: string;
 }
