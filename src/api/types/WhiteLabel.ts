@@ -9,7 +9,7 @@ export interface WhiteLabel {
     /** Human-readable name for the white label integration. This helps you identify the integration in the UI and should clearly describe its purpose (e.g., 'Customer Portal Slack Integration', 'Enterprise Google Drive Access'). */
     name: string;
     /** Technical identifier of the source type that this integration supports (e.g., 'slack', 'google_drive', 'github'). This determines which service provider the OAuth integration connects to. */
-    short_name: string;
+    source_short_name: string;
     /** OAuth2 callback URL where users are redirected after completing authentication. This must be a valid HTTPS URL that your application can handle to receive the authorization code. */
     redirect_url: string;
     /** OAuth2 client identifier provided by the service provider. This identifies your application during the OAuth consent flow and must match the client ID configured in the service provider's developer console. */

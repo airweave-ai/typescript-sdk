@@ -13,7 +13,7 @@ describe("WhiteLabels", () => {
         const rawResponseBody = [
             {
                 name: "Support Team GitHub Integration",
-                short_name: "slack",
+                source_short_name: "github",
                 redirect_url: "https://support.yoursite.com/integrations/github/callback",
                 client_id: "Iv1.a1b2c3d4e5f6g7h8",
                 client_secret: "1234567890abcdef1234567890abcdef12345678",
@@ -32,7 +32,7 @@ describe("WhiteLabels", () => {
         expect(response).toEqual([
             {
                 name: "Support Team GitHub Integration",
-                short_name: "slack",
+                source_short_name: "github",
                 redirect_url: "https://support.yoursite.com/integrations/github/callback",
                 client_id: "Iv1.a1b2c3d4e5f6g7h8",
                 client_secret: "1234567890abcdef1234567890abcdef12345678",
@@ -52,7 +52,7 @@ describe("WhiteLabels", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = {
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -60,7 +60,7 @@ describe("WhiteLabels", () => {
         };
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -83,7 +83,7 @@ describe("WhiteLabels", () => {
 
         const response = await client.whiteLabels.createWhiteLabel({
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -91,7 +91,7 @@ describe("WhiteLabels", () => {
         });
         expect(response).toEqual({
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -111,7 +111,7 @@ describe("WhiteLabels", () => {
 
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -134,7 +134,7 @@ describe("WhiteLabels", () => {
         const response = await client.whiteLabels.getWhiteLabel("white_label_id");
         expect(response).toEqual({
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -158,7 +158,7 @@ describe("WhiteLabels", () => {
         };
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -186,7 +186,7 @@ describe("WhiteLabels", () => {
         });
         expect(response).toEqual({
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -206,7 +206,7 @@ describe("WhiteLabels", () => {
 
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -229,7 +229,7 @@ describe("WhiteLabels", () => {
         const response = await client.whiteLabels.deleteWhiteLabel("white_label_id");
         expect(response).toEqual({
             name: "Customer Portal Slack Integration",
-            short_name: "slack",
+            source_short_name: "slack",
             redirect_url: "https://yourapp.com/auth/slack/callback",
             client_id: "1234567890.1234567890123",
             client_secret: "abcdefghijklmnopqrstuvwxyz123456",
@@ -243,7 +243,7 @@ describe("WhiteLabels", () => {
         });
     });
 
-    test("getWhiteLabelOauth2AuthUrl", async () => {
+    test("get_white_label_oauth2_auth_url_white_labels__white_label_id__oauth2_auth_url_options", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
@@ -257,7 +257,10 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+        const response =
+            await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+                "white_label_id",
+            );
         expect(response).toEqual(
             "https://slack.com/oauth/v2/authorize?response_type=code&client_id=1234567890.1234567890123&redirect_uri=https%3A//yourapp.com/auth/slack/callback&scope=channels%3Aread+chat%3Awrite+users%3Aread",
         );
@@ -306,7 +309,7 @@ describe("WhiteLabels", () => {
         ]);
     });
 
-    test("exchange_white_label_oauth2_code_white_labels__white_label_id__oauth2_code_options", async () => {
+    test("exchangeWhiteLabelOauth2Code", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = { code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7" };
@@ -344,12 +347,9 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
-            "white_label_id",
-            {
-                code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
-            },
-        );
+        const response = await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+            code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
+        });
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",
