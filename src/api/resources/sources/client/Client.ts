@@ -13,7 +13,10 @@ export declare namespace Sources {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        /** Override the X-API-Key header */
+        apiKey?: core.Supplier<string | undefined>;
+        /** Override the X-Organization-ID header */
+        organizationId?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -25,15 +28,22 @@ export declare namespace Sources {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Override the X-API-Key header */
+        apiKey?: string | undefined;
+        /** Override the X-Organization-ID header */
+        organizationId?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
 }
 
+/**
+ * API endpoints for discovering available data source connectors and their configuration requirements
+ */
 export class Sources {
     protected readonly _options: Sources.Options;
 
-    constructor(_options: Sources.Options) {
+    constructor(_options: Sources.Options = {}) {
         this._options = _options;
     }
 
@@ -69,7 +79,10 @@ export class Sources {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -145,7 +158,10 @@ export class Sources {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -187,10 +203,5 @@ export class Sources {
                     rawResponse: _response.rawResponse,
                 });
         }
-    }
-
-    protected async _getCustomAuthorizationHeaders() {
-        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
-        return { "x-api-key": apiKeyValue };
     }
 }

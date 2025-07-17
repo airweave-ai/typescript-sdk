@@ -13,7 +13,10 @@ export declare namespace WhiteLabels {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        /** Override the X-API-Key header */
+        apiKey?: core.Supplier<string | undefined>;
+        /** Override the X-Organization-ID header */
+        organizationId?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -25,15 +28,22 @@ export declare namespace WhiteLabels {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Override the X-API-Key header */
+        apiKey?: string | undefined;
+        /** Override the X-Organization-ID header */
+        organizationId?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
 }
 
+/**
+ * API endpoints for managing custom OAuth2 integrations with your own branding and credentials
+ */
 export class WhiteLabels {
     protected readonly _options: WhiteLabels.Options;
 
-    constructor(_options: WhiteLabels.Options) {
+    constructor(_options: WhiteLabels.Options = {}) {
         this._options = _options;
     }
 
@@ -73,7 +83,10 @@ export class WhiteLabels {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -164,7 +177,10 @@ export class WhiteLabels {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -243,7 +259,10 @@ export class WhiteLabels {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -328,7 +347,10 @@ export class WhiteLabels {
             method: "PUT",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -414,7 +436,10 @@ export class WhiteLabels {
             method: "DELETE",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -474,16 +499,18 @@ export class WhiteLabels {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id")
+     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id")
      */
-    public getWhiteLabelOauth2AuthUrl(
+    public getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<string> {
-        return core.HttpResponsePromise.fromPromise(this.__getWhiteLabelOauth2AuthUrl(whiteLabelId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(
+            this.__getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(whiteLabelId, requestOptions),
+        );
     }
 
-    private async __getWhiteLabelOauth2AuthUrl(
+    private async __getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<string>> {
@@ -497,7 +524,10 @@ export class WhiteLabels {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -580,7 +610,10 @@ export class WhiteLabels {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -675,7 +708,10 @@ export class WhiteLabels {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -722,10 +758,5 @@ export class WhiteLabels {
                     rawResponse: _response.rawResponse,
                 });
         }
-    }
-
-    protected async _getCustomAuthorizationHeaders() {
-        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
-        return { "x-api-key": apiKeyValue };
     }
 }

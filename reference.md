@@ -1,6 +1,6 @@
 # Reference
 
-## Sources
+## sources
 
 <details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">readSource</a>(shortName) -> AirweaveSDK.Source</code></summary>
 <dl>
@@ -123,7 +123,7 @@ await client.sources.readSources();
 </dl>
 </details>
 
-## Collections
+## collections
 
 <details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">listCollections</a>({ ...params }) -> AirweaveSDK.Collection[]</code></summary>
 <dl>
@@ -617,7 +617,7 @@ await client.collections.refreshAllSourceConnections("readable_id");
 </dl>
 </details>
 
-## SourceConnections
+## source-connections
 
 <details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">listSourceConnections</a>({ ...params }) -> AirweaveSDK.SourceConnectionListItem[]</code></summary>
 <dl>
@@ -1282,7 +1282,7 @@ await client.sourceConnections.cancelSourceConnectionJob("source_connection_id",
 </dl>
 </details>
 
-## WhiteLabels
+## white-labels
 
 <details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>() -> AirweaveSDK.WhiteLabel[]</code></summary>
 <dl>
@@ -1630,7 +1630,7 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions</a>(whiteLabelId) -> string</code></summary>
 <dl>
 <dd>
 
@@ -1663,7 +1663,7 @@ branding instead of Airweave.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id");
 ```
 
 </dd>

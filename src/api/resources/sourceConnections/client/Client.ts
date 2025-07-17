@@ -13,7 +13,10 @@ export declare namespace SourceConnections {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        apiKey: core.Supplier<string>;
+        /** Override the X-API-Key header */
+        apiKey?: core.Supplier<string | undefined>;
+        /** Override the X-Organization-ID header */
+        organizationId?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -25,15 +28,22 @@ export declare namespace SourceConnections {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Override the X-API-Key header */
+        apiKey?: string | undefined;
+        /** Override the X-Organization-ID header */
+        organizationId?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
 }
 
+/**
+ * API endpoints for managing live connections to data sources. Source connections are the actual configured instances that Airweave uses to sync data from your apps and databases, transforming it into searchable, structured information within collections
+ */
 export class SourceConnections {
     protected readonly _options: SourceConnections.Options;
 
-    constructor(_options: SourceConnections.Options) {
+    constructor(_options: SourceConnections.Options = {}) {
         this._options = _options;
     }
 
@@ -89,7 +99,10 @@ export class SourceConnections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -186,7 +199,10 @@ export class SourceConnections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -276,7 +292,10 @@ export class SourceConnections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -365,7 +384,10 @@ export class SourceConnections {
             method: "PUT",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -463,7 +485,10 @@ export class SourceConnections {
             method: "DELETE",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -552,7 +577,10 @@ export class SourceConnections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -639,7 +667,10 @@ export class SourceConnections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -722,7 +753,10 @@ export class SourceConnections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -810,7 +844,10 @@ export class SourceConnections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                mergeOnlyDefinedHeaders({
+                    "X-API-Key": requestOptions?.apiKey,
+                    "X-Organization-ID": requestOptions?.organizationId,
+                }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -854,10 +891,5 @@ export class SourceConnections {
                     rawResponse: _response.rawResponse,
                 });
         }
-    }
-
-    protected async _getCustomAuthorizationHeaders() {
-        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
-        return { "x-api-key": apiKeyValue };
     }
 }
