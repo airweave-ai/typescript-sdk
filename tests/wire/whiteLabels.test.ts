@@ -8,7 +8,7 @@ import { AirweaveSDKClient } from "../../src/Client";
 describe("WhiteLabels", () => {
     test("listWhiteLabels", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -49,7 +49,7 @@ describe("WhiteLabels", () => {
 
     test("createWhiteLabel", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = {
             name: "Customer Portal Slack Integration",
             source_short_name: "slack",
@@ -107,7 +107,7 @@ describe("WhiteLabels", () => {
 
     test("getWhiteLabel", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
@@ -150,7 +150,7 @@ describe("WhiteLabels", () => {
 
     test("updateWhiteLabel", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = {
             name: "Updated Customer Portal Integration",
             redirect_url: "https://v2.yourapp.com/auth/slack/callback",
@@ -202,7 +202,7 @@ describe("WhiteLabels", () => {
 
     test("deleteWhiteLabel", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "Customer Portal Slack Integration",
@@ -243,9 +243,9 @@ describe("WhiteLabels", () => {
         });
     });
 
-    test("get_white_label_oauth2_auth_url_white_labels__white_label_id__oauth2_auth_url_options", async () => {
+    test("getWhiteLabelOauth2AuthUrl", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody =
             "https://slack.com/oauth/v2/authorize?response_type=code&client_id=1234567890.1234567890123&redirect_uri=https%3A//yourapp.com/auth/slack/callback&scope=channels%3Aread+chat%3Awrite+users%3Aread";
@@ -257,10 +257,7 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response =
-            await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
-                "white_label_id",
-            );
+        const response = await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
         expect(response).toEqual(
             "https://slack.com/oauth/v2/authorize?response_type=code&client_id=1234567890.1234567890123&redirect_uri=https%3A//yourapp.com/auth/slack/callback&scope=channels%3Aread+chat%3Awrite+users%3Aread",
         );
@@ -268,7 +265,7 @@ describe("WhiteLabels", () => {
 
     test("listWhiteLabelSourceConnections", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -309,9 +306,9 @@ describe("WhiteLabels", () => {
         ]);
     });
 
-    test("exchange_white_label_oauth2_code_white_labels__white_label_id__oauth2_code_options", async () => {
+    test("exchangeWhiteLabelOauth2Code", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = { code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7" };
         const rawResponseBody = {
             name: "GitHub - Engineering Documentation",
@@ -347,12 +344,9 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
-            "white_label_id",
-            {
-                code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
-            },
-        );
+        const response = await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+            code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
+        });
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",

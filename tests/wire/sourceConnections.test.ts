@@ -8,7 +8,7 @@ import { AirweaveSDKClient } from "../../src/Client";
 describe("SourceConnections", () => {
     test("listSourceConnections", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -51,7 +51,7 @@ describe("SourceConnections", () => {
 
     test("createSourceConnection", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Production Stripe Account", short_name: "stripe" };
         const rawResponseBody = {
             name: "GitHub - Engineering Documentation",
@@ -125,7 +125,7 @@ describe("SourceConnections", () => {
 
     test("getSourceConnection", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "GitHub - Engineering Documentation",
@@ -195,7 +195,7 @@ describe("SourceConnections", () => {
 
     test("updateSourceConnection", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             name: "GitHub - Engineering Documentation",
@@ -266,7 +266,7 @@ describe("SourceConnections", () => {
 
     test("deleteSourceConnection", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "GitHub - Engineering Documentation",
@@ -336,7 +336,7 @@ describe("SourceConnections", () => {
 
     test("runSourceConnection", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
@@ -398,7 +398,7 @@ describe("SourceConnections", () => {
 
     test("listSourceConnectionJobs", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -463,7 +463,7 @@ describe("SourceConnections", () => {
 
     test("getSourceConnectionJob", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
@@ -524,7 +524,7 @@ describe("SourceConnections", () => {
 
     test("cancelSourceConnectionJob", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
