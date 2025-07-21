@@ -18,6 +18,10 @@ export interface SourceConnection {
     short_name: string;
     /** Identifier for custom OAuth integrations. Only present for connections created through white label OAuth flows. */
     white_label_id?: string;
+    /** Readable ID of the auth provider used to create this connection. Present only if the connection was created through an auth provider. */
+    auth_provider?: string;
+    /** Configuration used with the auth provider to create this connection. Present only if the connection was created through an auth provider. */
+    auth_provider_config?: Record<string, unknown>;
     /** Unique system identifier for this source connection. This UUID is generated automatically and used for API operations. */
     id: string;
     /** Internal identifier for the sync configuration associated with this source connection. Managed automatically by the system. */

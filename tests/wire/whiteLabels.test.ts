@@ -243,7 +243,7 @@ describe("WhiteLabels", () => {
         });
     });
 
-    test("getWhiteLabelOauth2AuthUrl", async () => {
+    test("get_white_label_oauth2_auth_url_white_labels__white_label_id__oauth2_auth_url_options", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
 
@@ -257,7 +257,10 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+        const response =
+            await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+                "white_label_id",
+            );
         expect(response).toEqual(
             "https://slack.com/oauth/v2/authorize?response_type=code&client_id=1234567890.1234567890123&redirect_uri=https%3A//yourapp.com/auth/slack/callback&scope=channels%3Aread+chat%3Awrite+users%3Aread",
         );
@@ -316,6 +319,8 @@ describe("WhiteLabels", () => {
             config_fields: { branch: "main" },
             short_name: "github",
             white_label_id: "white_label_id",
+            auth_provider: "auth_provider",
+            auth_provider_config: { key: "value" },
             id: "550e8400-e29b-41d4-a716-446655440000",
             sync_id: "123e4567-e89b-12d3-a456-426614174000",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -355,6 +360,10 @@ describe("WhiteLabels", () => {
             },
             short_name: "github",
             white_label_id: "white_label_id",
+            auth_provider: "auth_provider",
+            auth_provider_config: {
+                key: "value",
+            },
             id: "550e8400-e29b-41d4-a716-446655440000",
             sync_id: "123e4567-e89b-12d3-a456-426614174000",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",

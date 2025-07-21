@@ -23,6 +23,10 @@ export interface SourceConnectionUpdate {
     connection_id?: string;
     /** ID of the white label integration. Used for custom OAuth integrations with your own branding. */
     white_label_id?: string;
+    /** Updated auth provider readable ID. Only relevant if the connection uses an auth provider. */
+    auth_provider?: string;
+    /** Updated configuration for the auth provider. Only relevant if the connection uses an auth provider. */
+    auth_provider_config?: Record<string, unknown>;
 }
 
 export namespace SourceConnectionUpdate {

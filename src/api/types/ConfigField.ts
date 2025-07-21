@@ -10,4 +10,5 @@ export interface ConfigField {
     title: string;
     description?: string;
     type: string;
+    required?: boolean;
 }

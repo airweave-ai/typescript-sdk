@@ -5,9 +5,10 @@
 /**
  * Integration type enum.
  */
-export type IntegrationType = "source" | "destination" | "embedding_model";
+export type IntegrationType = "source" | "destination" | "embedding_model" | "auth_provider";
 export const IntegrationType = {
     Source: "source",
     Destination: "destination",
     EmbeddingModel: "embedding_model",
+    AuthProvider: "auth_provider",
 } as const;
