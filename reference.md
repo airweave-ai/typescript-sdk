@@ -1740,7 +1740,7 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions</a>(whiteLabelId) -> string</code></summary>
 <dl>
 <dd>
 
@@ -1773,7 +1773,7 @@ branding instead of Airweave.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id");
 ```
 
 </dd>
