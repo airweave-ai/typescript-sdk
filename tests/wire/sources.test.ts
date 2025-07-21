@@ -8,7 +8,7 @@ import { AirweaveSDKClient } from "../../src/Client";
 describe("Sources", () => {
     test("readSource", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "GitHub",
@@ -101,7 +101,7 @@ describe("Sources", () => {
 
     test("readSources", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", organizationId: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {

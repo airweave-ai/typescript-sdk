@@ -15,10 +15,7 @@ export declare namespace AirweaveSDKClient {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        /** Override the X-API-Key header */
-        apiKey?: core.Supplier<string | undefined>;
-        /** Override the X-Organization-ID header */
-        organizationId?: core.Supplier<string | undefined>;
+        apiKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -30,10 +27,6 @@ export declare namespace AirweaveSDKClient {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-API-Key header */
-        apiKey?: string | undefined;
-        /** Override the X-Organization-ID header */
-        organizationId?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -46,17 +39,15 @@ export class AirweaveSDKClient {
     protected _sourceConnections: SourceConnections | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
 
-    constructor(_options: AirweaveSDKClient.Options = {}) {
+    constructor(_options: AirweaveSDKClient.Options) {
         this._options = {
             ..._options,
             headers: mergeHeaders(
                 {
-                    "X-API-Key": _options?.apiKey,
-                    "X-Organization-ID": _options?.organizationId,
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.3.44",
-                    "User-Agent": "@airweave/sdk/v0.3.44",
+                    "X-Fern-SDK-Version": "v0.1.51",
+                    "User-Agent": "@airweave/sdk/v0.1.51",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
