@@ -594,6 +594,126 @@ export class Collections {
     }
 
     /**
+     * Advanced search with comprehensive filtering and options.
+     *
+     * This endpoint supports:
+     * - Metadata filtering using Qdrant's native filter syntax
+     * - Pagination with offset and limit
+     * - Score threshold filtering
+     * - Query expansion strategies
+     * - Result summarization
+     * - Control over included metadata and vectors
+     *
+     * Example request body:
+     * ```json
+     * {
+     *     "query": "customer payment issues",
+     *     "filter": {
+     *         "must": [
+     *             {"key": "source", "match": {"value": "stripe"}},
+     *             {"key": "created_at", "range": {"gte": "2024-01-01T00:00:00Z"}}
+     *         ]
+     *     },
+     *     "limit": 50,
+     *     "score_threshold": 0.7,
+     *     "response_type": "completion"
+     * }
+     * ```
+     *
+     * @param {string} readableId - The unique readable identifier of the collection to search
+     * @param {AirweaveSDK.SearchRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.searchCollectionAdvanced("readable_id", {
+     *         query: "customer payment issues",
+     *         filter: {
+     *             must: {
+     *                 key: "key"
+     *             }
+     *         },
+     *         limit: 50,
+     *         score_threshold: 0.7,
+     *         response_type: "completion"
+     *     })
+     */
+    public searchCollectionAdvanced(
+        readableId: string,
+        request: AirweaveSDK.SearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
+        return core.HttpResponsePromise.fromPromise(
+            this.__searchCollectionAdvanced(readableId, request, requestOptions),
+        );
+    }
+
+    private async __searchCollectionAdvanced(
+        readableId: string,
+        request: AirweaveSDK.SearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search`,
+            ),
+            method: "POST",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SearchResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * Trigger data synchronization for all source connections in the collection.
      *
      * <br/><br/>The sync jobs run asynchronously in the background, so this endpoint

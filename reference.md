@@ -552,6 +552,113 @@ await client.collections.searchCollection("readable_id", {
 </dl>
 </details>
 
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">searchCollectionAdvanced</a>(readableId, { ...params }) -> AirweaveSDK.SearchResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Advanced search with comprehensive filtering and options.
+
+This endpoint supports:
+
+- Metadata filtering using Qdrant's native filter syntax
+- Pagination with offset and limit
+- Score threshold filtering
+- Query expansion strategies
+- Result summarization
+- Control over included metadata and vectors
+
+Example request body:
+
+```json
+{
+    "query": "customer payment issues",
+    "filter": {
+        "must": [
+            { "key": "source", "match": { "value": "stripe" } },
+            { "key": "created_at", "range": { "gte": "2024-01-01T00:00:00Z" } }
+        ]
+    },
+    "limit": 50,
+    "score_threshold": 0.7,
+    "response_type": "completion"
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.searchCollectionAdvanced("readable_id", {
+    query: "customer payment issues",
+    filter: {
+        must: {
+            key: "key",
+        },
+    },
+    limit: 50,
+    score_threshold: 0.7,
+    response_type: "completion",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string` — The unique readable identifier of the collection to search
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 <details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>(readableId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
 <dl>
 <dd>

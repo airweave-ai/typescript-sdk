@@ -280,6 +280,54 @@ describe("Collections", () => {
         });
     });
 
+    test("searchCollectionAdvanced", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            query: "customer payment issues",
+            filter: { must: { key: "key" } },
+            limit: 50,
+            score_threshold: 0.7,
+            response_type: "completion",
+        };
+        const rawResponseBody = {
+            results: [{ key: "value" }],
+            response_type: "raw",
+            completion: "completion",
+            status: "success",
+        };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.collections.searchCollectionAdvanced("readable_id", {
+            query: "customer payment issues",
+            filter: {
+                must: {
+                    key: "key",
+                },
+            },
+            limit: 50,
+            score_threshold: 0.7,
+            response_type: "completion",
+        });
+        expect(response).toEqual({
+            results: [
+                {
+                    key: "value",
+                },
+            ],
+            response_type: "raw",
+            completion: "completion",
+            status: "success",
+        });
+    });
+
     test("refreshAllSourceConnections", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });

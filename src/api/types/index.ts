@@ -58,7 +58,6 @@ export * from "./OrganizationWithRole.js";
 export * from "./PayloadField.js";
 export * from "./QueryExpansionStrategy.js";
 export * from "./ResponseType.js";
-export * from "./SearchRequest.js";
 export * from "./SearchResponse.js";
 export * from "./SearchStatus.js";
 export * from "./Source.js";
