@@ -19,4 +19,20 @@ export interface SearchCollectionCollectionsReadableIdSearchGetRequest {
      * Format of the response: 'raw' returns search results, 'completion' returns AI-generated answers
      */
     response_type?: AirweaveSDK.ResponseType;
+    /**
+     * Maximum number of results to return
+     */
+    limit?: number;
+    /**
+     * Number of results to skip for pagination
+     */
+    offset?: number;
+    /**
+     * Minimum similarity score threshold
+     */
+    score_threshold?: number;
+    /**
+     * Query expansion strategy (auto, llm, or no_expansion)
+     */
+    expansion_strategy?: AirweaveSDK.QueryExpansionStrategy;
 }
