@@ -203,32 +203,45 @@ describe("Collections", () => {
         const rawResponseBody = {
             results: [
                 {
-                    content:
-                        "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
-                    id: "stripe_cust_1234567890",
-                    metadata: { amount: 99, currency: "USD", date: "2024-01-15T10:30:00Z", type: "payment" },
+                    id: "f30bf505-cc33-4c74-920c-524eab49334c",
                     score: 0.92,
-                    source: "stripe",
-                    title: "Customer Payment Record",
+                    payload: {
+                        entity_id: "1207573546742333",
+                        source_name: "Asana",
+                        md_content: "Implement user authentication - Build secure login system with JWT tokens",
+                        md_type: "text",
+                        metadata: {
+                            project_name: "Q4 Development Sprint",
+                            assignee: "john.doe@company.com",
+                            due_date: "2024-01-20",
+                            priority: "high",
+                            tags: ["authentication", "security", "backend"],
+                        },
+                        md_position: 0,
+                        md_parent_title: "Authentication Module",
+                    },
                 },
                 {
-                    content:
-                        "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
-                    id: "zendesk_ticket_789",
-                    metadata: {
-                        date: "2024-01-14T14:22:00Z",
-                        priority: "medium",
-                        status: "resolved",
-                        type: "support_ticket",
-                    },
+                    id: "fb6c49f7-2f9a-4000-ad50-96d1047a8f10",
                     score: 0.87,
-                    source: "zendesk",
-                    title: "Billing Question - Subscription Upgrade",
+                    payload: {
+                        entity_id: "1207921130902216",
+                        source_name: "Asana",
+                        md_content: "Review and update API authentication documentation",
+                        md_type: "text",
+                        metadata: {
+                            project_name: "Documentation Updates",
+                            assignee: "sarah.smith@company.com",
+                            status: "in_progress",
+                            last_modified: "2024-01-18T14:30:00Z",
+                        },
+                        md_position: 0,
+                        md_parent_title: "API Documentation",
+                    },
                 },
             ],
-            response_type: "completion",
-            completion:
-                "Based on your recent data, customer John Doe successfully processed a $99 monthly subscription payment on January 15th. There was also a related support ticket from January 14th where a customer inquired about upgrading from Basic to Pro plan for advanced analytics features. This suggests strong customer engagement with your premium offerings.",
+            response_type: "raw",
+            completion: "completion",
             status: "success",
         };
         server
@@ -245,37 +258,45 @@ describe("Collections", () => {
         expect(response).toEqual({
             results: [
                 {
-                    content:
-                        "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
-                    id: "stripe_cust_1234567890",
-                    metadata: {
-                        amount: 99,
-                        currency: "USD",
-                        date: "2024-01-15T10:30:00Z",
-                        type: "payment",
-                    },
+                    id: "f30bf505-cc33-4c74-920c-524eab49334c",
                     score: 0.92,
-                    source: "stripe",
-                    title: "Customer Payment Record",
+                    payload: {
+                        entity_id: "1207573546742333",
+                        source_name: "Asana",
+                        md_content: "Implement user authentication - Build secure login system with JWT tokens",
+                        md_type: "text",
+                        metadata: {
+                            project_name: "Q4 Development Sprint",
+                            assignee: "john.doe@company.com",
+                            due_date: "2024-01-20",
+                            priority: "high",
+                            tags: ["authentication", "security", "backend"],
+                        },
+                        md_position: 0,
+                        md_parent_title: "Authentication Module",
+                    },
                 },
                 {
-                    content:
-                        "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
-                    id: "zendesk_ticket_789",
-                    metadata: {
-                        date: "2024-01-14T14:22:00Z",
-                        priority: "medium",
-                        status: "resolved",
-                        type: "support_ticket",
-                    },
+                    id: "fb6c49f7-2f9a-4000-ad50-96d1047a8f10",
                     score: 0.87,
-                    source: "zendesk",
-                    title: "Billing Question - Subscription Upgrade",
+                    payload: {
+                        entity_id: "1207921130902216",
+                        source_name: "Asana",
+                        md_content: "Review and update API authentication documentation",
+                        md_type: "text",
+                        metadata: {
+                            project_name: "Documentation Updates",
+                            assignee: "sarah.smith@company.com",
+                            status: "in_progress",
+                            last_modified: "2024-01-18T14:30:00Z",
+                        },
+                        md_position: 0,
+                        md_parent_title: "API Documentation",
+                    },
                 },
             ],
-            response_type: "completion",
-            completion:
-                "Based on your recent data, customer John Doe successfully processed a $99 monthly subscription payment on January 15th. There was also a related support ticket from January 14th where a customer inquired about upgrading from Basic to Pro plan for advanced analytics features. This suggests strong customer engagement with your premium offerings.",
+            response_type: "raw",
+            completion: "completion",
             status: "success",
         });
     });
@@ -291,9 +312,47 @@ describe("Collections", () => {
             response_type: "completion",
         };
         const rawResponseBody = {
-            results: [{ key: "value" }],
-            response_type: "raw",
-            completion: "completion",
+            results: [
+                {
+                    id: "stripe_cust_1234567890",
+                    score: 0.94,
+                    payload: {
+                        entity_id: "cust_1234567890",
+                        source_name: "Stripe",
+                        title: "Customer Payment Record",
+                        content:
+                            "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
+                        metadata: {
+                            date: "2024-01-15T10:30:00Z",
+                            type: "payment",
+                            amount: 99,
+                            currency: "USD",
+                            customer_email: "john@company.com",
+                        },
+                    },
+                },
+                {
+                    id: "zendesk_ticket_789",
+                    score: 0.89,
+                    payload: {
+                        entity_id: "ticket_789",
+                        source_name: "Zendesk",
+                        title: "Billing Question - Subscription Upgrade",
+                        content:
+                            "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
+                        metadata: {
+                            date: "2024-01-14T14:22:00Z",
+                            type: "support_ticket",
+                            status: "resolved",
+                            priority: "medium",
+                            agent: "support@company.com",
+                        },
+                    },
+                },
+            ],
+            response_type: "completion",
+            completion:
+                "Based on your recent data:\n\n## Payment Processing\nCustomer John Doe successfully processed a **$99 monthly subscription payment** on January 15th using a Visa card ending in 4242.\n\n## Customer Support Activity\nThere was a related support ticket from January 14th where a customer inquired about **upgrading from Basic to Pro plan** for advanced analytics features. This ticket has been resolved.\n\n### Summary\nThis shows strong customer engagement with your premium offerings, with successful payment processing and interest in higher-tier features.",
             status: "success",
         };
         server
@@ -319,11 +378,45 @@ describe("Collections", () => {
         expect(response).toEqual({
             results: [
                 {
-                    key: "value",
+                    id: "stripe_cust_1234567890",
+                    score: 0.94,
+                    payload: {
+                        entity_id: "cust_1234567890",
+                        source_name: "Stripe",
+                        title: "Customer Payment Record",
+                        content:
+                            "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
+                        metadata: {
+                            date: "2024-01-15T10:30:00Z",
+                            type: "payment",
+                            amount: 99,
+                            currency: "USD",
+                            customer_email: "john@company.com",
+                        },
+                    },
+                },
+                {
+                    id: "zendesk_ticket_789",
+                    score: 0.89,
+                    payload: {
+                        entity_id: "ticket_789",
+                        source_name: "Zendesk",
+                        title: "Billing Question - Subscription Upgrade",
+                        content:
+                            "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
+                        metadata: {
+                            date: "2024-01-14T14:22:00Z",
+                            type: "support_ticket",
+                            status: "resolved",
+                            priority: "medium",
+                            agent: "support@company.com",
+                        },
+                    },
                 },
             ],
-            response_type: "raw",
-            completion: "completion",
+            response_type: "completion",
+            completion:
+                "Based on your recent data:\n\n## Payment Processing\nCustomer John Doe successfully processed a **$99 monthly subscription payment** on January 15th using a Visa card ending in 4242.\n\n## Customer Support Activity\nThere was a related support ticket from January 14th where a customer inquired about **upgrading from Basic to Pro plan** for advanced analytics features. This ticket has been resolved.\n\n### Summary\nThis shows strong customer engagement with your premium offerings, with successful payment processing and interest in higher-tier features.",
             status: "success",
         });
     });

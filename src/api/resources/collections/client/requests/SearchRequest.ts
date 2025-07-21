@@ -33,10 +33,6 @@ export interface SearchRequest {
     summarize?: boolean;
     /** Type of response (raw or completion) */
     response_type?: AirweaveSDK.ResponseType;
-    /** Query expansion strategy */
+    /** Query expansion strategy. Enhances recall by expanding the query with synonyms, related terms, and other variations, but increases latency. */
     expansion_strategy?: AirweaveSDK.QueryExpansionStrategy;
-    /** Whether to include metadata in results */
-    include_metadata?: boolean;
-    /** Whether to include vectors in response */
-    with_vectors?: boolean;
 }
