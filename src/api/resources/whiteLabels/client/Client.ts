@@ -499,18 +499,16 @@ export class WhiteLabels {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id")
+     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id")
      */
-    public getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+    public getWhiteLabelOauth2AuthUrl(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<string> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(whiteLabelId, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__getWhiteLabelOauth2AuthUrl(whiteLabelId, requestOptions));
     }
 
-    private async __getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+    private async __getWhiteLabelOauth2AuthUrl(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<string>> {
