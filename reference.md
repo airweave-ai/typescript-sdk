@@ -1854,7 +1854,7 @@ await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2Code</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1889,7 +1889,7 @@ tracking and branding purposes.
 <dd>
 
 ```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
     code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
 });
 ```
@@ -1915,7 +1915,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost`
+**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions`
 
 </dd>
 </dl>
