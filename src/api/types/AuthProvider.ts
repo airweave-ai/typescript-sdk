@@ -29,6 +29,6 @@ export interface AuthProvider {
     modified_at: string;
     /** Dynamically populated field definitions for authentication configuration. These describe what credentials are required to connect to this auth provider. */
     auth_fields?: AirweaveSDK.Fields;
-    /** Dynamically populated field definitions for auth provider-specific configuration. These describe what additional configuration is required when using this auth provider to connect to a source (e.g., integration_id and account_id for Composio). */
+    /** Dynamically populated field definitions for auth provider-specific configuration. These describe what additional configuration is required when using this auth provider to connect to a source (e.g., auth_config_id and account_id for Composio). */
     config_fields?: AirweaveSDK.Fields;
 }

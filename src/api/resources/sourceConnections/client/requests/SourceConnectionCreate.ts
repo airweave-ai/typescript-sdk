@@ -28,7 +28,7 @@ export interface SourceConnectionCreate {
     auth_fields?: AirweaveSDK.ConfigValues;
     /** Unique readable ID of a connected auth provider to use for authentication instead of providing auth_fields directly. When specified, credentials for the source will be obtained and refreshed automatically by Airweave interaction with the auth provider. To see which auth providers are supported and learn more about how to use them, check [this page](https://docs.airweave.ai/docs/auth-providers). */
     auth_provider?: string;
-    /** Configuration for the auth provider when using auth_provider field. Required fields vary by auth provider. For Composio, use integration_id and  account_id to specify which integration and account from Composio you want to use to connect to the source. */
+    /** Configuration for the auth provider when using auth_provider field. Required fields vary by auth provider. For Composio, use auth_config_id and  account_id to specify which integration and account from Composio you want to use to connect to the source. */
     auth_provider_config?: AirweaveSDK.ConfigValues;
     /** Whether to start an initial data synchronization immediately after creating the connection. */
     sync_immediately?: boolean;
