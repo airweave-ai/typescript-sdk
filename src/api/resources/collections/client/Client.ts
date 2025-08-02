@@ -13,10 +13,7 @@ export declare namespace Collections {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
-        /** Override the X-API-Key header */
-        apiKey?: core.Supplier<string | undefined>;
-        /** Override the X-Organization-ID header */
-        organizationId?: core.Supplier<string | undefined>;
+        apiKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -28,10 +25,6 @@ export declare namespace Collections {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-API-Key header */
-        apiKey?: string | undefined;
-        /** Override the X-Organization-ID header */
-        organizationId?: string | undefined;
         /** Additional headers to include in the request. */
         headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
     }
@@ -43,7 +36,7 @@ export declare namespace Collections {
 export class Collections {
     protected readonly _options: Collections.Options;
 
-    constructor(_options: Collections.Options = {}) {
+    constructor(_options: Collections.Options) {
         this._options = _options;
     }
 
@@ -89,10 +82,7 @@ export class Collections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -176,10 +166,7 @@ export class Collections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -258,10 +245,7 @@ export class Collections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -349,10 +333,7 @@ export class Collections {
             method: "PUT",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -448,10 +429,7 @@ export class Collections {
             method: "DELETE",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -568,10 +546,7 @@ export class Collections {
             method: "GET",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             queryParameters: _queryParams,
@@ -671,10 +646,7 @@ export class Collections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             contentType: "application/json",
@@ -760,10 +732,7 @@ export class Collections {
             method: "POST",
             headers: mergeHeaders(
                 this._options?.headers,
-                mergeOnlyDefinedHeaders({
-                    "X-API-Key": requestOptions?.apiKey,
-                    "X-Organization-ID": requestOptions?.organizationId,
-                }),
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
@@ -807,5 +776,10 @@ export class Collections {
                     rawResponse: _response.rawResponse,
                 });
         }
+    }
+
+    protected async _getCustomAuthorizationHeaders() {
+        const apiKeyValue = await core.Supplier.get(this._options.apiKey);
+        return { "x-api-key": apiKeyValue };
     }
 }
