@@ -418,16 +418,14 @@ export class SourceConnections {
     }
 
     /**
-     * Delete a source connection.
+     * Delete a source connection and all associated data.
      *
      * <br/><br/>
      *
-     * Permanently removes the source connection configuration and credentials.
-     * By default, previously synced data remains in your destination systems for continuity.
-     * Use delete_data=true to also remove all associated data from destination systems.
+     * Permanently removes the source connection configuration, credentials, and all synced data
+     * from the destination systems. This action cannot be undone.
      *
      * @param {string} sourceConnectionId - The unique identifier of the source connection to delete
-     * @param {AirweaveSDK.DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -437,25 +435,15 @@ export class SourceConnections {
      */
     public deleteSourceConnection(
         sourceConnectionId: string,
-        request: AirweaveSDK.DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__deleteSourceConnection(sourceConnectionId, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__deleteSourceConnection(sourceConnectionId, requestOptions));
     }
 
     private async __deleteSourceConnection(
         sourceConnectionId: string,
-        request: AirweaveSDK.DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { delete_data: deleteData } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (deleteData != null) {
-            _queryParams["delete_data"] = deleteData.toString();
-        }
-
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -469,7 +457,6 @@ export class SourceConnections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

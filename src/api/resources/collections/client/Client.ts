@@ -383,16 +383,13 @@ export class Collections {
     }
 
     /**
-     * Delete a collection and optionally its associated data.
+     * Delete a collection and all associated data.
      *
-     * <br/><br/>
-     * Permanently removes a collection from your organization. By default, this only
-     * deletes the collection metadata while preserving the actual data in the
-     * destination systems.<br/><br/>All source connections within this collection
-     * will also be deleted as part of the cleanup process.
+     * Permanently removes a collection from your organization including all synced data
+     * from the destination systems. All source connections within this collection
+     * will also be deleted as part of the cleanup process. This action cannot be undone.
      *
      * @param {string} readableId - The unique readable identifier of the collection to delete
-     * @param {AirweaveSDK.DeleteCollectionCollectionsReadableIdDeleteRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -402,23 +399,15 @@ export class Collections {
      */
     public deleteCollection(
         readableId: string,
-        request: AirweaveSDK.DeleteCollectionCollectionsReadableIdDeleteRequest = {},
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteCollection(readableId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__deleteCollection(readableId, requestOptions));
     }
 
     private async __deleteCollection(
         readableId: string,
-        request: AirweaveSDK.DeleteCollectionCollectionsReadableIdDeleteRequest = {},
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
-        const { delete_data: deleteData } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (deleteData != null) {
-            _queryParams["delete_data"] = deleteData.toString();
-        }
-
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -432,7 +421,6 @@ export class Collections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

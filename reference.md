@@ -399,7 +399,7 @@ await client.collections.updateCollection("readable_id", {
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">deleteCollection</a>(readableId, { ...params }) -> AirweaveSDK.Collection</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">deleteCollection</a>(readableId) -> AirweaveSDK.Collection</code></summary>
 <dl>
 <dd>
 
@@ -411,13 +411,11 @@ await client.collections.updateCollection("readable_id", {
 <dl>
 <dd>
 
-Delete a collection and optionally its associated data.
+Delete a collection and all associated data.
 
-<br/><br/>
-Permanently removes a collection from your organization. By default, this only
-deletes the collection metadata while preserving the actual data in the
-destination systems.<br/><br/>All source connections within this collection
-will also be deleted as part of the cleanup process.
+Permanently removes a collection from your organization including all synced data
+from the destination systems. All source connections within this collection
+will also be deleted as part of the cleanup process. This action cannot be undone.
 
 </dd>
 </dl>
@@ -450,14 +448,6 @@ await client.collections.deleteCollection("readable_id");
 <dd>
 
 **readableId:** `string` — The unique readable identifier of the collection to delete
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.DeleteCollectionCollectionsReadableIdDeleteRequest`
 
 </dd>
 </dl>
@@ -1005,7 +995,7 @@ await client.sourceConnections.updateSourceConnection("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">deleteSourceConnection</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">deleteSourceConnection</a>(sourceConnectionId) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1017,13 +1007,12 @@ await client.sourceConnections.updateSourceConnection("source_connection_id");
 <dl>
 <dd>
 
-Delete a source connection.
+Delete a source connection and all associated data.
 
 <br/><br/>
 
-Permanently removes the source connection configuration and credentials.
-By default, previously synced data remains in your destination systems for continuity.
-Use delete_data=true to also remove all associated data from destination systems.
+Permanently removes the source connection configuration, credentials, and all synced data
+from the destination systems. This action cannot be undone.
 
 </dd>
 </dl>
@@ -1056,14 +1045,6 @@ await client.sourceConnections.deleteSourceConnection("source_connection_id");
 <dd>
 
 **sourceConnectionId:** `string` — The unique identifier of the source connection to delete
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.DeleteSourceConnectionSourceConnectionsSourceConnectionIdDeleteRequest`
 
 </dd>
 </dl>
@@ -1720,7 +1701,7 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions</a>(whiteLabelId) -> string</code></summary>
 <dl>
 <dd>
 
@@ -1753,7 +1734,7 @@ branding instead of Airweave.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
+await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id");
 ```
 
 </dd>
@@ -1854,7 +1835,7 @@ await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2Code</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1889,7 +1870,7 @@ tracking and branding purposes.
 <dd>
 
 ```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
     code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
 });
 ```
@@ -1915,7 +1896,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost`
+**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions`
 
 </dd>
 </dl>
