@@ -14,4 +14,5 @@ export interface OrganizationWithRole {
     role: string;
     is_primary: boolean;
     auth0_org_id?: string;
+    org_metadata?: Record<string, unknown>;
 }

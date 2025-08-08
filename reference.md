@@ -202,7 +202,6 @@ await client.collections.listCollections();
 
 Create a new collection.
 
-<br/><br/>
 The newly created collection is initially empty and does not contain any data
 until you explicitly add source connections to it.
 
@@ -335,7 +334,6 @@ await client.collections.getCollection("readable_id");
 
 Update a collection's properties.
 
-<br/><br/>
 Modifies the display name of an existing collection.
 Note that the readable ID cannot be changed after creation to maintain stable
 API endpoints and preserve any existing integrations or bookmarks.
@@ -643,7 +641,7 @@ await client.collections.searchCollectionAdvanced("readable_id", {
 
 Trigger data synchronization for all source connections in the collection.
 
-<br/><br/>The sync jobs run asynchronously in the background, so this endpoint
+The sync jobs run asynchronously in the background, so this endpoint
 returns immediately with job details that you can use to track progress. You can
 monitor the status of individual data synchronization using the source connection
 endpoints.
@@ -713,7 +711,6 @@ await client.collections.refreshAllSourceConnections("readable_id");
 
 List source connections across your organization.
 
-<br/><br/>
 By default, returns ALL source connections from every collection in your
 organization. Use the 'collection' parameter to filter results to a specific
 collection. This is useful for getting an overview of all your data sources
@@ -781,8 +778,6 @@ await client.sourceConnections.listSourceConnections();
 <dd>
 
 Create a new source connection to sync data into your collection.
-
-<br/><br/>
 
 **This endpoint only works for sources that do not use OAuth2.0.**
 Sources that do use OAuth2.0 like Google Drive, Slack, or HubSpot must be
@@ -933,8 +928,6 @@ await client.sourceConnections.getSourceConnection("source_connection_id");
 
 Update a source connection's properties.
 
-<br/><br/>
-
 Modify the configuration of an existing source connection including its name,
 authentication credentials, configuration fields, sync schedule, or source-specific settings.
 
@@ -1009,10 +1002,9 @@ await client.sourceConnections.updateSourceConnection("source_connection_id");
 
 Delete a source connection and all associated data.
 
-<br/><br/>
-
-Permanently removes the source connection configuration, credentials, and all synced data
-from the destination systems. This action cannot be undone.
+Permanently removes the source connection configuration and credentials.
+By default, previously synced data remains in your destination systems for continuity.
+Use delete_data=true to also remove all associated data from destination systems.
 
 </dd>
 </dl>
@@ -1077,7 +1069,6 @@ await client.sourceConnections.deleteSourceConnection("source_connection_id");
 
 Manually trigger a data sync for this source connection.
 
-<br/><br/>
 Starts an immediate synchronization job that extracts fresh data from your source,
 transforms it according to your configuration, and updates the destination systems.
 The job runs asynchronously and endpoint returns immediately with tracking information.
@@ -1153,7 +1144,6 @@ await client.sourceConnections.runSourceConnection("source_connection_id");
 
 List all sync jobs for a source connection.
 
-<br/><br/>
 Returns the complete history of data synchronization jobs including successful syncs,
 failed attempts, and currently running operations.
 
@@ -1291,7 +1281,6 @@ await client.sourceConnections.getSourceConnectionJob("source_connection_id", "j
 
 Cancel a running sync job.
 
-<br/><br/>
 Sends a cancellation signal to stop an in-progress data synchronization.
 The job will complete its current operation and then terminate gracefully.
 Only jobs in 'created', 'pending', or 'in_progress' states can be cancelled.
@@ -1701,7 +1690,7 @@ await client.whiteLabels.deleteWhiteLabel("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions</a>(whiteLabelId) -> string</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
 <dl>
 <dd>
 
@@ -1734,7 +1723,7 @@ branding instead of Airweave.
 <dd>
 
 ```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id");
+await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
 ```
 
 </dd>
@@ -1835,7 +1824,7 @@ await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2Code</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1870,7 +1859,7 @@ tracking and branding purposes.
 <dd>
 
 ```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
+await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
     code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
 });
 ```
@@ -1896,7 +1885,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOaut
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions`
+**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost`
 
 </dd>
 </dl>

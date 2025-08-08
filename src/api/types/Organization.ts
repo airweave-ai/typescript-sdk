@@ -12,4 +12,5 @@ export interface Organization {
     id: string;
     created_at: string;
     modified_at: string;
+    org_metadata?: Record<string, unknown>;
 }

@@ -12,4 +12,6 @@ export interface OrganizationCreate {
     description?: string;
     /** Auth0 organization ID */
     auth0_org_id?: string;
+    /** Additional organization metadata */
+    org_metadata?: Record<string, unknown>;
 }

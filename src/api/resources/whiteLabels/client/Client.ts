@@ -477,18 +477,16 @@ export class WhiteLabels {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions("white_label_id")
+     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id")
      */
-    public getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+    public getWhiteLabelOauth2AuthUrl(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<string> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(whiteLabelId, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__getWhiteLabelOauth2AuthUrl(whiteLabelId, requestOptions));
     }
 
-    private async __getWhiteLabelOauth2AuthUrlWhiteLabelsWhiteLabelIdOauth2AuthUrlOptions(
+    private async __getWhiteLabelOauth2AuthUrl(
         whiteLabelId: string,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<string>> {
@@ -645,33 +643,29 @@ export class WhiteLabels {
      * tracking and branding purposes.
      *
      * @param {string} whiteLabelId - The unique identifier of the white label integration
-     * @param {AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions} request
+     * @param {AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
+     *     await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
      *         code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7"
      *     })
      */
-    public exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+    public exchangeWhiteLabelOauth2Code(
         whiteLabelId: string,
-        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost,
         requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
         return core.HttpResponsePromise.fromPromise(
-            this.__exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
-                whiteLabelId,
-                request,
-                requestOptions,
-            ),
+            this.__exchangeWhiteLabelOauth2Code(whiteLabelId, request, requestOptions),
         );
     }
 
-    private async __exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+    private async __exchangeWhiteLabelOauth2Code(
         whiteLabelId: string,
-        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         const _response = await core.fetcher({
