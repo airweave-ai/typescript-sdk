@@ -645,29 +645,33 @@ export class WhiteLabels {
      * tracking and branding purposes.
      *
      * @param {string} whiteLabelId - The unique identifier of the white label integration
-     * @param {AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost} request
+     * @param {AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions} request
      * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
+     *     await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
      *         code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7"
      *     })
      */
-    public exchangeWhiteLabelOauth2Code(
+    public exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
         whiteLabelId: string,
-        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
         requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
         return core.HttpResponsePromise.fromPromise(
-            this.__exchangeWhiteLabelOauth2Code(whiteLabelId, request, requestOptions),
+            this.__exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+                whiteLabelId,
+                request,
+                requestOptions,
+            ),
         );
     }
 
-    private async __exchangeWhiteLabelOauth2Code(
+    private async __exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
         whiteLabelId: string,
-        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
         requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         const _response = await core.fetcher({
