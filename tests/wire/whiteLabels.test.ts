@@ -306,7 +306,7 @@ describe("WhiteLabels", () => {
         ]);
     });
 
-    test("exchangeWhiteLabelOauth2Code", async () => {
+    test("exchange_white_label_oauth2_code_white_labels__white_label_id__oauth2_code_options", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7" };
@@ -346,9 +346,12 @@ describe("WhiteLabels", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
-            code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
-        });
+        const response = await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+            "white_label_id",
+            {
+                code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
+            },
+        );
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",
