@@ -13,7 +13,7 @@ import * as AirweaveSDK from "../../../../index.js";
  *                 key: "key"
  *             }
  *         },
- *         limit: 50,
+ *         limit: 10,
  *         score_threshold: 0.7,
  *         response_type: "completion"
  *     }
@@ -23,16 +23,31 @@ export interface SearchRequest {
     query: string;
     /** Qdrant native filter for metadata-based filtering */
     filter?: AirweaveSDK.Filter;
-    /** Number of results to skip */
+    /** Number of results to skip (DEFAULT: 0) */
     offset?: number;
-    /** Maximum number of results to return */
+    /** Maximum number of results to return (DEFAULT: 20) */
     limit?: number;
-    /** Minimum similarity score threshold */
+    /** Minimum similarity score threshold (DEFAULT: None - no filtering) */
     score_threshold?: number;
-    /** Whether to summarize results */
-    summarize?: boolean;
-    /** Type of response (raw or completion) */
+    /** Type of response - 'raw' or 'completion' (DEFAULT: 'raw') */
     response_type?: AirweaveSDK.ResponseType;
-    /** Query expansion strategy. Enhances recall by expanding the query with synonyms, related terms, and other variations, but increases latency. */
+    /** Search method to use (DEFAULT: 'hybrid' - combines neural + BM25) */
+    search_method?: SearchRequest.SearchMethod;
+    /** How much document age penalizes the similarity score (0..1). 0 = no age penalty (pure similarity); 0.5 = old docs lose up to 50% of their score; 1 = old docs get zero score (pure recency). Applied as: score × (1 - bias + bias × age_factor). Works within top ~10,000 semantic matches. DEFAULT: 0.3 */
+    recency_bias?: number;
+    /** Query expansion strategy (DEFAULT: 'auto' - generates up to 4 query variations). Options: 'auto', 'llm', 'no_expansion' */
     expansion_strategy?: AirweaveSDK.QueryExpansionStrategy;
+    /** Enable LLM-based reranking to improve result relevance (DEFAULT: True - enabled, set to False to disable) */
+    enable_reranking?: boolean;
+    /** Enable automatic filter extraction from natural language query (DEFAULT: True - enabled, set to False to disable) */
+    enable_query_interpretation?: boolean;
+}
+
+export namespace SearchRequest {
+    export type SearchMethod = "hybrid" | "neural" | "keyword";
+    export const SearchMethod = {
+        Hybrid: "hybrid",
+        Neural: "neural",
+        Keyword: "keyword",
+    } as const;
 }

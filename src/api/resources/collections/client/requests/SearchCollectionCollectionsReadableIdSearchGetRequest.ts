@@ -28,11 +28,7 @@ export interface SearchCollectionCollectionsReadableIdSearchGetRequest {
      */
     offset?: number;
     /**
-     * Minimum similarity score threshold
+     * How much to weigh recency vs similarity (0..1). 0 = no recency effect; 1 = rank by recency only.
      */
-    score_threshold?: number;
-    /**
-     * Query expansion strategy (auto, llm, or no_expansion)
-     */
-    expansion_strategy?: AirweaveSDK.QueryExpansionStrategy;
+    recency_bias?: number;
 }

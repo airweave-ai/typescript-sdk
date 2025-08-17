@@ -559,7 +559,22 @@ This endpoint supports:
 - Metadata filtering using Qdrant's native filter syntax
 - Pagination with offset and limit
 - Score threshold filtering
-- Query expansion strategies
+- Query expansion strategies (default: AUTO, generates up to 4 variations)
+- Automatic filter extraction from natural language (default: ON)
+- LLM-based result reranking (default: ON)
+
+Default behavior:
+
+- Query expansion: ON (AUTO strategy)
+- Query interpretation: ON (extracts filters from natural language)
+- Reranking: ON (improves relevance using LLM)
+- Score threshold: None (no filtering)
+
+To disable features, explicitly set:
+
+- enable_reranking: false
+- enable_query_interpretation: false
+- expansion_strategy: "no_expansion"
   </dd>
   </dl>
   </dd>
@@ -581,7 +596,7 @@ await client.collections.searchCollectionAdvanced("readable_id", {
             key: "key",
         },
     },
-    limit: 50,
+    limit: 10,
     score_threshold: 0.7,
     response_type: "completion",
 });
@@ -1824,7 +1839,7 @@ await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id");
 </dl>
 </details>
 
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2Code</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1859,7 +1874,7 @@ tracking and branding purposes.
 <dd>
 
 ```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
+await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
     code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
 });
 ```
@@ -1885,7 +1900,7 @@ await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOaut
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions`
+**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost`
 
 </dd>
 </dl>

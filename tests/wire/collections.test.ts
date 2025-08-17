@@ -307,7 +307,7 @@ describe("Collections", () => {
         const rawRequestBody = {
             query: "customer payment issues",
             filter: { must: { key: "key" } },
-            limit: 50,
+            limit: 10,
             score_threshold: 0.7,
             response_type: "completion",
         };
@@ -371,7 +371,7 @@ describe("Collections", () => {
                     key: "key",
                 },
             },
-            limit: 50,
+            limit: 10,
             score_threshold: 0.7,
             response_type: "completion",
         });

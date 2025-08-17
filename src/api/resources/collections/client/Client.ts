@@ -492,14 +492,7 @@ export class Collections {
         request: AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
-        const {
-            query,
-            response_type: responseType,
-            limit,
-            offset,
-            score_threshold: scoreThreshold,
-            expansion_strategy: expansionStrategy,
-        } = request;
+        const { query, response_type: responseType, limit, offset, recency_bias: recencyBias } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["query"] = query;
         if (responseType != null) {
@@ -514,12 +507,8 @@ export class Collections {
             _queryParams["offset"] = offset.toString();
         }
 
-        if (scoreThreshold != null) {
-            _queryParams["score_threshold"] = scoreThreshold.toString();
-        }
-
-        if (expansionStrategy != null) {
-            _queryParams["expansion_strategy"] = expansionStrategy;
+        if (recencyBias != null) {
+            _queryParams["recency_bias"] = recencyBias.toString();
         }
 
         const _response = await core.fetcher({
@@ -586,7 +575,20 @@ export class Collections {
      * - Metadata filtering using Qdrant's native filter syntax
      * - Pagination with offset and limit
      * - Score threshold filtering
-     * - Query expansion strategies
+     * - Query expansion strategies (default: AUTO, generates up to 4 variations)
+     * - Automatic filter extraction from natural language (default: ON)
+     * - LLM-based result reranking (default: ON)
+     *
+     * Default behavior:
+     * - Query expansion: ON (AUTO strategy)
+     * - Query interpretation: ON (extracts filters from natural language)
+     * - Reranking: ON (improves relevance using LLM)
+     * - Score threshold: None (no filtering)
+     *
+     * To disable features, explicitly set:
+     * - enable_reranking: false
+     * - enable_query_interpretation: false
+     * - expansion_strategy: "no_expansion"
      *
      * @param {string} readableId - The unique readable identifier of the collection to search
      * @param {AirweaveSDK.SearchRequest} request
@@ -602,7 +604,7 @@ export class Collections {
      *                 key: "key"
      *             }
      *         },
-     *         limit: 50,
+     *         limit: 10,
      *         score_threshold: 0.7,
      *         response_type: "completion"
      *     })
