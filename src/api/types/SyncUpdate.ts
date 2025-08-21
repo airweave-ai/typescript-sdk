@@ -13,4 +13,7 @@ export interface SyncUpdate {
     next_scheduled_run?: string;
     sync_metadata?: Record<string, unknown>;
     status?: AirweaveSDK.SyncStatus;
+    temporal_schedule_id?: string;
+    sync_type?: string;
+    minute_level_cron_schedule?: string;
 }

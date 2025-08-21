@@ -15,6 +15,9 @@ export interface SyncCreate {
     description?: string;
     cron_schedule?: string;
     next_scheduled_run?: string;
+    temporal_schedule_id?: string;
+    sync_type?: string;
+    minute_level_cron_schedule?: string;
     sync_metadata?: Record<string, unknown>;
     status?: AirweaveSDK.SyncStatus;
     run_immediately?: boolean;
