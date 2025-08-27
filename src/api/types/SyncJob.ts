@@ -10,6 +10,7 @@ import * as AirweaveSDK from "../index.js";
 export interface SyncJob {
     sync_id: string;
     status?: AirweaveSDK.SyncJobStatus;
+    scheduled?: boolean;
     entities_inserted?: number;
     entities_updated?: number;
     entities_deleted?: number;

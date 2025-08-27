@@ -24,6 +24,8 @@ export interface SourceConnectionJob {
     modified_at?: string;
     /** Current execution status of the data refresh:<br/>• **created**: Operation has been created but not yet queued<br/>• **pending**: Operation is queued and waiting to start<br/>• **in_progress**: Currently running and processing data<br/>• **completed**: Finished successfully with all data processed<br/>• **failed**: Encountered errors and could not complete<br/>• **cancelled**: Manually cancelled before completion */
     status?: AirweaveSDK.SyncJobStatus;
+    /** Whether this data refresh was triggered by a schedule (true) or manually (false). */
+    scheduled?: boolean;
     /** Number of new data entities that were added to the collection during this refresh. */
     entities_inserted?: number;
     /** Number of existing entities that were modified and updated during this refresh. */
