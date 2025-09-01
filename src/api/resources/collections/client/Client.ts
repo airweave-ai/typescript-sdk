@@ -43,23 +43,23 @@ export class Collections {
     /**
      * List all collections that belong to your organization.
      *
-     * @param {AirweaveSDK.ListCollectionsCollectionsGetRequest} request
+     * @param {AirweaveSDK.ListCollectionsGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.listCollections()
+     *     await client.collections.list()
      */
-    public listCollections(
-        request: AirweaveSDK.ListCollectionsCollectionsGetRequest = {},
+    public list(
+        request: AirweaveSDK.ListCollectionsGetRequest = {},
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection[]> {
-        return core.HttpResponsePromise.fromPromise(this.__listCollections(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listCollections(
-        request: AirweaveSDK.ListCollectionsCollectionsGetRequest = {},
+    private async __list(
+        request: AirweaveSDK.ListCollectionsGetRequest = {},
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection[]>> {
         const { skip, limit } = request;
@@ -139,19 +139,19 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.createCollection({
+     *     await client.collections.create({
      *         name: "Finance Data",
      *         readable_id: "finance-data-reports"
      *     })
      */
-    public createCollection(
+    public create(
         request: AirweaveSDK.CollectionCreate,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__createCollection(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createCollection(
+    private async __create(
         request: AirweaveSDK.CollectionCreate,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
@@ -221,16 +221,16 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.getCollection("readable_id")
+     *     await client.collections.get("readable_id")
      */
-    public getCollection(
+    public get(
         readableId: string,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__getCollection(readableId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(readableId, requestOptions));
     }
 
-    private async __getCollection(
+    private async __get(
         readableId: string,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
@@ -304,19 +304,19 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.updateCollection("readable_id", {
+     *     await client.collections.update("readable_id", {
      *         name: "Updated Finance Data"
      *     })
      */
-    public updateCollection(
+    public update(
         readableId: string,
         request: AirweaveSDK.CollectionUpdate = {},
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__updateCollection(readableId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(readableId, request, requestOptions));
     }
 
-    private async __updateCollection(
+    private async __update(
         readableId: string,
         request: AirweaveSDK.CollectionUpdate = {},
         requestOptions?: Collections.RequestOptions,
@@ -393,16 +393,16 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.deleteCollection("readable_id")
+     *     await client.collections.delete("readable_id")
      */
-    public deleteCollection(
+    public delete(
         readableId: string,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteCollection(readableId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(readableId, requestOptions));
     }
 
-    private async __deleteCollection(
+    private async __delete(
         readableId: string,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
@@ -469,27 +469,27 @@ export class Collections {
      * and options, use the POST /search endpoint.
      *
      * @param {string} readableId - The unique readable identifier of the collection to search
-     * @param {AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest} request
+     * @param {AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.searchCollection("readable_id", {
+     *     await client.collections.search("readable_id", {
      *         query: "customer payment issues"
      *     })
      */
-    public searchCollection(
+    public search(
         readableId: string,
-        request: AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest,
+        request: AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__searchCollection(readableId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__search(readableId, request, requestOptions));
     }
 
-    private async __searchCollection(
+    private async __search(
         readableId: string,
-        request: AirweaveSDK.SearchCollectionCollectionsReadableIdSearchGetRequest,
+        request: AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
         const { query, response_type: responseType, limit, offset, recency_bias: recencyBias } = request;
@@ -597,7 +597,7 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.searchCollectionAdvanced("readable_id", {
+     *     await client.collections.searchAdvanced("readable_id", {
      *         query: "customer payment issues",
      *         filter: {
      *             must: {
@@ -609,17 +609,15 @@ export class Collections {
      *         response_type: "completion"
      *     })
      */
-    public searchCollectionAdvanced(
+    public searchAdvanced(
         readableId: string,
         request: AirweaveSDK.SearchRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__searchCollectionAdvanced(readableId, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__searchAdvanced(readableId, request, requestOptions));
     }
 
-    private async __searchCollectionAdvanced(
+    private async __searchAdvanced(
         readableId: string,
         request: AirweaveSDK.SearchRequest,
         requestOptions?: Collections.RequestOptions,

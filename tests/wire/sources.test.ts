@@ -6,7 +6,7 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 
 describe("Sources", () => {
-    test("readSource", async () => {
+    test("read", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -53,7 +53,7 @@ describe("Sources", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sources.readSource("short_name");
+        const response = await client.sources.read("short_name");
         expect(response).toEqual({
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
@@ -99,7 +99,7 @@ describe("Sources", () => {
         });
     });
 
-    test("readSources", async () => {
+    test("list", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -142,7 +142,7 @@ describe("Sources", () => {
         ];
         server.mockEndpoint().get("/sources/list").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.sources.readSources();
+        const response = await client.sources.list();
         expect(response).toEqual([
             {
                 name: "GitHub",

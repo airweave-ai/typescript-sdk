@@ -6,7 +6,7 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 
 describe("SourceConnections", () => {
-    test("listSourceConnections", async () => {
+    test("list", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -32,7 +32,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.listSourceConnections();
+        const response = await client.sourceConnections.list();
         expect(response).toEqual([
             {
                 id: "550e8400-e29b-41d4-a716-446655440000",
@@ -49,7 +49,7 @@ describe("SourceConnections", () => {
         ]);
     });
 
-    test("createSourceConnection", async () => {
+    test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Production Stripe Account", short_name: "stripe" };
@@ -89,7 +89,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.createSourceConnection({
+        const response = await client.sourceConnections.create({
             name: "Production Stripe Account",
             short_name: "stripe",
         });
@@ -129,7 +129,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("getSourceConnection", async () => {
+    test("get", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -168,7 +168,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.getSourceConnection("source_connection_id");
+        const response = await client.sourceConnections.get("source_connection_id");
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",
@@ -205,7 +205,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("updateSourceConnection", async () => {
+    test("update", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -245,7 +245,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.updateSourceConnection("source_connection_id");
+        const response = await client.sourceConnections.update("source_connection_id");
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",
@@ -282,7 +282,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("deleteSourceConnection", async () => {
+    test("delete", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -321,7 +321,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.deleteSourceConnection("source_connection_id");
+        const response = await client.sourceConnections.delete("source_connection_id");
         expect(response).toEqual({
             name: "GitHub - Engineering Documentation",
             description: "Sync technical documentation and code from our engineering repos",
@@ -358,7 +358,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("runSourceConnection", async () => {
+    test("run", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -392,7 +392,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.runSourceConnection("source_connection_id");
+        const response = await client.sourceConnections.run("source_connection_id");
         expect(response).toEqual({
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
@@ -422,7 +422,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("listSourceConnectionJobs", async () => {
+    test("listJobs", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -457,7 +457,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.listSourceConnectionJobs("source_connection_id");
+        const response = await client.sourceConnections.listJobs("source_connection_id");
         expect(response).toEqual([
             {
                 source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
@@ -489,7 +489,7 @@ describe("SourceConnections", () => {
         ]);
     });
 
-    test("getSourceConnectionJob", async () => {
+    test("getJob", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -522,7 +522,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.getSourceConnectionJob("source_connection_id", "job_id");
+        const response = await client.sourceConnections.getJob("source_connection_id", "job_id");
         expect(response).toEqual({
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
@@ -552,7 +552,7 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("cancelSourceConnectionJob", async () => {
+    test("cancelJob", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -585,7 +585,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.cancelSourceConnectionJob("source_connection_id", "job_id");
+        const response = await client.sourceConnections.cancelJob("source_connection_id", "job_id");
         expect(response).toEqual({
             source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",

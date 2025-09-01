@@ -1,5 +1,5 @@
-export { type ListSourceConnectionsSourceConnectionsGetRequest } from "./ListSourceConnectionsSourceConnectionsGetRequest.js";
+export { type ListSourceConnectionsGetRequest } from "./ListSourceConnectionsGetRequest.js";
 export { type SourceConnectionCreate } from "./SourceConnectionCreate.js";
-export { type GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest } from "./GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest.js";
+export { type GetSourceConnectionsSourceConnectionIdGetRequest } from "./GetSourceConnectionsSourceConnectionIdGetRequest.js";
 export { type SourceConnectionUpdate } from "./SourceConnectionUpdate.js";
-export { type BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost } from "./BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost.js";
+export { type BodyRunSourceConnectionsSourceConnectionIdRunPost } from "./BodyRunSourceConnectionsSourceConnectionIdRunPost.js";

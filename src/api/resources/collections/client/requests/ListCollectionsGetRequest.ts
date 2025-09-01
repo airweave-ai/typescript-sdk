@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface ListCollectionsCollectionsGetRequest {
+export interface ListCollectionsGetRequest {
     /**
      * Number of collections to skip for pagination
      */

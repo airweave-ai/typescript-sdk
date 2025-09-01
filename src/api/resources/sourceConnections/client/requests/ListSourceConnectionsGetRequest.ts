@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface ListSourceConnectionsSourceConnectionsGetRequest {
+export interface ListSourceConnectionsGetRequest {
     /**
      * Filter source connections by collection readable ID
      */

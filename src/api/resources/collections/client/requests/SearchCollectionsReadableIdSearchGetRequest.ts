@@ -10,7 +10,7 @@ import * as AirweaveSDK from "../../../../index.js";
  *         query: "customer payment issues"
  *     }
  */
-export interface SearchCollectionCollectionsReadableIdSearchGetRequest {
+export interface SearchCollectionsReadableIdSearchGetRequest {
     /**
      * The search query text to find relevant documents and data
      */

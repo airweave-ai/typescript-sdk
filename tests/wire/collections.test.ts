@@ -6,7 +6,7 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 
 describe("Collections", () => {
-    test("listCollections", async () => {
+    test("list", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -25,7 +25,7 @@ describe("Collections", () => {
         ];
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.collections.listCollections();
+        const response = await client.collections.list();
         expect(response).toEqual([
             {
                 name: "Finance Data",
@@ -41,7 +41,7 @@ describe("Collections", () => {
         ]);
     });
 
-    test("createCollection", async () => {
+    test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Finance Data", readable_id: "finance-data-reports" };
@@ -65,7 +65,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.createCollection({
+        const response = await client.collections.create({
             name: "Finance Data",
             readable_id: "finance-data-reports",
         });
@@ -82,7 +82,7 @@ describe("Collections", () => {
         });
     });
 
-    test("getCollection", async () => {
+    test("get", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -105,7 +105,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.getCollection("readable_id");
+        const response = await client.collections.get("readable_id");
         expect(response).toEqual({
             name: "Finance Data",
             readable_id: "finance-data-ab123",
@@ -119,7 +119,7 @@ describe("Collections", () => {
         });
     });
 
-    test("updateCollection", async () => {
+    test("update", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Updated Finance Data" };
@@ -143,7 +143,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.updateCollection("readable_id", {
+        const response = await client.collections.update("readable_id", {
             name: "Updated Finance Data",
         });
         expect(response).toEqual({
@@ -159,7 +159,7 @@ describe("Collections", () => {
         });
     });
 
-    test("deleteCollection", async () => {
+    test("delete", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -182,7 +182,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.deleteCollection("readable_id");
+        const response = await client.collections.delete("readable_id");
         expect(response).toEqual({
             name: "Finance Data",
             readable_id: "finance-data-ab123",
@@ -196,7 +196,7 @@ describe("Collections", () => {
         });
     });
 
-    test("searchCollection", async () => {
+    test("search", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -252,7 +252,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.searchCollection("readable_id", {
+        const response = await client.collections.search("readable_id", {
             query: "customer payment issues",
         });
         expect(response).toEqual({
@@ -301,7 +301,7 @@ describe("Collections", () => {
         });
     });
 
-    test("searchCollectionAdvanced", async () => {
+    test("searchAdvanced", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -364,7 +364,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.searchCollectionAdvanced("readable_id", {
+        const response = await client.collections.searchAdvanced("readable_id", {
             query: "customer payment issues",
             filter: {
                 must: {

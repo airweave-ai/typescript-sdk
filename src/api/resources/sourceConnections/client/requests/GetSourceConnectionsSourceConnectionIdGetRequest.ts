@@ -6,7 +6,7 @@
  * @example
  *     {}
  */
-export interface GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest {
+export interface GetSourceConnectionsSourceConnectionIdGetRequest {
     /**
      * Whether to reveal authentication credentials.
      */

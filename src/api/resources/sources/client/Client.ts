@@ -49,16 +49,16 @@ export class Sources {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSource("short_name")
+     *     await client.sources.read("short_name")
      */
-    public readSource(
+    public read(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Source> {
-        return core.HttpResponsePromise.fromPromise(this.__readSource(shortName, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__read(shortName, requestOptions));
     }
 
-    private async __readSource(
+    private async __read(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
@@ -129,15 +129,13 @@ export class Sources {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.readSources()
+     *     await client.sources.list()
      */
-    public readSources(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
-        return core.HttpResponsePromise.fromPromise(this.__readSources(requestOptions));
+    public list(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
+        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __readSources(
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
+    private async __list(requestOptions?: Sources.RequestOptions): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??

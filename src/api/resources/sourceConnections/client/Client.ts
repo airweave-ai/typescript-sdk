@@ -48,23 +48,23 @@ export class SourceConnections {
      * collection. This is useful for getting an overview of all your data sources
      * or managing connections within a particular collection.
      *
-     * @param {AirweaveSDK.ListSourceConnectionsSourceConnectionsGetRequest} request
+     * @param {AirweaveSDK.ListSourceConnectionsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.listSourceConnections()
+     *     await client.sourceConnections.list()
      */
-    public listSourceConnections(
-        request: AirweaveSDK.ListSourceConnectionsSourceConnectionsGetRequest = {},
+    public list(
+        request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionListItem[]> {
-        return core.HttpResponsePromise.fromPromise(this.__listSourceConnections(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
     }
 
-    private async __listSourceConnections(
-        request: AirweaveSDK.ListSourceConnectionsSourceConnectionsGetRequest = {},
+    private async __list(
+        request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionListItem[]>> {
         const { collection, skip, limit } = request;
@@ -161,19 +161,19 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.createSourceConnection({
+     *     await client.sourceConnections.create({
      *         name: "Production Stripe Account",
      *         short_name: "stripe"
      *     })
      */
-    public createSourceConnection(
+    public create(
         request: AirweaveSDK.SourceConnectionCreate,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__createSourceConnection(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
-    private async __createSourceConnection(
+    private async __create(
         request: AirweaveSDK.SourceConnectionCreate,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
@@ -238,27 +238,25 @@ export class SourceConnections {
      * Retrieve a specific source connection by its ID.
      *
      * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {AirweaveSDK.GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest} request
+     * @param {AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.getSourceConnection("source_connection_id")
+     *     await client.sourceConnections.get("source_connection_id")
      */
-    public getSourceConnection(
+    public get(
         sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest = {},
+        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__getSourceConnection(sourceConnectionId, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__get(sourceConnectionId, request, requestOptions));
     }
 
-    private async __getSourceConnection(
+    private async __get(
         sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionSourceConnectionsSourceConnectionIdGetRequest = {},
+        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         const { show_auth_fields: showAuthFields } = request;
@@ -337,19 +335,17 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.updateSourceConnection("source_connection_id")
+     *     await client.sourceConnections.update("source_connection_id")
      */
-    public updateSourceConnection(
+    public update(
         sourceConnectionId: string,
         request: AirweaveSDK.SourceConnectionUpdate = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__updateSourceConnection(sourceConnectionId, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__update(sourceConnectionId, request, requestOptions));
     }
 
-    private async __updateSourceConnection(
+    private async __update(
         sourceConnectionId: string,
         request: AirweaveSDK.SourceConnectionUpdate = {},
         requestOptions?: SourceConnections.RequestOptions,
@@ -426,16 +422,16 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.deleteSourceConnection("source_connection_id")
+     *     await client.sourceConnections.delete("source_connection_id")
      */
-    public deleteSourceConnection(
+    public delete(
         sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__deleteSourceConnection(sourceConnectionId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(sourceConnectionId, requestOptions));
     }
 
-    private async __deleteSourceConnection(
+    private async __delete(
         sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
@@ -503,27 +499,25 @@ export class SourceConnections {
      * The job runs asynchronously and endpoint returns immediately with tracking information.
      *
      * @param {string} sourceConnectionId - The unique identifier of the source connection to sync
-     * @param {AirweaveSDK.BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost} request
+     * @param {AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.runSourceConnection("source_connection_id")
+     *     await client.sourceConnections.run("source_connection_id")
      */
-    public runSourceConnection(
+    public run(
         sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost = {},
+        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__runSourceConnection(sourceConnectionId, request, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, request, requestOptions));
     }
 
-    private async __runSourceConnection(
+    private async __run(
         sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionSourceConnectionsSourceConnectionIdRunPost = {},
+        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
         const _response = await core.fetcher({
@@ -597,18 +591,16 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.listSourceConnectionJobs("source_connection_id")
+     *     await client.sourceConnections.listJobs("source_connection_id")
      */
-    public listSourceConnectionJobs(
+    public listJobs(
         sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob[]> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__listSourceConnectionJobs(sourceConnectionId, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__listJobs(sourceConnectionId, requestOptions));
     }
 
-    private async __listSourceConnectionJobs(
+    private async __listJobs(
         sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
@@ -678,19 +670,17 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.getSourceConnectionJob("source_connection_id", "job_id")
+     *     await client.sourceConnections.getJob("source_connection_id", "job_id")
      */
-    public getSourceConnectionJob(
+    public getJob(
         sourceConnectionId: string,
         jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__getSourceConnectionJob(sourceConnectionId, jobId, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__getJob(sourceConnectionId, jobId, requestOptions));
     }
 
-    private async __getSourceConnectionJob(
+    private async __getJob(
         sourceConnectionId: string,
         jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
@@ -765,19 +755,17 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.cancelSourceConnectionJob("source_connection_id", "job_id")
+     *     await client.sourceConnections.cancelJob("source_connection_id", "job_id")
      */
-    public cancelSourceConnectionJob(
+    public cancelJob(
         sourceConnectionId: string,
         jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(
-            this.__cancelSourceConnectionJob(sourceConnectionId, jobId, requestOptions),
-        );
+        return core.HttpResponsePromise.fromPromise(this.__cancelJob(sourceConnectionId, jobId, requestOptions));
     }
 
-    private async __cancelSourceConnectionJob(
+    private async __cancelJob(
         sourceConnectionId: string,
         jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
