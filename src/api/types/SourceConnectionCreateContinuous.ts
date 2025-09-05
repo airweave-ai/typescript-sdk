@@ -22,6 +22,8 @@ export interface SourceConnectionCreateContinuous {
     short_name: string;
     /** Readable ID of the collection where synced data will be stored. If not provided, a new collection will be automatically created. */
     collection?: string;
+    /** Whether to create a daily forced full sync with entity cleanup. Defaults to true for resilience; set to false to rely solely on incremental changes. */
+    enable_daily_cleanup?: boolean;
     /** Authentication credentials required to access the data source. The required fields vary by source type. Check the documentation of a specific source (for example [Github](https://docs.airweave.ai/docs/connectors/github)) to see what is required. */
     auth_fields?: AirweaveSDK.ConfigValues;
     /** Unique readable ID of a connected auth provider to use for authentication instead of providing auth_fields directly. */

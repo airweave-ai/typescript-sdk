@@ -6,6 +6,7 @@ import * as environments from "./environments.js";
 import * as core from "./core/index.js";
 import { mergeHeaders } from "./core/headers.js";
 import { Sources } from "./api/resources/sources/client/Client.js";
+import { AuthProviders } from "./api/resources/authProviders/client/Client.js";
 import { Collections } from "./api/resources/collections/client/Client.js";
 import { SourceConnections } from "./api/resources/sourceConnections/client/Client.js";
 import { WhiteLabels } from "./api/resources/whiteLabels/client/Client.js";
@@ -35,6 +36,7 @@ export declare namespace AirweaveSDKClient {
 export class AirweaveSDKClient {
     protected readonly _options: AirweaveSDKClient.Options;
     protected _sources: Sources | undefined;
+    protected _authProviders: AuthProviders | undefined;
     protected _collections: Collections | undefined;
     protected _sourceConnections: SourceConnections | undefined;
     protected _whiteLabels: WhiteLabels | undefined;
@@ -46,8 +48,8 @@ export class AirweaveSDKClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.4.19",
-                    "User-Agent": "@airweave/sdk/v0.4.19",
+                    "X-Fern-SDK-Version": "v0.5.0",
+                    "User-Agent": "@airweave/sdk/v0.5.0",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
@@ -58,6 +60,10 @@ export class AirweaveSDKClient {
 
     public get sources(): Sources {
         return (this._sources ??= new Sources(this._options));
+    }
+
+    public get authProviders(): AuthProviders {
+        return (this._authProviders ??= new AuthProviders(this._options));
     }
 
     public get collections(): Collections {

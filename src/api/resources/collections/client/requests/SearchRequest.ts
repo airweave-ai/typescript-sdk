@@ -25,7 +25,7 @@ export interface SearchRequest {
     filter?: AirweaveSDK.Filter;
     /** Number of results to skip (DEFAULT: 0) */
     offset?: number;
-    /** Maximum number of results to return (DEFAULT: 20) */
+    /** Maximum number of results to return (DEFAULT: 100) */
     limit?: number;
     /** Minimum similarity score threshold (DEFAULT: None - no filtering) */
     score_threshold?: number;
