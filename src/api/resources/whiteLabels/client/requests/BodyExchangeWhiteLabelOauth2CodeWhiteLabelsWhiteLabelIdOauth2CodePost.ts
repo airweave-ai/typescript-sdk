@@ -10,7 +10,7 @@ import * as AirweaveSDK from "../../../../index.js";
  *         code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7"
  *     }
  */
-export interface BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions {
+export interface BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost {
     /** The OAuth2 authorization code received from the OAuth callback after customer authentication */
     code: string;
     /** Optional configuration for the source connection. If not provided, a source connection will be created automatically with default settings. The white label integration is automatically linked to the source connection. */
