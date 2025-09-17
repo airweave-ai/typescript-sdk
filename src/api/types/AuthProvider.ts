@@ -18,8 +18,6 @@ export interface AuthProvider {
     auth_config_class: string;
     /** Python class name that defines the auth provider-specific configuration */
     config_class: string;
-    /** Type of authentication mechanism used by this provider */
-    auth_type: AirweaveSDK.AuthType;
     /** Detailed description explaining what this auth provider offers */
     description?: string;
     /** Organization identifier for custom auth providers. System providers have this set to null. */

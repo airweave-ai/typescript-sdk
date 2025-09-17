@@ -41,12 +41,7 @@ export class SourceConnections {
     }
 
     /**
-     * List source connections across your organization.
-     *
-     * By default, returns ALL source connections from every collection in your
-     * organization. Use the 'collection' parameter to filter results to a specific
-     * collection. This is useful for getting an overview of all your data sources
-     * or managing connections within a particular collection.
+     * List source connections with minimal fields for performance.
      *
      * @param {AirweaveSDK.ListSourceConnectionsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
@@ -140,41 +135,42 @@ export class SourceConnections {
     }
 
     /**
-     * Create a new source connection to sync data into your collection.
+     * Create a new source connection.
      *
-     * **This endpoint only works for sources that do not use OAuth2.0.**
-     * Sources that do use OAuth2.0 like Google Drive, Slack, or HubSpot must be
-     * connected through the UI where you can complete the OAuth consent flow
-     * or using Auth Providers (see [Auth Providers](/docs/auth-providers)).<br/><br/>
+     * Accepts discriminated union types for explicit auth method specification.
      *
-     * Credentials for a source have to be provided using the `auth_fields` field.
-     * Currently, it is not automatically checked if the provided credentials are valid.
-     * If they are not valid, the data synchronization will fail.<br/><br/>
+     * The authentication method determines the flow:
+     * - direct: Immediate creation with provided credentials
+     * - oauth_browser: Returns shell with authentication URL
+     * - oauth_token: Immediate creation with provided token
+     * - oauth_byoc: OAuth with custom client credentials
+     * - auth_provider: Using external auth provider
      *
-     * Check the documentation of a specific source (for example
-     * [Github](https://docs.airweave.ai/docs/connectors/github)) to see what kind
-     * of authentication is used.
-     *
-     * @param {AirweaveSDK.SourceConnectionCreate} request
+     * @param {AirweaveSDK.CreateSourceConnectionsPostRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
      *     await client.sourceConnections.create({
-     *         name: "Production Stripe Account",
-     *         short_name: "stripe"
+     *         auth_method: "direct",
+     *         name: "name",
+     *         short_name: "short_name",
+     *         readable_collection_id: "readable_collection_id",
+     *         credentials: {
+     *             "key": "value"
+     *         }
      *     })
      */
     public create(
-        request: AirweaveSDK.SourceConnectionCreate,
+        request: AirweaveSDK.CreateSourceConnectionsPostRequest,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
         return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
     }
 
     private async __create(
-        request: AirweaveSDK.SourceConnectionCreate,
+        request: AirweaveSDK.CreateSourceConnectionsPostRequest,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         const _response = await core.fetcher({
@@ -235,10 +231,9 @@ export class SourceConnections {
     }
 
     /**
-     * Retrieve a specific source connection by its ID.
+     * Get a source connection with optional depth expansion.
      *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest} request
+     * @param {string} sourceConnectionId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -248,23 +243,15 @@ export class SourceConnections {
      */
     public get(
         sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__get(sourceConnectionId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(sourceConnectionId, requestOptions));
     }
 
     private async __get(
         sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { show_auth_fields: showAuthFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (showAuthFields != null) {
-            _queryParams["show_auth_fields"] = showAuthFields.toString();
-        }
-
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -278,7 +265,6 @@ export class SourceConnections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -323,100 +309,9 @@ export class SourceConnections {
     }
 
     /**
-     * Update a source connection's properties.
+     * Delete a source connection and all related data.
      *
-     * Modify the configuration of an existing source connection including its name,
-     * authentication credentials, configuration fields, sync schedule, or source-specific settings.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to update
-     * @param {AirweaveSDK.SourceConnectionUpdate} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.update("source_connection_id")
-     */
-    public update(
-        sourceConnectionId: string,
-        request: AirweaveSDK.SourceConnectionUpdate = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__update(sourceConnectionId, request, requestOptions));
-    }
-
-    private async __update(
-        sourceConnectionId: string,
-        request: AirweaveSDK.SourceConnectionUpdate = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}`,
-            ),
-            method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling PUT /source-connections/{source_connection_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Delete a source connection and all associated data.
-     *
-     * Permanently removes the source connection configuration and credentials.
-     * By default, previously synced data remains in your destination systems for continuity.
-     * Use delete_data=true to also remove all associated data from destination systems.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to delete
+     * @param {string} sourceConnectionId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -492,14 +387,11 @@ export class SourceConnections {
     }
 
     /**
-     * Manually trigger a data sync for this source connection.
+     * Trigger a sync run for a source connection.
      *
-     * Starts an immediate synchronization job that extracts fresh data from your source,
-     * transforms it according to your configuration, and updates the destination systems.
-     * The job runs asynchronously and endpoint returns immediately with tracking information.
+     * Runs are always executed through Temporal workflow engine.
      *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to sync
-     * @param {AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost} request
+     * @param {string} sourceConnectionId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -509,15 +401,13 @@ export class SourceConnections {
      */
     public run(
         sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, requestOptions));
     }
 
     private async __run(
         sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
         const _response = await core.fetcher({
@@ -533,9 +423,6 @@ export class SourceConnections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -580,30 +467,38 @@ export class SourceConnections {
     }
 
     /**
-     * List all sync jobs for a source connection.
+     * Get sync jobs for a source connection.
      *
-     * Returns the complete history of data synchronization jobs including successful syncs,
-     * failed attempts, and currently running operations.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
+     * @param {string} sourceConnectionId
+     * @param {AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.listJobs("source_connection_id")
+     *     await client.sourceConnections.getSourceConnectionJobs("source_connection_id")
      */
-    public listJobs(
+    public getSourceConnectionJobs(
         sourceConnectionId: string,
+        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob[]> {
-        return core.HttpResponsePromise.fromPromise(this.__listJobs(sourceConnectionId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(
+            this.__getSourceConnectionJobs(sourceConnectionId, request, requestOptions),
+        );
     }
 
-    private async __listJobs(
+    private async __getSourceConnectionJobs(
         sourceConnectionId: string,
+        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
+        const { limit } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (limit != null) {
+            _queryParams["limit"] = limit.toString();
+        }
+
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -617,6 +512,7 @@ export class SourceConnections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
+            queryParameters: _queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -661,95 +557,13 @@ export class SourceConnections {
     }
 
     /**
-     * Get detailed information about a specific sync job.
+     * Cancel a running sync job for a source connection.
      *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {string} jobId - The unique identifier of the sync job
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
+     * This will update the job status in the database to CANCELLED and
+     * send a cancellation request to the Temporal workflow if it's running.
      *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.getJob("source_connection_id", "job_id")
-     */
-    public getJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__getJob(sourceConnectionId, jobId, requestOptions));
-    }
-
-    private async __getJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}/jobs/${encodeURIComponent(jobId)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnectionJob, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /source-connections/{source_connection_id}/jobs/{job_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Cancel a running sync job.
-     *
-     * Sends a cancellation signal to stop an in-progress data synchronization.
-     * The job will complete its current operation and then terminate gracefully.
-     * Only jobs in 'created', 'pending', or 'in_progress' states can be cancelled.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {string} jobId - The unique identifier of the sync job to cancel
+     * @param {string} sourceConnectionId
+     * @param {string} jobId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
@@ -817,6 +631,124 @@ export class SourceConnections {
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
                     "Timeout exceeded when calling POST /source-connections/{source_connection_id}/jobs/{job_id}/cancel.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * POC: Create source connection with nested auth structure.
+     *
+     * This endpoint demonstrates a cleaner API structure where authentication
+     * is a nested discriminated union field rather than spread across the root.
+     *
+     * Example request body:
+     * ```json
+     * {
+     *     "short_name": "github",
+     *     "name": "My GitHub Connection",
+     *     "collection_id": "...",
+     *     "authentication": {
+     *         "auth_method": "direct",
+     *         "credentials": {"token": "ghp_..."}
+     *     }
+     * }
+     * ```
+     *
+     * Or for OAuth:
+     * ```json
+     * {
+     *     "short_name": "slack",
+     *     "name": "My Slack Workspace",
+     *     "collection_id": "...",
+     *     "authentication": {
+     *         "auth_method": "oauth_browser",
+     *         "redirect_uri": "http://localhost:3000/callback"
+     *     }
+     * }
+     * ```
+     *
+     * @param {AirweaveSDK.SourceConnectionCreateNested} request
+     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.sourceConnections.createNested({
+     *         short_name: "short_name",
+     *         name: "name",
+     *         collection_id: "collection_id",
+     *         authentication: {
+     *             auth_method: "auth_provider",
+     *             provider_name: "provider_name"
+     *         }
+     *     })
+     */
+    public createNested(
+        request: AirweaveSDK.SourceConnectionCreateNested,
+        requestOptions?: SourceConnections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
+        return core.HttpResponsePromise.fromPromise(this.__createNested(request, requestOptions));
+    }
+
+    private async __createNested(
+        request: AirweaveSDK.SourceConnectionCreateNested,
+        requestOptions?: SourceConnections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                "source-connections/nested",
+            ),
+            method: "POST",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /source-connections/nested.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({

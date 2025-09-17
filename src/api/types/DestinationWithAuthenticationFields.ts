@@ -12,7 +12,6 @@ export interface DestinationWithAuthenticationFields {
     description?: string;
     short_name: string;
     class_name: string;
-    auth_type?: AirweaveSDK.AuthType;
     auth_config_class?: string;
     input_entity_definition_ids?: string[];
     organization_id?: string;

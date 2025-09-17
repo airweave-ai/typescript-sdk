@@ -427,25 +427,19 @@ describe("Collections", () => {
 
         const rawResponseBody = [
             {
-                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-                organization_id: "org12345-6789-abcd-ef01-234567890abc",
-                created_by_email: "engineering@company.com",
-                modified_by_email: "engineering@company.com",
-                created_at: "2024-01-15T14:00:00Z",
-                modified_at: "2024-01-15T14:05:22Z",
+                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 status: "completed",
-                scheduled: true,
+                started_at: "2024-01-15T14:00:15Z",
+                completed_at: "2024-01-15T14:05:22Z",
+                duration_seconds: 1.1,
+                entities_processed: 1,
                 entities_inserted: 45,
                 entities_updated: 12,
                 entities_deleted: 3,
-                entities_kept: 234,
-                entities_skipped: 8,
-                entities_encountered: { issues: 67, pull_requests: 23, commits: 156, releases: 12, readme_files: 8 },
-                started_at: "2024-01-15T14:00:15Z",
-                completed_at: "2024-01-15T14:05:22Z",
-                failed_at: "2024-01-15T09:30:00Z",
+                entities_failed: 1,
                 error: "error",
+                error_details: { key: "value" },
             },
         ];
         server
@@ -459,31 +453,21 @@ describe("Collections", () => {
         const response = await client.collections.refreshAllSourceConnections("readable_id");
         expect(response).toEqual([
             {
-                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-                organization_id: "org12345-6789-abcd-ef01-234567890abc",
-                created_by_email: "engineering@company.com",
-                modified_by_email: "engineering@company.com",
-                created_at: "2024-01-15T14:00:00Z",
-                modified_at: "2024-01-15T14:05:22Z",
+                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 status: "completed",
-                scheduled: true,
+                started_at: "2024-01-15T14:00:15Z",
+                completed_at: "2024-01-15T14:05:22Z",
+                duration_seconds: 1.1,
+                entities_processed: 1,
                 entities_inserted: 45,
                 entities_updated: 12,
                 entities_deleted: 3,
-                entities_kept: 234,
-                entities_skipped: 8,
-                entities_encountered: {
-                    issues: 67,
-                    pull_requests: 23,
-                    commits: 156,
-                    releases: 12,
-                    readme_files: 8,
-                },
-                started_at: "2024-01-15T14:00:15Z",
-                completed_at: "2024-01-15T14:05:22Z",
-                failed_at: "2024-01-15T09:30:00Z",
+                entities_failed: 1,
                 error: "error",
+                error_details: {
+                    key: "value",
+                },
             },
         ]);
     });

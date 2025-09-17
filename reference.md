@@ -883,12 +883,7 @@ await client.collections.refreshAllSourceConnections("readable_id");
 <dl>
 <dd>
 
-List source connections across your organization.
-
-By default, returns ALL source connections from every collection in your
-organization. Use the 'collection' parameter to filter results to a specific
-collection. This is useful for getting an overview of all your data sources
-or managing connections within a particular collection.
+List source connections with minimal fields for performance.
 
 </dd>
 </dl>
@@ -951,25 +946,21 @@ await client.sourceConnections.list();
 <dl>
 <dd>
 
-Create a new source connection to sync data into your collection.
+Create a new source connection.
 
-**This endpoint only works for sources that do not use OAuth2.0.**
-Sources that do use OAuth2.0 like Google Drive, Slack, or HubSpot must be
-connected through the UI where you can complete the OAuth consent flow
-or using Auth Providers (see [Auth Providers](/docs/auth-providers)).<br/><br/>
+Accepts discriminated union types for explicit auth method specification.
 
-Credentials for a source have to be provided using the `auth_fields` field.
-Currently, it is not automatically checked if the provided credentials are valid.
-If they are not valid, the data synchronization will fail.<br/><br/>
+The authentication method determines the flow:
 
-Check the documentation of a specific source (for example
-[Github](https://docs.airweave.ai/docs/connectors/github)) to see what kind
-of authentication is used.
-
-</dd>
-</dl>
-</dd>
-</dl>
+- direct: Immediate creation with provided credentials
+- oauth_browser: Returns shell with authentication URL
+- oauth_token: Immediate creation with provided token
+- oauth_byoc: OAuth with custom client credentials
+- auth_provider: Using external auth provider
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -981,8 +972,13 @@ of authentication is used.
 
 ```typescript
 await client.sourceConnections.create({
-    name: "Production Stripe Account",
-    short_name: "stripe",
+    auth_method: "direct",
+    name: "name",
+    short_name: "short_name",
+    readable_collection_id: "readable_collection_id",
+    credentials: {
+        key: "value",
+    },
 });
 ```
 
@@ -999,7 +995,7 @@ await client.sourceConnections.create({
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.SourceConnectionCreate`
+**request:** `AirweaveSDK.CreateSourceConnectionsPostRequest`
 
 </dd>
 </dl>
@@ -1018,7 +1014,7 @@ await client.sourceConnections.create({
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">get</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">get</a>(sourceConnectionId) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1030,7 +1026,7 @@ await client.sourceConnections.create({
 <dl>
 <dd>
 
-Retrieve a specific source connection by its ID.
+Get a source connection with optional depth expansion.
 
 </dd>
 </dl>
@@ -1062,89 +1058,7 @@ await client.sourceConnections.get("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string` — The unique identifier of the source connection
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `SourceConnections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">update</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a source connection's properties.
-
-Modify the configuration of an existing source connection including its name,
-authentication credentials, configuration fields, sync schedule, or source-specific settings.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sourceConnections.update("source_connection_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**sourceConnectionId:** `string` — The unique identifier of the source connection to update
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SourceConnectionUpdate`
+**sourceConnectionId:** `string`
 
 </dd>
 </dl>
@@ -1175,11 +1089,7 @@ await client.sourceConnections.update("source_connection_id");
 <dl>
 <dd>
 
-Delete a source connection and all associated data.
-
-Permanently removes the source connection configuration and credentials.
-By default, previously synced data remains in your destination systems for continuity.
-Use delete_data=true to also remove all associated data from destination systems.
+Delete a source connection and all related data.
 
 </dd>
 </dl>
@@ -1211,7 +1121,7 @@ await client.sourceConnections.delete("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string` — The unique identifier of the source connection to delete
+**sourceConnectionId:** `string`
 
 </dd>
 </dl>
@@ -1230,7 +1140,7 @@ await client.sourceConnections.delete("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>(sourceConnectionId) -> AirweaveSDK.SourceConnectionJob</code></summary>
 <dl>
 <dd>
 
@@ -1242,11 +1152,9 @@ await client.sourceConnections.delete("source_connection_id");
 <dl>
 <dd>
 
-Manually trigger a data sync for this source connection.
+Trigger a sync run for a source connection.
 
-Starts an immediate synchronization job that extracts fresh data from your source,
-transforms it according to your configuration, and updates the destination systems.
-The job runs asynchronously and endpoint returns immediately with tracking information.
+Runs are always executed through Temporal workflow engine.
 
 </dd>
 </dl>
@@ -1278,15 +1186,7 @@ await client.sourceConnections.run("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string` — The unique identifier of the source connection to sync
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost`
+**sourceConnectionId:** `string`
 
 </dd>
 </dl>
@@ -1305,7 +1205,7 @@ await client.sourceConnections.run("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">listJobs</a>(sourceConnectionId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">getSourceConnectionJobs</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
 <dl>
 <dd>
 
@@ -1317,10 +1217,7 @@ await client.sourceConnections.run("source_connection_id");
 <dl>
 <dd>
 
-List all sync jobs for a source connection.
-
-Returns the complete history of data synchronization jobs including successful syncs,
-failed attempts, and currently running operations.
+Get sync jobs for a source connection.
 
 </dd>
 </dl>
@@ -1336,7 +1233,7 @@ failed attempts, and currently running operations.
 <dd>
 
 ```typescript
-await client.sourceConnections.listJobs("source_connection_id");
+await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
 ```
 
 </dd>
@@ -1352,7 +1249,7 @@ await client.sourceConnections.listJobs("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string` — The unique identifier of the source connection
+**sourceConnectionId:** `string`
 
 </dd>
 </dl>
@@ -1360,70 +1257,7 @@ await client.sourceConnections.listJobs("source_connection_id");
 <dl>
 <dd>
 
-**requestOptions:** `SourceConnections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">getJob</a>(sourceConnectionId, jobId) -> AirweaveSDK.SourceConnectionJob</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get detailed information about a specific sync job.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sourceConnections.getJob("source_connection_id", "job_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**sourceConnectionId:** `string` — The unique identifier of the source connection
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**jobId:** `string` — The unique identifier of the sync job
+**request:** `AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest`
 
 </dd>
 </dl>
@@ -1454,11 +1288,10 @@ await client.sourceConnections.getJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-Cancel a running sync job.
+Cancel a running sync job for a source connection.
 
-Sends a cancellation signal to stop an in-progress data synchronization.
-The job will complete its current operation and then terminate gracefully.
-Only jobs in 'created', 'pending', or 'in_progress' states can be cancelled.
+This will update the job status in the database to CANCELLED and
+send a cancellation request to the Temporal workflow if it's running.
 
 </dd>
 </dl>
@@ -1490,7 +1323,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string` — The unique identifier of the source connection
+**sourceConnectionId:** `string`
 
 </dd>
 </dl>
@@ -1498,7 +1331,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-**jobId:** `string` — The unique identifier of the sync job to cancel
+**jobId:** `string`
 
 </dd>
 </dl>
@@ -1517,9 +1350,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 </dl>
 </details>
 
-## white-labels
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabels</a>() -> AirweaveSDK.WhiteLabel[]</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">createNested</a>({ ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -1531,30 +1362,37 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-List all white label integrations for your organization.
+POC: Create source connection with nested auth structure.
 
-<br/><br/>
-Returns all custom OAuth integrations configured with your own branding and
-credentials. These integrations allow you to present OAuth consent screens with
-your company name instead of Airweave.<br/><br/>**White label integrations only
-work with OAuth2.0 sources** like Slack, Google Drive, or HubSpot that require
-OAuth consent flows.
+This endpoint demonstrates a cleaner API structure where authentication
+is a nested discriminated union field rather than spread across the root.
 
-</dd>
-</dl>
-</dd>
-</dl>
+Example request body:
 
-#### 🔌 Usage
+```json
+{
+    "short_name": "github",
+    "name": "My GitHub Connection",
+    "collection_id": "...",
+    "authentication": {
+        "auth_method": "direct",
+        "credentials": { "token": "ghp_..." }
+    }
+}
+```
 
-<dl>
-<dd>
+Or for OAuth:
 
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.listWhiteLabels();
+```json
+{
+    "short_name": "slack",
+    "name": "My Slack Workspace",
+    "collection_id": "...",
+    "authentication": {
+        "auth_method": "oauth_browser",
+        "redirect_uri": "http://localhost:3000/callback"
+    }
+}
 ```
 
 </dd>
@@ -1562,52 +1400,6 @@ await client.whiteLabels.listWhiteLabels();
 </dd>
 </dl>
 
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">createWhiteLabel</a>({ ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create a new white label integration.
-
-<br/><br/>
-**This only works for sources that use OAuth2.0 authentication** like Slack,
-Google Drive, GitHub, or HubSpot.<br/><br/>Sets up a custom OAuth integration
-using your own OAuth application credentials and branding. Once created,
-customers will see your company name during OAuth consent flows instead of
-Airweave. This requires you to have already configured your own OAuth
-application with the target service provider.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
 #### 🔌 Usage
 
 <dl>
@@ -1617,13 +1409,14 @@ application with the target service provider.
 <dd>
 
 ```typescript
-await client.whiteLabels.createWhiteLabel({
-    name: "Customer Portal Slack Integration",
-    source_short_name: "slack",
-    redirect_url: "https://yourapp.com/auth/slack/callback",
-    client_id: "1234567890.1234567890123",
-    client_secret: "abcdefghijklmnopqrstuvwxyz123456",
-    allowed_origins: "https://yourapp.com,https://app.yourapp.com",
+await client.sourceConnections.createNested({
+    short_name: "short_name",
+    name: "name",
+    collection_id: "collection_id",
+    authentication: {
+        auth_method: "auth_provider",
+        provider_name: "provider_name",
+    },
 });
 ```
 
@@ -1640,7 +1433,7 @@ await client.whiteLabels.createWhiteLabel({
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.WhiteLabelCreate`
+**request:** `AirweaveSDK.SourceConnectionCreateNested`
 
 </dd>
 </dl>
@@ -1648,427 +1441,7 @@ await client.whiteLabels.createWhiteLabel({
 <dl>
 <dd>
 
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Retrieve a specific white label integration by its ID.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.getWhiteLabel("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">updateWhiteLabel</a>(whiteLabelId, { ...params }) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a white label integration's configuration.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.updateWhiteLabel("white_label_id", {
-    name: "Updated Customer Portal Integration",
-    redirect_url: "https://v2.yourapp.com/auth/slack/callback",
-    allowed_origins: "https://v2.yourapp.com,https://api.yourapp.com",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration to update
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.WhiteLabelUpdate`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">deleteWhiteLabel</a>(whiteLabelId) -> AirweaveSDK.WhiteLabel</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Delete a white label integration.
-
-<br/><br/>
-Permanently removes the white label configuration and OAuth credentials.
-Existing source connections created through this integration will continue to work,
-but no new OAuth flows can be initiated until a new white label integration is created.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.deleteWhiteLabel("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration to delete
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">getWhiteLabelOauth2AuthUrl</a>(whiteLabelId) -> string</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Generate a branded OAuth2 authorization URL for customer authentication.
-
-<br/><br/>
-Creates the OAuth consent URL that customers should be redirected to for
-authentication. The OAuth consent screen will display your company name and
-branding instead of Airweave.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">listWhiteLabelSourceConnections</a>(whiteLabelId) -> AirweaveSDK.SourceConnectionListItem[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-List all source connections created through a specific white label integration.
-
-<br/><br/>
-Returns source connections that were established using this white label's OAuth flow.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.whiteLabels.<a href="/src/api/resources/whiteLabels/client/Client.ts">exchangeWhiteLabelOauth2Code</a>(whiteLabelId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Complete the OAuth flow and create a source connection.
-
-<br/><br/>
-**This is the core endpoint that converts OAuth authorization codes into working
-source connections.**<br/><br/>The OAuth credentials are obtained automatically
-from the authorization code - you do not need to provide auth_fields. The white
-label integration is automatically linked to the created source connection for
-tracking and branding purposes.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.whiteLabels.exchangeWhiteLabelOauth2Code("white_label_id", {
-    code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**whiteLabelId:** `string` — The unique identifier of the white label integration
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodePost`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `WhiteLabels.RequestOptions`
+**requestOptions:** `SourceConnections.RequestOptions`
 
 </dd>
 </dl>

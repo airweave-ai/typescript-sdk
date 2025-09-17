@@ -5,64 +5,20 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Complete source connection representation returned by the API.
+ * Complete source connection details.
  */
 export interface SourceConnection {
-    /** Human-readable display name for the source connection. This helps you identify the connection in the UI and should clearly describe what data it connects to (e.g., 'Production Stripe Account', 'Customer Support Database'). */
-    name: string;
-    /** Optional additional context about the data this connection provides. Use this to document the purpose, data types, or any special considerations for this connection. */
-    description?: string;
-    /** Source-specific configuration options that control data retrieval behavior. These vary by source type and control how data is retrieved (e.g., database queries, API filters, file paths). Check the documentation of a specific source (for example [Github](https://docs.airweave.ai/docs/connectors/github)) to see what is required. */
-    config_fields?: AirweaveSDK.ConfigValues;
-    /** Technical identifier of the source type (e.g., 'github', 'stripe', 'postgresql', 'slack'). This determines which connector Airweave uses to sync data. */
-    short_name: string;
-    /** Identifier for custom OAuth integrations. Only present for connections created through white label OAuth flows. */
-    white_label_id?: string;
-    /** Readable ID of the auth provider used to create this connection. Present only if the connection was created through an auth provider. */
-    auth_provider?: string;
-    /** Configuration used with the auth provider to create this connection. Present only if the connection was created through an auth provider. */
-    auth_provider_config?: Record<string, unknown>;
-    /** Unique system identifier for this source connection. This UUID is generated automatically and used for API operations. */
     id: string;
-    /** Internal identifier for the sync configuration associated with this source connection. Managed automatically by the system. */
-    sync_id?: string;
-    /** Identifier of the organization that owns this source connection. Source connections are isolated per organization. */
-    organization_id: string;
-    /** Timestamp when the source connection was created (ISO 8601 format). */
+    name: string;
+    description?: string;
+    short_name: string;
+    readable_collection_id: string;
+    status: AirweaveSDK.SourceConnectionStatus;
     created_at: string;
-    /** Timestamp when the source connection was last modified (ISO 8601 format). */
     modified_at: string;
-    /** Internal identifier for the underlying connection object that manages authentication and configuration. */
-    connection_id?: string;
-    /** Readable ID of the collection where this source connection syncs its data. This creates the link between your data source and searchable content. */
-    collection: string;
-    /** Email address of the user who created this source connection. */
-    created_by_email?: string;
-    /** Email address of the user who last modified this source connection. */
-    modified_by_email?: string;
-    /** Authentication credentials for the data source. Returns '********' by default for security. */
-    auth_fields?: SourceConnection.AuthFields;
-    /** Current operational status of the source connection:<br/>• **active**: Connection is healthy and ready for data synchronization<br/>• **in_progress**: Currently syncing data from the source<br/>• **failing**: Recent sync attempts have failed and require attention */
-    status?: AirweaveSDK.SourceConnectionStatus;
-    /** Status of the most recent data synchronization job:<br/>• **completed**: Last sync finished successfully<br/>• **failed**: Last sync encountered errors<br/>• **in_progress**: Currently running a sync job<br/>• **pending**: Sync job is queued and waiting to start */
-    latest_sync_job_status?: AirweaveSDK.SyncJobStatus;
-    /** Unique identifier of the most recent sync job. Use this to track sync progress or retrieve detailed job information. */
-    latest_sync_job_id?: string;
-    /** Timestamp when the most recent sync job started (ISO 8601 format). */
-    latest_sync_job_started_at?: string;
-    /** Timestamp when the most recent sync job completed (ISO 8601 format). Null if the job is still running or failed. */
-    latest_sync_job_completed_at?: string;
-    /** Error message from the most recent sync job if it failed. Use this to diagnose and resolve sync issues. */
-    latest_sync_job_error?: string;
-    /** Cron expression defining when automatic data synchronization occurs. Null if automatic syncing is disabled and syncs must be triggered manually. */
-    cron_schedule?: string;
-    /** Timestamp when the next automatic sync is scheduled to run (ISO 8601 format). Null if no automatic schedule is configured. */
-    next_scheduled_run?: string;
-}
-
-export namespace SourceConnection {
-    /**
-     * Authentication credentials for the data source. Returns '********' by default for security.
-     */
-    export type AuthFields = AirweaveSDK.ConfigValues | string;
+    auth: AirweaveSDK.AuthenticationDetails;
+    config?: Record<string, unknown>;
+    schedule?: AirweaveSDK.ScheduleDetails;
+    sync?: AirweaveSDK.SyncDetails;
+    entities?: AirweaveSDK.EntitySummary;
 }

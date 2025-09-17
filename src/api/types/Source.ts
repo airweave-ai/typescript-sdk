@@ -12,12 +12,16 @@ export interface Source {
     name: string;
     /** Detailed description explaining what data this source can extract and its typical use cases. */
     description?: string;
-    /** Type of authentication mechanism required by this source (e.g., 'oauth2'). */
-    auth_type?: AirweaveSDK.AuthType;
-    /** Python class name that defines the authentication configuration fields required for this source. */
-    auth_config_class: string;
+    /** List of supported authentication methods (e.g., 'direct', 'oauth_browser'). */
+    auth_methods?: string[];
+    /** OAuth token type for OAuth sources (e.g., 'access_only', 'with_refresh'). */
+    oauth_type?: string;
+    /** Whether this OAuth source requires users to bring their own client. */
+    requires_byoc?: boolean;
+    /** Python class name that defines the authentication configuration fields required for this source (only for DIRECT auth). */
+    auth_config_class?: string;
     /** Python class name that defines the source-specific configuration options and parameters. */
-    config_class: string;
+    config_class?: string;
     /** Technical identifier used internally to reference this source type. Must be unique across all sources. */
     short_name: string;
     /** Python class name of the source implementation that handles data extraction logic. */
@@ -34,8 +38,8 @@ export interface Source {
     created_at: string;
     /** Timestamp when this source type was last updated (ISO 8601 format). */
     modified_at: string;
-    /** Schema definition for authentication fields required to connect to this source. Describes field types, validation rules, and user interface hints. */
-    auth_fields: AirweaveSDK.Fields;
+    /** Schema definition for authentication fields required to connect to this source. Only present for sources using DIRECT authentication. OAuth sources handle authentication through browser flows. */
+    auth_fields?: AirweaveSDK.Fields;
     /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */
     config_fields: AirweaveSDK.Fields;
 }

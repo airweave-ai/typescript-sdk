@@ -13,7 +13,9 @@ describe("Sources", () => {
         const rawResponseBody = {
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-            auth_type: "config_class",
+            auth_methods: ["auth_methods"],
+            oauth_type: "oauth_type",
+            requires_byoc: true,
             auth_config_class: "GitHubAuthConfig",
             config_class: "GitHubConfig",
             short_name: "github",
@@ -57,7 +59,9 @@ describe("Sources", () => {
         expect(response).toEqual({
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-            auth_type: "config_class",
+            auth_methods: ["auth_methods"],
+            oauth_type: "oauth_type",
+            requires_byoc: true,
             auth_config_class: "GitHubAuthConfig",
             config_class: "GitHubConfig",
             short_name: "github",
@@ -107,7 +111,9 @@ describe("Sources", () => {
             {
                 name: "GitHub",
                 description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-                auth_type: "config_class",
+                auth_methods: ["auth_methods"],
+                oauth_type: "oauth_type",
+                requires_byoc: true,
                 auth_config_class: "GitHubAuthConfig",
                 config_class: "GitHubConfig",
                 short_name: "github",
@@ -147,7 +153,9 @@ describe("Sources", () => {
             {
                 name: "GitHub",
                 description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-                auth_type: "config_class",
+                auth_methods: ["auth_methods"],
+                oauth_type: "oauth_type",
+                requires_byoc: true,
                 auth_config_class: "GitHubAuthConfig",
                 config_class: "GitHubConfig",
                 short_name: "github",

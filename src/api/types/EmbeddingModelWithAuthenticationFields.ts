@@ -14,7 +14,6 @@ export interface EmbeddingModelWithAuthenticationFields {
     provider: string;
     model_name?: string;
     model_version?: string;
-    auth_type?: AirweaveSDK.AuthType;
     auth_config_class?: string;
     id: string;
     created_at: string;
