@@ -5,7 +5,7 @@
 /**
  * OAuth authentication with pre-obtained token.
  */
-export interface OAuthTokenAuth {
+export interface OAuthTokenAuthentication {
     /** OAuth access token */
     access_token: string;
     /** OAuth refresh token */

@@ -60,8 +60,7 @@ describe("SourceConnections", () => {
             name: "name",
             short_name: "short_name",
             readable_collection_id: "readable_collection_id",
-            credentials: { key: "value" },
-            auth_method: "direct",
+            authentication: { credentials: { key: "value" } },
         };
         const rawResponseBody = {
             id: "id",
@@ -121,12 +120,13 @@ describe("SourceConnections", () => {
             .build();
 
         const response = await client.sourceConnections.create({
-            auth_method: "direct",
             name: "name",
             short_name: "short_name",
             readable_collection_id: "readable_collection_id",
-            credentials: {
-                key: "value",
+            authentication: {
+                credentials: {
+                    key: "value",
+                },
             },
         });
         expect(response).toEqual({
@@ -578,143 +578,6 @@ describe("SourceConnections", () => {
             error: "error",
             error_details: {
                 key: "value",
-            },
-        });
-    });
-
-    test("createNested", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            short_name: "short_name",
-            name: "name",
-            collection_id: "collection_id",
-            authentication: { provider_name: "provider_name", auth_method: "auth_provider" },
-        };
-        const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
-            status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
-            auth: {
-                method: "direct",
-                authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
-                expires_at: "2024-01-15T09:30:00Z",
-                auth_url: "auth_url",
-                auth_url_expires: "2024-01-15T09:30:00Z",
-                redirect_url: "redirect_url",
-                provider_name: "provider_name",
-                provider_id: "provider_id",
-            },
-            config: { key: "value" },
-            schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
-                continuous: true,
-                cursor_field: "cursor_field",
-                cursor_value: { key: "value" },
-            },
-            sync: {
-                total_runs: 1,
-                successful_runs: 1,
-                failed_runs: 1,
-                last_job: {
-                    id: "id",
-                    status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_processed: 1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
-                    entities_deleted: 1,
-                    entities_failed: 1,
-                    error: "error",
-                },
-            },
-            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
-        };
-        server
-            .mockEndpoint()
-            .post("/source-connections/nested")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.sourceConnections.createNested({
-            short_name: "short_name",
-            name: "name",
-            collection_id: "collection_id",
-            authentication: {
-                auth_method: "auth_provider",
-                provider_name: "provider_name",
-            },
-        });
-        expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
-            status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
-            auth: {
-                method: "direct",
-                authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
-                expires_at: "2024-01-15T09:30:00Z",
-                auth_url: "auth_url",
-                auth_url_expires: "2024-01-15T09:30:00Z",
-                redirect_url: "redirect_url",
-                provider_name: "provider_name",
-                provider_id: "provider_id",
-            },
-            config: {
-                key: "value",
-            },
-            schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
-                continuous: true,
-                cursor_field: "cursor_field",
-                cursor_value: {
-                    key: "value",
-                },
-            },
-            sync: {
-                total_runs: 1,
-                successful_runs: 1,
-                failed_runs: 1,
-                last_job: {
-                    id: "id",
-                    status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_processed: 1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
-                    entities_deleted: 1,
-                    entities_failed: 1,
-                    error: "error",
-                },
-            },
-            entities: {
-                total_entities: 1,
-                by_type: {
-                    key: {
-                        count: 1,
-                    },
-                },
-                last_updated: "2024-01-15T09:30:00Z",
             },
         });
     });

@@ -948,19 +948,20 @@ await client.sourceConnections.list();
 
 Create a new source connection.
 
-Accepts discriminated union types for explicit auth method specification.
+The authentication configuration determines the flow:
 
-The authentication method determines the flow:
+- DirectAuthentication: Immediate creation with provided credentials
+- OAuthBrowserAuthentication: Returns shell with authentication URL
+- OAuthTokenAuthentication: Immediate creation with provided token
+- AuthProviderAuthentication: Using external auth provider
 
-- direct: Immediate creation with provided credentials
-- oauth_browser: Returns shell with authentication URL
-- oauth_token: Immediate creation with provided token
-- oauth_byoc: OAuth with custom client credentials
-- auth_provider: Using external auth provider
-  </dd>
-  </dl>
-  </dd>
-  </dl>
+BYOC (Bring Your Own Client) is detected when client_id and client_secret
+are provided in OAuthBrowserAuthentication.
+
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -972,12 +973,13 @@ The authentication method determines the flow:
 
 ```typescript
 await client.sourceConnections.create({
-    auth_method: "direct",
     name: "name",
     short_name: "short_name",
     readable_collection_id: "readable_collection_id",
-    credentials: {
-        key: "value",
+    authentication: {
+        credentials: {
+            key: "value",
+        },
     },
 });
 ```
@@ -995,7 +997,7 @@ await client.sourceConnections.create({
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.CreateSourceConnectionsPostRequest`
+**request:** `AirweaveSDK.SourceConnectionCreate`
 
 </dd>
 </dl>
@@ -1332,108 +1334,6 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dd>
 
 **jobId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `SourceConnections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">createNested</a>({ ...params }) -> AirweaveSDK.SourceConnection</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-POC: Create source connection with nested auth structure.
-
-This endpoint demonstrates a cleaner API structure where authentication
-is a nested discriminated union field rather than spread across the root.
-
-Example request body:
-
-```json
-{
-    "short_name": "github",
-    "name": "My GitHub Connection",
-    "collection_id": "...",
-    "authentication": {
-        "auth_method": "direct",
-        "credentials": { "token": "ghp_..." }
-    }
-}
-```
-
-Or for OAuth:
-
-```json
-{
-    "short_name": "slack",
-    "name": "My Slack Workspace",
-    "collection_id": "...",
-    "authentication": {
-        "auth_method": "oauth_browser",
-        "redirect_uri": "http://localhost:3000/callback"
-    }
-}
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.sourceConnections.createNested({
-    short_name: "short_name",
-    name: "name",
-    collection_id: "collection_id",
-    authentication: {
-        auth_method: "auth_provider",
-        provider_name: "provider_name",
-    },
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SourceConnectionCreateNested`
 
 </dd>
 </dl>

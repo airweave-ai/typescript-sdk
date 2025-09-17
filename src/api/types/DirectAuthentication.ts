@@ -5,7 +5,7 @@
 /**
  * Direct authentication with API keys or passwords.
  */
-export interface DirectAuth {
-    /** Direct auth credentials */
+export interface DirectAuthentication {
+    /** Authentication credentials */
     credentials: Record<string, unknown>;
 }
