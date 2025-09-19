@@ -5,20 +5,45 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Individual sync job for a source connection.
+ * Data synchronization job for a specific source connection.
  */
 export interface SourceConnectionJob {
-    id: string;
+    /** Unique identifier of the source connection for which this data refresh is running. */
     source_connection_id: string;
-    status: AirweaveSDK.SyncJobStatus;
-    started_at?: string;
-    completed_at?: string;
-    duration_seconds?: number;
-    entities_processed?: number;
+    /** Unique identifier for this specific data refresh operation. */
+    id: string;
+    /** Identifier of the organization that owns this data refresh operation. */
+    organization_id: string;
+    /** Email address of the user who initiated this data refresh (for manually triggered operations). */
+    created_by_email?: string;
+    /** Email address of the user who last modified this data refresh operation. */
+    modified_by_email?: string;
+    /** Timestamp when this data refresh was created and queued (ISO 8601 format). */
+    created_at?: string;
+    /** Timestamp when this data refresh was last modified (ISO 8601 format). */
+    modified_at?: string;
+    /** Current execution status of the data refresh:<br/>• **created**: Operation has been created but not yet queued<br/>• **pending**: Operation is queued and waiting to start<br/>• **in_progress**: Currently running and processing data<br/>• **completed**: Finished successfully with all data processed<br/>• **failed**: Encountered errors and could not complete<br/>• **cancelled**: Manually cancelled before completion */
+    status?: AirweaveSDK.SyncJobStatus;
+    /** Whether this data refresh was triggered by a schedule (true) or manually (false). */
+    scheduled?: boolean;
+    /** Number of new data entities that were added to the collection during this refresh. */
     entities_inserted?: number;
+    /** Number of existing entities that were modified and updated during this refresh. */
     entities_updated?: number;
+    /** Number of entities that were removed from the collection because they no longer exist in the source. */
     entities_deleted?: number;
-    entities_failed?: number;
+    /** Number of entities that were checked but required no changes because they were already up-to-date. */
+    entities_kept?: number;
+    /** Number of entities that were intentionally skipped due to filtering rules or processing decisions. */
+    entities_skipped?: number;
+    /** Detailed breakdown of entities processed by type or category. */
+    entities_encountered?: Record<string, number | undefined>;
+    /** Timestamp when the data refresh began active processing (ISO 8601 format). */
+    started_at?: string;
+    /** Timestamp when the data refresh finished successfully (ISO 8601 format). */
+    completed_at?: string;
+    /** Timestamp when the data refresh failed (ISO 8601 format). */
+    failed_at?: string;
+    /** Detailed error message if the data refresh failed. */
     error?: string;
-    error_details?: Record<string, unknown>;
 }

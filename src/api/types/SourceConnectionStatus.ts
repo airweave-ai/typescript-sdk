@@ -3,13 +3,11 @@
  */
 
 /**
- * Source connection status enum - represents overall connection state.
+ * Source connection status enum.
  */
-export type SourceConnectionStatus = "active" | "pending_auth" | "syncing" | "error" | "inactive";
+export type SourceConnectionStatus = "active" | "in_progress" | "failing";
 export const SourceConnectionStatus = {
     Active: "active",
-    PendingAuth: "pending_auth",
-    Syncing: "syncing",
-    Error: "error",
-    Inactive: "inactive",
+    InProgress: "in_progress",
+    Failing: "failing",
 } as const;

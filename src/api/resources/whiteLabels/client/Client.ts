@@ -8,7 +8,7 @@ import * as AirweaveSDK from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
-export declare namespace SourceConnections {
+export declare namespace WhiteLabels {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
@@ -31,62 +31,47 @@ export declare namespace SourceConnections {
 }
 
 /**
- * API endpoints for managing live connections to data sources. Source connections are the actual configured instances that Airweave uses to sync data from your apps and databases, transforming it into searchable, structured information within collections
+ * API endpoints for managing custom OAuth2 integrations with your own branding and credentials
  */
-export class SourceConnections {
-    protected readonly _options: SourceConnections.Options;
+export class WhiteLabels {
+    protected readonly _options: WhiteLabels.Options;
 
-    constructor(_options: SourceConnections.Options) {
+    constructor(_options: WhiteLabels.Options) {
         this._options = _options;
     }
 
     /**
-     * List source connections across your organization.
+     * List all white label integrations for your organization.
      *
-     * By default, returns ALL source connections from every collection in your
-     * organization. Use the 'collection' parameter to filter results to a specific
-     * collection. This is useful for getting an overview of all your data sources
-     * or managing connections within a particular collection.
+     * <br/><br/>
+     * Returns all custom OAuth integrations configured with your own branding and
+     * credentials. These integrations allow you to present OAuth consent screens with
+     * your company name instead of Airweave.<br/><br/>**White label integrations only
+     * work with OAuth2.0 sources** like Slack, Google Drive, or HubSpot that require
+     * OAuth consent flows.
      *
-     * @param {AirweaveSDK.ListSourceConnectionsGetRequest} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.list()
+     *     await client.whiteLabels.listWhiteLabels()
      */
-    public list(
-        request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionListItem[]> {
-        return core.HttpResponsePromise.fromPromise(this.__list(request, requestOptions));
+    public listWhiteLabels(
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WhiteLabel[]> {
+        return core.HttpResponsePromise.fromPromise(this.__listWhiteLabels(requestOptions));
     }
 
-    private async __list(
-        request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionListItem[]>> {
-        const { collection, skip, limit } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (collection != null) {
-            _queryParams["collection"] = collection;
-        }
-
-        if (skip != null) {
-            _queryParams["skip"] = skip.toString();
-        }
-
-        if (limit != null) {
-            _queryParams["limit"] = limit.toString();
-        }
-
+    private async __listWhiteLabels(
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WhiteLabel[]>> {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "source-connections",
+                "white-labels/list",
             ),
             method: "GET",
             headers: mergeHeaders(
@@ -94,7 +79,513 @@ export class SourceConnections {
                 mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
                 requestOptions?.headers,
             ),
-            queryParameters: _queryParams,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.WhiteLabel[], rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /white-labels/list.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Create a new white label integration.
+     *
+     * <br/><br/>
+     * **This only works for sources that use OAuth2.0 authentication** like Slack,
+     * Google Drive, GitHub, or HubSpot.<br/><br/>Sets up a custom OAuth integration
+     * using your own OAuth application credentials and branding. Once created,
+     * customers will see your company name during OAuth consent flows instead of
+     * Airweave. This requires you to have already configured your own OAuth
+     * application with the target service provider.
+     *
+     * @param {AirweaveSDK.WhiteLabelCreate} request
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.createWhiteLabel({
+     *         name: "Customer Portal Slack Integration",
+     *         source_short_name: "slack",
+     *         redirect_url: "https://yourapp.com/auth/slack/callback",
+     *         client_id: "1234567890.1234567890123",
+     *         client_secret: "abcdefghijklmnopqrstuvwxyz123456",
+     *         allowed_origins: "https://yourapp.com,https://app.yourapp.com"
+     *     })
+     */
+    public createWhiteLabel(
+        request: AirweaveSDK.WhiteLabelCreate,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WhiteLabel> {
+        return core.HttpResponsePromise.fromPromise(this.__createWhiteLabel(request, requestOptions));
+    }
+
+    private async __createWhiteLabel(
+        request: AirweaveSDK.WhiteLabelCreate,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WhiteLabel>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                "white-labels",
+            ),
+            method: "POST",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.WhiteLabel, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /white-labels.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Retrieve a specific white label integration by its ID.
+     *
+     * @param {string} whiteLabelId - The unique identifier of the white label integration
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.getWhiteLabel("white_label_id")
+     */
+    public getWhiteLabel(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WhiteLabel> {
+        return core.HttpResponsePromise.fromPromise(this.__getWhiteLabel(whiteLabelId, requestOptions));
+    }
+
+    private async __getWhiteLabel(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WhiteLabel>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `white-labels/${encodeURIComponent(whiteLabelId)}`,
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.WhiteLabel, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /white-labels/{white_label_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Update a white label integration's configuration.
+     *
+     * @param {string} whiteLabelId - The unique identifier of the white label integration to update
+     * @param {AirweaveSDK.WhiteLabelUpdate} request
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.updateWhiteLabel("white_label_id", {
+     *         name: "Updated Customer Portal Integration",
+     *         redirect_url: "https://v2.yourapp.com/auth/slack/callback",
+     *         allowed_origins: "https://v2.yourapp.com,https://api.yourapp.com"
+     *     })
+     */
+    public updateWhiteLabel(
+        whiteLabelId: string,
+        request: AirweaveSDK.WhiteLabelUpdate = {},
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WhiteLabel> {
+        return core.HttpResponsePromise.fromPromise(this.__updateWhiteLabel(whiteLabelId, request, requestOptions));
+    }
+
+    private async __updateWhiteLabel(
+        whiteLabelId: string,
+        request: AirweaveSDK.WhiteLabelUpdate = {},
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WhiteLabel>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `white-labels/${encodeURIComponent(whiteLabelId)}`,
+            ),
+            method: "PUT",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.WhiteLabel, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling PUT /white-labels/{white_label_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Delete a white label integration.
+     *
+     * <br/><br/>
+     * Permanently removes the white label configuration and OAuth credentials.
+     * Existing source connections created through this integration will continue to work,
+     * but no new OAuth flows can be initiated until a new white label integration is created.
+     *
+     * @param {string} whiteLabelId - The unique identifier of the white label integration to delete
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.deleteWhiteLabel("white_label_id")
+     */
+    public deleteWhiteLabel(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WhiteLabel> {
+        return core.HttpResponsePromise.fromPromise(this.__deleteWhiteLabel(whiteLabelId, requestOptions));
+    }
+
+    private async __deleteWhiteLabel(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WhiteLabel>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `white-labels/${encodeURIComponent(whiteLabelId)}`,
+            ),
+            method: "DELETE",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.WhiteLabel, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling DELETE /white-labels/{white_label_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Generate a branded OAuth2 authorization URL for customer authentication.
+     *
+     * <br/><br/>
+     * Creates the OAuth consent URL that customers should be redirected to for
+     * authentication. The OAuth consent screen will display your company name and
+     * branding instead of Airweave.
+     *
+     * @param {string} whiteLabelId - The unique identifier of the white label integration
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.getWhiteLabelOauth2AuthUrl("white_label_id")
+     */
+    public getWhiteLabelOauth2AuthUrl(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<string> {
+        return core.HttpResponsePromise.fromPromise(this.__getWhiteLabelOauth2AuthUrl(whiteLabelId, requestOptions));
+    }
+
+    private async __getWhiteLabelOauth2AuthUrl(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<string>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `white-labels/${encodeURIComponent(whiteLabelId)}/oauth2/auth_url`,
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as string, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /white-labels/{white_label_id}/oauth2/auth_url.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * List all source connections created through a specific white label integration.
+     *
+     * <br/><br/>
+     * Returns source connections that were established using this white label's OAuth flow.
+     *
+     * @param {string} whiteLabelId - The unique identifier of the white label integration
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.whiteLabels.listWhiteLabelSourceConnections("white_label_id")
+     */
+    public listWhiteLabelSourceConnections(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionListItem[]> {
+        return core.HttpResponsePromise.fromPromise(
+            this.__listWhiteLabelSourceConnections(whiteLabelId, requestOptions),
+        );
+    }
+
+    private async __listWhiteLabelSourceConnections(
+        whiteLabelId: string,
+        requestOptions?: WhiteLabels.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionListItem[]>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `white-labels/${encodeURIComponent(whiteLabelId)}/source-connections`,
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -130,7 +621,9 @@ export class SourceConnections {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /source-connections.");
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /white-labels/{white_label_id}/source-connections.",
+                );
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -140,49 +633,51 @@ export class SourceConnections {
     }
 
     /**
-     * Create a new source connection to sync data into your collection.
+     * Complete the OAuth flow and create a source connection.
      *
-     * **This endpoint only works for sources that do not use OAuth2.0.**
-     * Sources that do use OAuth2.0 like Google Drive, Slack, or HubSpot must be
-     * connected through the UI where you can complete the OAuth consent flow
-     * or using Auth Providers (see [Auth Providers](/docs/auth-providers)).<br/><br/>
+     * <br/><br/>
+     * **This is the core endpoint that converts OAuth authorization codes into working
+     * source connections.**<br/><br/>The OAuth credentials are obtained automatically
+     * from the authorization code - you do not need to provide auth_fields. The white
+     * label integration is automatically linked to the created source connection for
+     * tracking and branding purposes.
      *
-     * Credentials for a source have to be provided using the `auth_fields` field.
-     * Currently, it is not automatically checked if the provided credentials are valid.
-     * If they are not valid, the data synchronization will fail.<br/><br/>
-     *
-     * Check the documentation of a specific source (for example
-     * [Github](https://docs.airweave.ai/docs/connectors/github)) to see what kind
-     * of authentication is used.
-     *
-     * @param {AirweaveSDK.SourceConnectionCreate} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {string} whiteLabelId - The unique identifier of the white label integration
+     * @param {AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions} request
+     * @param {WhiteLabels.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.create({
-     *         name: "Production Stripe Account",
-     *         short_name: "stripe"
+     *     await client.whiteLabels.exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions("white_label_id", {
+     *         code: "4/P7q7W91a-oMsCeLvIaQm6bTrgtp7"
      *     })
      */
-    public create(
-        request: AirweaveSDK.SourceConnectionCreate,
-        requestOptions?: SourceConnections.RequestOptions,
+    public exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+        whiteLabelId: string,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
+        requestOptions?: WhiteLabels.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__create(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(
+            this.__exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+                whiteLabelId,
+                request,
+                requestOptions,
+            ),
+        );
     }
 
-    private async __create(
-        request: AirweaveSDK.SourceConnectionCreate,
-        requestOptions?: SourceConnections.RequestOptions,
+    private async __exchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions(
+        whiteLabelId: string,
+        request: AirweaveSDK.BodyExchangeWhiteLabelOauth2CodeWhiteLabelsWhiteLabelIdOauth2CodeOptions,
+        requestOptions?: WhiteLabels.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "source-connections",
+                `white-labels/${encodeURIComponent(whiteLabelId)}/oauth2/code`,
             ),
             method: "POST",
             headers: mergeHeaders(
@@ -225,598 +720,8 @@ export class SourceConnections {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /source-connections.");
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Retrieve a specific source connection by its ID.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.get("source_connection_id")
-     */
-    public get(
-        sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__get(sourceConnectionId, request, requestOptions));
-    }
-
-    private async __get(
-        sourceConnectionId: string,
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { show_auth_fields: showAuthFields } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (showAuthFields != null) {
-            _queryParams["show_auth_fields"] = showAuthFields.toString();
-        }
-
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            queryParameters: _queryParams,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /source-connections/{source_connection_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Update a source connection's properties.
-     *
-     * Modify the configuration of an existing source connection including its name,
-     * authentication credentials, configuration fields, sync schedule, or source-specific settings.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to update
-     * @param {AirweaveSDK.SourceConnectionUpdate} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.update("source_connection_id")
-     */
-    public update(
-        sourceConnectionId: string,
-        request: AirweaveSDK.SourceConnectionUpdate = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__update(sourceConnectionId, request, requestOptions));
-    }
-
-    private async __update(
-        sourceConnectionId: string,
-        request: AirweaveSDK.SourceConnectionUpdate = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}`,
-            ),
-            method: "PUT",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling PUT /source-connections/{source_connection_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Delete a source connection and all associated data.
-     *
-     * Permanently removes the source connection configuration and credentials.
-     * By default, previously synced data remains in your destination systems for continuity.
-     * Use delete_data=true to also remove all associated data from destination systems.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to delete
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.delete("source_connection_id")
-     */
-    public delete(
-        sourceConnectionId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(sourceConnectionId, requestOptions));
-    }
-
-    private async __delete(
-        sourceConnectionId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}`,
-            ),
-            method: "DELETE",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling DELETE /source-connections/{source_connection_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Manually trigger a data sync for this source connection.
-     *
-     * Starts an immediate synchronization job that extracts fresh data from your source,
-     * transforms it according to your configuration, and updates the destination systems.
-     * The job runs asynchronously and endpoint returns immediately with tracking information.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection to sync
-     * @param {AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost} request
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.run("source_connection_id")
-     */
-    public run(
-        sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, request, requestOptions));
-    }
-
-    private async __run(
-        sourceConnectionId: string,
-        request: AirweaveSDK.BodyRunSourceConnectionsSourceConnectionIdRunPost = {},
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}/run`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            contentType: "application/json",
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnectionJob, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling POST /source-connections/{source_connection_id}/run.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * List all sync jobs for a source connection.
-     *
-     * Returns the complete history of data synchronization jobs including successful syncs,
-     * failed attempts, and currently running operations.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.listJobs("source_connection_id")
-     */
-    public listJobs(
-        sourceConnectionId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob[]> {
-        return core.HttpResponsePromise.fromPromise(this.__listJobs(sourceConnectionId, requestOptions));
-    }
-
-    private async __listJobs(
-        sourceConnectionId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}/jobs`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnectionJob[], rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /source-connections/{source_connection_id}/jobs.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Get detailed information about a specific sync job.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {string} jobId - The unique identifier of the sync job
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.getJob("source_connection_id", "job_id")
-     */
-    public getJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__getJob(sourceConnectionId, jobId, requestOptions));
-    }
-
-    private async __getJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}/jobs/${encodeURIComponent(jobId)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnectionJob, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /source-connections/{source_connection_id}/jobs/{job_id}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Cancel a running sync job.
-     *
-     * Sends a cancellation signal to stop an in-progress data synchronization.
-     * The job will complete its current operation and then terminate gracefully.
-     * Only jobs in 'created', 'pending', or 'in_progress' states can be cancelled.
-     *
-     * @param {string} sourceConnectionId - The unique identifier of the source connection
-     * @param {string} jobId - The unique identifier of the sync job to cancel
-     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sourceConnections.cancelJob("source_connection_id", "job_id")
-     */
-    public cancelJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__cancelJob(sourceConnectionId, jobId, requestOptions));
-    }
-
-    private async __cancelJob(
-        sourceConnectionId: string,
-        jobId: string,
-        requestOptions?: SourceConnections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `source-connections/${encodeURIComponent(sourceConnectionId)}/jobs/${encodeURIComponent(jobId)}/cancel`,
-            ),
-            method: "POST",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SourceConnectionJob, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling POST /source-connections/{source_connection_id}/jobs/{job_id}/cancel.",
+                    "Timeout exceeded when calling POST /white-labels/{white_label_id}/oauth2/code.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({

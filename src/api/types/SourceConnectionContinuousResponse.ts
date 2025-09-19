@@ -5,9 +5,9 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Complete source connection representation returned by the API.
+ * Response schema for continuous source connection creation.
  */
-export interface SourceConnection {
+export interface SourceConnectionContinuousResponse {
     /** Human-readable display name for the source connection. This helps you identify the connection in the UI and should clearly describe what data it connects to (e.g., 'Production Stripe Account', 'Customer Support Database'). */
     name: string;
     /** Optional additional context about the data this connection provides. Use this to document the purpose, data types, or any special considerations for this connection. */
@@ -41,7 +41,7 @@ export interface SourceConnection {
     /** Email address of the user who last modified this source connection. */
     modified_by_email?: string;
     /** Authentication credentials for the data source. Returns '********' by default for security. */
-    auth_fields?: SourceConnection.AuthFields;
+    auth_fields?: SourceConnectionContinuousResponse.AuthFields;
     /** Current operational status of the source connection:<br/>• **active**: Connection is healthy and ready for data synchronization<br/>• **in_progress**: Currently syncing data from the source<br/>• **failing**: Recent sync attempts have failed and require attention */
     status?: AirweaveSDK.SourceConnectionStatus;
     /** Status of the most recent data synchronization job:<br/>• **completed**: Last sync finished successfully<br/>• **failed**: Last sync encountered errors<br/>• **in_progress**: Currently running a sync job<br/>• **pending**: Sync job is queued and waiting to start */
@@ -58,9 +58,11 @@ export interface SourceConnection {
     cron_schedule?: string;
     /** Timestamp when the next automatic sync is scheduled to run (ISO 8601 format). Null if no automatic schedule is configured. */
     next_scheduled_run?: string;
+    /** Information about the created minute-level schedule including schedule ID, cron expression, and current status. */
+    minute_level_schedule?: Record<string, unknown>;
 }
 
-export namespace SourceConnection {
+export namespace SourceConnectionContinuousResponse {
     /**
      * Authentication credentials for the data source. Returns '********' by default for security.
      */

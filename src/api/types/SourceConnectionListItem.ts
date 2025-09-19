@@ -5,17 +5,27 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Minimal source connection for list views.
+ * Simplified source connection representation for list operations.
  */
 export interface SourceConnectionListItem {
+    /** Unique identifier for the source connection. */
     id: string;
+    /** Human-readable name of the source connection. */
     name: string;
+    /** Brief description of what data this connection provides. */
+    description?: string;
+    /** Technical identifier of the source type (e.g., 'stripe', 'postgresql'). */
     short_name: string;
-    readable_collection_id: string;
+    /** Current operational status: active, in_progress, or failing. */
     status: AirweaveSDK.SourceConnectionStatus;
-    auth_method: AirweaveSDK.AuthenticationMethod;
+    /** When the source connection was created (ISO 8601 format). */
     created_at: string;
+    /** When the source connection was last modified (ISO 8601 format). */
     modified_at: string;
-    last_sync?: AirweaveSDK.SyncSummary;
-    entity_count?: number;
+    /** Internal identifier for the sync configuration. */
+    sync_id: string;
+    /** Readable ID of the collection where this connection syncs data. */
+    collection: string;
+    /** Identifier for custom OAuth integrations, if applicable. */
+    white_label_id?: string;
 }

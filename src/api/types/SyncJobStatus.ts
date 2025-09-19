@@ -5,11 +5,11 @@
 /**
  * Sync job status enum.
  */
-export type SyncJobStatus = "created" | "pending" | "running" | "completed" | "failed" | "cancelled";
+export type SyncJobStatus = "created" | "pending" | "in_progress" | "completed" | "failed" | "cancelled";
 export const SyncJobStatus = {
     Created: "created",
     Pending: "pending",
-    Running: "running",
+    InProgress: "in_progress",
     Completed: "completed",
     Failed: "failed",
     Cancelled: "cancelled",

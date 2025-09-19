@@ -12,8 +12,7 @@ export interface IntegrationCredentialInDb {
     integration_short_name: string;
     description?: string;
     integration_type: AirweaveSDK.IntegrationType;
-    authentication_method: AirweaveSDK.AuthenticationMethod;
-    oauth_type?: AirweaveSDK.OAuthType;
+    auth_type: AirweaveSDK.AuthType;
     auth_config_class?: string;
     id: string;
     organization_id: string;
