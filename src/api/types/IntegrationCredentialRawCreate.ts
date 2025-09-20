@@ -15,7 +15,8 @@ export interface IntegrationCredentialRawCreate {
     integration_short_name: string;
     description?: string;
     integration_type: AirweaveSDK.IntegrationType;
-    auth_type: AirweaveSDK.AuthType;
+    authentication_method: AirweaveSDK.AuthenticationMethod;
+    oauth_type?: AirweaveSDK.OAuthType;
     auth_config_class?: string;
     auth_fields: Record<string, unknown>;
 }

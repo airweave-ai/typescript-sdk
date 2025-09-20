@@ -7,29 +7,35 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         name: "Production Stripe Account",
- *         short_name: "stripe"
+ *         short_name: "short_name",
+ *         readable_collection_id: "readable_collection_id"
  *     }
  */
 export interface SourceConnectionCreate {
-    /** Human-readable name for the source connection. This helps you identify the connection in the UI and should clearly describe what data it connects to. */
-    name: string;
-    /** Optional detailed description of what this source connection provides. Use this to document the purpose, data types, or any special considerations for this connection. */
-    description?: string;
-    /** Source-specific configuration parameters required for data extraction. These vary by source type and control how data is retrieved (e.g., database queries, API filters, file paths). Check the documentation of a specific source (for example [Github](https://docs.airweave.ai/docs/connectors/github)) to see what is required. */
-    config_fields?: AirweaveSDK.ConfigValues;
-    /** Technical identifier of the source type that determines which connector to use for data synchronization. */
+    /** Connection name (defaults to '{Source Name} Connection') */
+    name?: string;
+    /** Source identifier (e.g., 'slack', 'github') */
     short_name: string;
-    /** Readable ID of the collection where synced data will be stored. If not provided, a new collection will be automatically created. */
-    collection?: string;
-    /** Cron expression for automatic data synchronization schedule. If not provided, data will only sync when manually triggered. Use standard cron format: minute hour day month weekday. */
-    cron_schedule?: string;
-    /** Authentication credentials required to access the data source. The required fields vary by source type. Check the documentation of a specific source (for example [Github](https://docs.airweave.ai/docs/connectors/github)) to see what is required. */
-    auth_fields?: AirweaveSDK.ConfigValues;
-    /** Unique readable ID of a connected auth provider to use for authentication instead of providing auth_fields directly. When specified, credentials for the source will be obtained and refreshed automatically by Airweave interaction with the auth provider. To see which auth providers are supported and learn more about how to use them, check [this page](https://docs.airweave.ai/docs/auth-providers). */
-    auth_provider?: string;
-    /** Configuration for the auth provider when using auth_provider field. Required fields vary by auth provider. For Composio, use auth_config_id and  account_id to specify which integration and account from Composio you want to use to connect to the source. */
-    auth_provider_config?: AirweaveSDK.ConfigValues;
-    /** Whether to start an initial data synchronization immediately after creating the connection. */
+    /** Collection readable ID */
+    readable_collection_id: string;
+    /** Connection description */
+    description?: string;
+    /** Source-specific configuration */
+    config?: Record<string, unknown>;
+    schedule?: AirweaveSDK.ScheduleConfig;
+    /** Run initial sync after creation */
     sync_immediately?: boolean;
+    /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
+    authentication?: SourceConnectionCreate.Authentication;
+}
+
+export namespace SourceConnectionCreate {
+    /**
+     * Authentication config (defaults to OAuth browser flow for OAuth sources)
+     */
+    export type Authentication =
+        | AirweaveSDK.DirectAuthentication
+        | AirweaveSDK.OAuthTokenAuthentication
+        | AirweaveSDK.OAuthBrowserAuthentication
+        | AirweaveSDK.AuthProviderAuthentication;
 }

@@ -12,16 +12,21 @@ describe("SourceConnections", () => {
 
         const rawResponseBody = [
             {
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                name: "GitHub - Engineering Documentation",
-                description: "Sync technical documentation and code from our engineering repos",
-                short_name: "github",
-                status: "active",
+                id: "id",
+                name: "name",
+                short_name: "short_name",
+                readable_collection_id: "readable_collection_id",
                 created_at: "2024-01-15T09:30:00Z",
-                modified_at: "2024-01-15T14:22:15Z",
-                sync_id: "123e4567-e89b-12d3-a456-426614174000",
-                collection: "engineering-docs-ab123",
-                white_label_id: "white_label_id",
+                modified_at: "2024-01-15T09:30:00Z",
+                is_authenticated: true,
+                readable_auth_provider_id: "readable_auth_provider_id",
+                connection_init_session_id: "connection_init_session_id",
+                is_active: true,
+                last_sync: { last_run: "2024-01-15T09:30:00Z", next_run: "2024-01-15T09:30:00Z", success_rate: 1.1 },
+                entity_count: 1,
+                last_job_status: "created",
+                auth_method: "direct",
+                status: "active",
             },
         ];
         server
@@ -35,16 +40,25 @@ describe("SourceConnections", () => {
         const response = await client.sourceConnections.list();
         expect(response).toEqual([
             {
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                name: "GitHub - Engineering Documentation",
-                description: "Sync technical documentation and code from our engineering repos",
-                short_name: "github",
-                status: "active",
+                id: "id",
+                name: "name",
+                short_name: "short_name",
+                readable_collection_id: "readable_collection_id",
                 created_at: "2024-01-15T09:30:00Z",
-                modified_at: "2024-01-15T14:22:15Z",
-                sync_id: "123e4567-e89b-12d3-a456-426614174000",
-                collection: "engineering-docs-ab123",
-                white_label_id: "white_label_id",
+                modified_at: "2024-01-15T09:30:00Z",
+                is_authenticated: true,
+                readable_auth_provider_id: "readable_auth_provider_id",
+                connection_init_session_id: "connection_init_session_id",
+                is_active: true,
+                last_sync: {
+                    last_run: "2024-01-15T09:30:00Z",
+                    next_run: "2024-01-15T09:30:00Z",
+                    success_rate: 1.1,
+                },
+                entity_count: 1,
+                last_job_status: "created",
+                auth_method: "direct",
+                status: "active",
             },
         ]);
     });
@@ -52,33 +66,54 @@ describe("SourceConnections", () => {
     test("create", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "Production Stripe Account", short_name: "stripe" };
+        const rawRequestBody = { short_name: "short_name", readable_collection_id: "readable_collection_id" };
         const rawResponseBody = {
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: { branch: "main" },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: { key: "value" },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: { personal_access_token: "********", repo_name: "airweave-ai/docs" },
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
             status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
+            },
+            config: { key: "value" },
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: { key: "value" },
+            },
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
         };
         server
             .mockEndpoint()
@@ -90,42 +125,68 @@ describe("SourceConnections", () => {
             .build();
 
         const response = await client.sourceConnections.create({
-            name: "Production Stripe Account",
-            short_name: "stripe",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
         });
         expect(response).toEqual({
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: {
-                branch: "main",
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            status: "active",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
             },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: {
+            config: {
                 key: "value",
             },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: {
-                personal_access_token: "********",
-                repo_name: "airweave-ai/docs",
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: {
+                    key: "value",
+                },
             },
-            status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: {
+                total_entities: 1,
+                by_type: {
+                    key: {
+                        count: 1,
+                    },
+                },
+                last_updated: "2024-01-15T09:30:00Z",
+            },
         });
     });
 
@@ -134,31 +195,52 @@ describe("SourceConnections", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: { branch: "main" },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: { key: "value" },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: { personal_access_token: "********", repo_name: "airweave-ai/docs" },
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
             status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
+            },
+            config: { key: "value" },
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: { key: "value" },
+            },
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
         };
         server
             .mockEndpoint()
@@ -170,115 +252,64 @@ describe("SourceConnections", () => {
 
         const response = await client.sourceConnections.get("source_connection_id");
         expect(response).toEqual({
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: {
-                branch: "main",
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            status: "active",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
             },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: {
+            config: {
                 key: "value",
             },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: {
-                personal_access_token: "********",
-                repo_name: "airweave-ai/docs",
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: {
+                    key: "value",
+                },
             },
-            status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
-        });
-    });
-
-    test("update", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: { branch: "main" },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: { key: "value" },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: { personal_access_token: "********", repo_name: "airweave-ai/docs" },
-            status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
-        };
-        server
-            .mockEndpoint()
-            .put("/source-connections/source_connection_id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.sourceConnections.update("source_connection_id");
-        expect(response).toEqual({
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: {
-                branch: "main",
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
             },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: {
-                key: "value",
+            entities: {
+                total_entities: 1,
+                by_type: {
+                    key: {
+                        count: 1,
+                    },
+                },
+                last_updated: "2024-01-15T09:30:00Z",
             },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: {
-                personal_access_token: "********",
-                repo_name: "airweave-ai/docs",
-            },
-            status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
         });
     });
 
@@ -287,31 +318,52 @@ describe("SourceConnections", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: { branch: "main" },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: { key: "value" },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: { personal_access_token: "********", repo_name: "airweave-ai/docs" },
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
             status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
+            },
+            config: { key: "value" },
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: { key: "value" },
+            },
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
         };
         server
             .mockEndpoint()
@@ -323,70 +375,89 @@ describe("SourceConnections", () => {
 
         const response = await client.sourceConnections.delete("source_connection_id");
         expect(response).toEqual({
-            name: "GitHub - Engineering Documentation",
-            description: "Sync technical documentation and code from our engineering repos",
-            config_fields: {
-                branch: "main",
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            status: "active",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_name: "provider_name",
+                provider_id: "provider_id",
             },
-            short_name: "github",
-            white_label_id: "white_label_id",
-            auth_provider: "auth_provider",
-            auth_provider_config: {
+            config: {
                 key: "value",
             },
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            sync_id: "123e4567-e89b-12d3-a456-426614174000",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            connection_id: "conn9876-5432-10fe-dcba-098765432100",
-            collection: "engineering-docs-ab123",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            auth_fields: {
-                personal_access_token: "********",
-                repo_name: "airweave-ai/docs",
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: {
+                    key: "value",
+                },
             },
-            status: "active",
-            latest_sync_job_status: "completed",
-            latest_sync_job_id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            latest_sync_job_started_at: "2024-01-15T14:00:00Z",
-            latest_sync_job_completed_at: "2024-01-15T14:05:22Z",
-            latest_sync_job_error: "latest_sync_job_error",
-            cron_schedule: "0 */6 * * *",
-            next_scheduled_run: "2024-01-16T02:00:00Z",
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: {
+                total_entities: 1,
+                by_type: {
+                    key: {
+                        count: 1,
+                    },
+                },
+                last_updated: "2024-01-15T09:30:00Z",
+            },
         });
     });
 
     test("run", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = {};
+
         const rawResponseBody = {
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:05:22Z",
-            status: "completed",
-            scheduled: true,
-            entities_inserted: 45,
-            entities_updated: 12,
-            entities_deleted: 3,
-            entities_kept: 234,
-            entities_skipped: 8,
-            entities_encountered: { issues: 67, pull_requests: 23, commits: 156, releases: 12, readme_files: 8 },
-            started_at: "2024-01-15T14:00:15Z",
-            completed_at: "2024-01-15T14:05:22Z",
-            failed_at: "2024-01-15T09:30:00Z",
+            id: "id",
+            source_connection_id: "source_connection_id",
+            status: "created",
+            started_at: "2024-01-15T09:30:00Z",
+            completed_at: "2024-01-15T09:30:00Z",
+            duration_seconds: 1.1,
+            entities_processed: 1,
+            entities_inserted: 1,
+            entities_updated: 1,
+            entities_deleted: 1,
+            entities_failed: 1,
             error: "error",
+            error_details: { key: "value" },
         };
         server
             .mockEndpoint()
             .post("/source-connections/source_connection_id/run")
-            .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
@@ -394,59 +465,43 @@ describe("SourceConnections", () => {
 
         const response = await client.sourceConnections.run("source_connection_id");
         expect(response).toEqual({
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:05:22Z",
-            status: "completed",
-            scheduled: true,
-            entities_inserted: 45,
-            entities_updated: 12,
-            entities_deleted: 3,
-            entities_kept: 234,
-            entities_skipped: 8,
-            entities_encountered: {
-                issues: 67,
-                pull_requests: 23,
-                commits: 156,
-                releases: 12,
-                readme_files: 8,
-            },
-            started_at: "2024-01-15T14:00:15Z",
-            completed_at: "2024-01-15T14:05:22Z",
-            failed_at: "2024-01-15T09:30:00Z",
+            id: "id",
+            source_connection_id: "source_connection_id",
+            status: "created",
+            started_at: "2024-01-15T09:30:00Z",
+            completed_at: "2024-01-15T09:30:00Z",
+            duration_seconds: 1.1,
+            entities_processed: 1,
+            entities_inserted: 1,
+            entities_updated: 1,
+            entities_deleted: 1,
+            entities_failed: 1,
             error: "error",
+            error_details: {
+                key: "value",
+            },
         });
     });
 
-    test("listJobs", async () => {
+    test("getSourceConnectionJobs", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
-                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-                id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-                organization_id: "org12345-6789-abcd-ef01-234567890abc",
-                created_by_email: "engineering@company.com",
-                modified_by_email: "engineering@company.com",
-                created_at: "2024-01-15T14:00:00Z",
-                modified_at: "2024-01-15T14:05:22Z",
-                status: "completed",
-                scheduled: true,
-                entities_inserted: 45,
-                entities_updated: 12,
-                entities_deleted: 3,
-                entities_kept: 234,
-                entities_skipped: 8,
-                entities_encountered: { issues: 67, pull_requests: 23, commits: 156, releases: 12, readme_files: 8 },
-                started_at: "2024-01-15T14:00:15Z",
-                completed_at: "2024-01-15T14:05:22Z",
-                failed_at: "2024-01-15T09:30:00Z",
+                id: "id",
+                source_connection_id: "source_connection_id",
+                status: "created",
+                started_at: "2024-01-15T09:30:00Z",
+                completed_at: "2024-01-15T09:30:00Z",
+                duration_seconds: 1.1,
+                entities_processed: 1,
+                entities_inserted: 1,
+                entities_updated: 1,
+                entities_deleted: 1,
+                entities_failed: 1,
                 error: "error",
+                error_details: { key: "value" },
             },
         ];
         server
@@ -457,99 +512,26 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.listJobs("source_connection_id");
+        const response = await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
         expect(response).toEqual([
             {
-                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-                id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-                organization_id: "org12345-6789-abcd-ef01-234567890abc",
-                created_by_email: "engineering@company.com",
-                modified_by_email: "engineering@company.com",
-                created_at: "2024-01-15T14:00:00Z",
-                modified_at: "2024-01-15T14:05:22Z",
-                status: "completed",
-                scheduled: true,
-                entities_inserted: 45,
-                entities_updated: 12,
-                entities_deleted: 3,
-                entities_kept: 234,
-                entities_skipped: 8,
-                entities_encountered: {
-                    issues: 67,
-                    pull_requests: 23,
-                    commits: 156,
-                    releases: 12,
-                    readme_files: 8,
-                },
-                started_at: "2024-01-15T14:00:15Z",
-                completed_at: "2024-01-15T14:05:22Z",
-                failed_at: "2024-01-15T09:30:00Z",
+                id: "id",
+                source_connection_id: "source_connection_id",
+                status: "created",
+                started_at: "2024-01-15T09:30:00Z",
+                completed_at: "2024-01-15T09:30:00Z",
+                duration_seconds: 1.1,
+                entities_processed: 1,
+                entities_inserted: 1,
+                entities_updated: 1,
+                entities_deleted: 1,
+                entities_failed: 1,
                 error: "error",
+                error_details: {
+                    key: "value",
+                },
             },
         ]);
-    });
-
-    test("getJob", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:05:22Z",
-            status: "completed",
-            scheduled: true,
-            entities_inserted: 45,
-            entities_updated: 12,
-            entities_deleted: 3,
-            entities_kept: 234,
-            entities_skipped: 8,
-            entities_encountered: { issues: 67, pull_requests: 23, commits: 156, releases: 12, readme_files: 8 },
-            started_at: "2024-01-15T14:00:15Z",
-            completed_at: "2024-01-15T14:05:22Z",
-            failed_at: "2024-01-15T09:30:00Z",
-            error: "error",
-        };
-        server
-            .mockEndpoint()
-            .get("/source-connections/source_connection_id/jobs/job_id")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.sourceConnections.getJob("source_connection_id", "job_id");
-        expect(response).toEqual({
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:05:22Z",
-            status: "completed",
-            scheduled: true,
-            entities_inserted: 45,
-            entities_updated: 12,
-            entities_deleted: 3,
-            entities_kept: 234,
-            entities_skipped: 8,
-            entities_encountered: {
-                issues: 67,
-                pull_requests: 23,
-                commits: 156,
-                releases: 12,
-                readme_files: 8,
-            },
-            started_at: "2024-01-15T14:00:15Z",
-            completed_at: "2024-01-15T14:05:22Z",
-            failed_at: "2024-01-15T09:30:00Z",
-            error: "error",
-        });
     });
 
     test("cancelJob", async () => {
@@ -557,25 +539,19 @@ describe("SourceConnections", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:02:30Z",
-            status: "cancelled",
-            scheduled: true,
-            entities_inserted: 12,
-            entities_updated: 3,
-            entities_deleted: 0,
-            entities_kept: 89,
-            entities_skipped: 2,
-            entities_encountered: { issues: 23, pull_requests: 8, commits: 67 },
-            started_at: "2024-01-15T14:00:15Z",
+            id: "id",
+            source_connection_id: "source_connection_id",
+            status: "created",
+            started_at: "2024-01-15T09:30:00Z",
             completed_at: "2024-01-15T09:30:00Z",
-            failed_at: "2024-01-15T14:02:30Z",
-            error: "Job cancelled by user",
+            duration_seconds: 1.1,
+            entities_processed: 1,
+            entities_inserted: 1,
+            entities_updated: 1,
+            entities_deleted: 1,
+            entities_failed: 1,
+            error: "error",
+            error_details: { key: "value" },
         };
         server
             .mockEndpoint()
@@ -587,29 +563,21 @@ describe("SourceConnections", () => {
 
         const response = await client.sourceConnections.cancelJob("source_connection_id", "job_id");
         expect(response).toEqual({
-            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
-            id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "engineering@company.com",
-            modified_by_email: "engineering@company.com",
-            created_at: "2024-01-15T14:00:00Z",
-            modified_at: "2024-01-15T14:02:30Z",
-            status: "cancelled",
-            scheduled: true,
-            entities_inserted: 12,
-            entities_updated: 3,
-            entities_deleted: 0,
-            entities_kept: 89,
-            entities_skipped: 2,
-            entities_encountered: {
-                issues: 23,
-                pull_requests: 8,
-                commits: 67,
-            },
-            started_at: "2024-01-15T14:00:15Z",
+            id: "id",
+            source_connection_id: "source_connection_id",
+            status: "created",
+            started_at: "2024-01-15T09:30:00Z",
             completed_at: "2024-01-15T09:30:00Z",
-            failed_at: "2024-01-15T14:02:30Z",
-            error: "Job cancelled by user",
+            duration_seconds: 1.1,
+            entities_processed: 1,
+            entities_inserted: 1,
+            entities_updated: 1,
+            entities_deleted: 1,
+            entities_failed: 1,
+            error: "error",
+            error_details: {
+                key: "value",
+            },
         });
     });
 });

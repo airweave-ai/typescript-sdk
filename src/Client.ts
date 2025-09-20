@@ -9,7 +9,6 @@ import { Sources } from "./api/resources/sources/client/Client.js";
 import { AuthProviders } from "./api/resources/authProviders/client/Client.js";
 import { Collections } from "./api/resources/collections/client/Client.js";
 import { SourceConnections } from "./api/resources/sourceConnections/client/Client.js";
-import { WhiteLabels } from "./api/resources/whiteLabels/client/Client.js";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -39,7 +38,6 @@ export class AirweaveSDKClient {
     protected _authProviders: AuthProviders | undefined;
     protected _collections: Collections | undefined;
     protected _sourceConnections: SourceConnections | undefined;
-    protected _whiteLabels: WhiteLabels | undefined;
 
     constructor(_options: AirweaveSDKClient.Options) {
         this._options = {
@@ -48,8 +46,8 @@ export class AirweaveSDKClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.6.0",
-                    "User-Agent": "@airweave/sdk/v0.6.0",
+                    "X-Fern-SDK-Version": "v0.6.3",
+                    "User-Agent": "@airweave/sdk/v0.6.3",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
@@ -72,9 +70,5 @@ export class AirweaveSDKClient {
 
     public get sourceConnections(): SourceConnections {
         return (this._sourceConnections ??= new SourceConnections(this._options));
-    }
-
-    public get whiteLabels(): WhiteLabels {
-        return (this._whiteLabels ??= new WhiteLabels(this._options));
     }
 }

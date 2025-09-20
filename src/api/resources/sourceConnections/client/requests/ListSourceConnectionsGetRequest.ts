@@ -8,15 +8,9 @@
  */
 export interface ListSourceConnectionsGetRequest {
     /**
-     * Filter source connections by collection readable ID
+     * Filter by collection readable ID
      */
     collection?: string;
-    /**
-     * Number of source connections to skip for pagination
-     */
     skip?: number;
-    /**
-     * Maximum number of source connections to return (1-1000)
-     */
     limit?: number;
 }

@@ -5,11 +5,10 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Individual sync job for a source connection.
+ * Sync job details.
  */
-export interface SourceConnectionJob {
+export interface SyncJobDetails {
     id: string;
-    source_connection_id: string;
     status: AirweaveSDK.SyncJobStatus;
     started_at?: string;
     completed_at?: string;
@@ -20,5 +19,4 @@ export interface SourceConnectionJob {
     entities_deleted?: number;
     entities_failed?: number;
     error?: string;
-    error_details?: Record<string, unknown>;
 }
