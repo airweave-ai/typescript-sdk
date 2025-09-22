@@ -16,6 +16,6 @@ export interface AuthenticationDetails {
     auth_url?: string;
     auth_url_expires?: string;
     redirect_url?: string;
-    provider_name?: string;
+    provider_readable_id?: string;
     provider_id?: string;
 }

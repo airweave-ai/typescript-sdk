@@ -6,8 +6,8 @@
  * Authentication via external provider.
  */
 export interface AuthProviderAuthentication {
-    /** Auth provider identifier */
-    provider_name: string;
+    /** Auth provider readable ID */
+    provider_readable_id: string;
     /** Provider-specific configuration */
     provider_config?: Record<string, unknown>;
 }
