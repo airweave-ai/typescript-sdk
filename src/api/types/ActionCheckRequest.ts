@@ -3,9 +3,9 @@
  */
 
 /**
- * Request schema for checking multiple actions.
+ * Request body for checking multiple actions at once.
  */
 export interface ActionCheckRequest {
-    /** Dictionary of action types to check with their amounts */
+    /** Map of action short name to amount to check */
     actions: Record<string, number>;
 }

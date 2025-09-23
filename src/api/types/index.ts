@@ -10,7 +10,6 @@ export * from "./AuthenticationDetails.js";
 export * from "./AuthenticationMethod.js";
 export * from "./BillingPeriodUsage.js";
 export * from "./BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost.js";
-export * from "./CancelSubscriptionRequest.js";
 export * from "./CheckoutSessionRequest.js";
 export * from "./CheckoutSessionResponse.js";
 export * from "./Collection.js";

@@ -5,9 +5,8 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Response schema for multiple action checks.
+ * Response containing per-action check results.
  */
 export interface ActionCheckResponse {
-    /** Dictionary of action check results keyed by action type */
     results: Record<string, AirweaveSDK.SingleActionCheckResponse>;
 }

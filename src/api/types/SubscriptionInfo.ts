@@ -38,4 +38,16 @@ export interface SubscriptionInfo {
     pending_plan_change?: string;
     /** When the pending plan change takes effect */
     pending_plan_change_at?: string;
+    /** Whether organization has an active yearly prepay credit */
+    has_yearly_prepay?: boolean;
+    /** When yearly prepay was started */
+    yearly_prepay_started_at?: string;
+    /** When yearly prepay expires */
+    yearly_prepay_expires_at?: string;
+    /** Total amount (in cents) credited for yearly prepay */
+    yearly_prepay_amount_cents?: number;
+    /** Coupon ID used for yearly prepay */
+    yearly_prepay_coupon_id?: string;
+    /** Payment intent ID used for yearly prepay */
+    yearly_prepay_payment_intent_id?: string;
 }

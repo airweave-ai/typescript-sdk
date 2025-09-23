@@ -6,26 +6,22 @@
  * Point-in-time usage data with limits.
  */
 export interface UsageSnapshot {
-    /** Number of syncs executed */
-    syncs: number;
     /** Total entities processed */
     entities: number;
     /** Search queries executed */
     queries: number;
-    /** Collections created */
-    collections: number;
     /** Source connections configured */
     source_connections: number;
-    /** Maximum syncs allowed */
-    max_syncs?: number;
+    /** Team members in the organization */
+    team_members: number;
     /** Maximum entities allowed */
     max_entities?: number;
     /** Maximum queries allowed */
     max_queries?: number;
-    /** Maximum collections allowed */
-    max_collections?: number;
     /** Maximum source connections allowed */
     max_source_connections?: number;
+    /** Maximum team members allowed */
+    max_team_members?: number;
     /** When this snapshot was taken */
     timestamp: string;
     /** Associated billing period */
