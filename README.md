@@ -37,7 +37,7 @@ following namespace:
 ```typescript
 import { AirweaveSDK } from "@airweave/sdk";
 
-const request: AirweaveSDK.AuthProviderConnectionCreate = {
+const request: AirweaveSDK.ListCollectionsGetRequest = {
     ...
 };
 ```

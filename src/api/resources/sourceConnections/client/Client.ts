@@ -382,6 +382,96 @@ export class SourceConnections {
     }
 
     /**
+     * Update a source connection.
+     *
+     * Updateable fields:
+     * - name, description
+     * - config_fields
+     * - cron_schedule
+     * - auth_fields (direct auth only)
+     *
+     * @param {string} sourceConnectionId
+     * @param {AirweaveSDK.SourceConnectionUpdate} request
+     * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.sourceConnections.update("source_connection_id")
+     */
+    public update(
+        sourceConnectionId: string,
+        request: AirweaveSDK.SourceConnectionUpdate = {},
+        requestOptions?: SourceConnections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
+        return core.HttpResponsePromise.fromPromise(this.__update(sourceConnectionId, request, requestOptions));
+    }
+
+    private async __update(
+        sourceConnectionId: string,
+        request: AirweaveSDK.SourceConnectionUpdate = {},
+        requestOptions?: SourceConnections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `source-connections/${encodeURIComponent(sourceConnectionId)}`,
+            ),
+            method: "PATCH",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            contentType: "application/json",
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SourceConnection, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling PATCH /source-connections/{source_connection_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
      * Trigger a sync run for a source connection.
      *
      * Runs are always executed through Temporal workflow engine.

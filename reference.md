@@ -123,165 +123,6 @@ await client.sources.list();
 </dl>
 </details>
 
-## AuthProviders
-
-<details><summary><code>client.authProviders.<a href="/src/api/resources/authProviders/client/Client.ts">connectOrUpdateAuthProvider</a>({ ...params }) -> AirweaveSDK.AuthProviderConnection</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Create or update an auth provider connection.
-
-If a connection for this auth provider already exists for the organization,
-it will be updated with the new credentials and fields.
-If no connection exists, a new one will be created.
-
-## Args:
-
-    db: The database session
-    ctx: The current authentication context
-    auth_provider_connection_in: The auth provider connection data
-
-## Returns:
-
-    schemas.AuthProviderConnection: The created or updated connection
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.authProviders.connectOrUpdateAuthProvider({
-    name: "My Composio Connection",
-    description: "My Composio Connection",
-    short_name: "composio",
-    auth_fields: {
-        api_key: "comp_1234567890abcdef",
-    },
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.AuthProviderConnectionCreate`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `AuthProviders.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.authProviders.<a href="/src/api/resources/authProviders/client/Client.ts">getAuthProvider</a>(shortName) -> AirweaveSDK.AuthProvider</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get details of a specific auth provider.
-
-## Args:
-
-    db: The database session
-    short_name: The short name of the auth provider
-    ctx: The current authentication context
-
-## Returns:
-
-    schemas.AuthProvider: The auth provider details
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.authProviders.getAuthProvider("short_name");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**shortName:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `AuthProviders.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 ## collections
 
 <details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">list</a>({ ...params }) -> AirweaveSDK.Collection[]</code></summary>
@@ -1118,6 +959,83 @@ await client.sourceConnections.delete("source_connection_id");
 <dd>
 
 **sourceConnectionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `SourceConnections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">update</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a source connection.
+
+Updateable fields:
+
+- name, description
+- config_fields
+- cron_schedule
+- auth_fields (direct auth only)
+  </dd>
+  </dl>
+  </dd>
+  </dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.sourceConnections.update("source_connection_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**sourceConnectionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SourceConnectionUpdate`
 
 </dd>
 </dl>

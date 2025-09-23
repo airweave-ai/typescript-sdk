@@ -5,7 +5,7 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Minimal source connection for list views with computed fields.
+ * Clean source connection for list views.
  */
 export interface SourceConnectionListItem {
     id: string;
@@ -15,13 +15,8 @@ export interface SourceConnectionListItem {
     created_at: string;
     modified_at: string;
     is_authenticated: boolean;
-    readable_auth_provider_id?: string;
-    connection_init_session_id?: string;
-    is_active?: boolean;
-    last_sync?: AirweaveSDK.SyncSummary;
     entity_count?: number;
-    last_job_status?: AirweaveSDK.SyncJobStatus;
-    /** Compute authentication method from database fields. */
+    /** Get authentication method from database value. */
     auth_method: AirweaveSDK.AuthenticationMethod;
     /** Compute connection status from current state. */
     status: AirweaveSDK.SourceConnectionStatus;

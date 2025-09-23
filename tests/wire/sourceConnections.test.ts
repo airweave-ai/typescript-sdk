@@ -19,12 +19,7 @@ describe("SourceConnections", () => {
                 created_at: "2024-01-15T09:30:00Z",
                 modified_at: "2024-01-15T09:30:00Z",
                 is_authenticated: true,
-                readable_auth_provider_id: "readable_auth_provider_id",
-                connection_init_session_id: "connection_init_session_id",
-                is_active: true,
-                last_sync: { last_run: "2024-01-15T09:30:00Z", next_run: "2024-01-15T09:30:00Z", success_rate: 1.1 },
                 entity_count: 1,
-                last_job_status: "created",
                 auth_method: "direct",
                 status: "active",
             },
@@ -47,16 +42,7 @@ describe("SourceConnections", () => {
                 created_at: "2024-01-15T09:30:00Z",
                 modified_at: "2024-01-15T09:30:00Z",
                 is_authenticated: true,
-                readable_auth_provider_id: "readable_auth_provider_id",
-                connection_init_session_id: "connection_init_session_id",
-                is_active: true,
-                last_sync: {
-                    last_run: "2024-01-15T09:30:00Z",
-                    next_run: "2024-01-15T09:30:00Z",
-                    success_rate: 1.1,
-                },
                 entity_count: 1,
-                last_job_status: "created",
                 auth_method: "direct",
                 status: "active",
             },
@@ -113,7 +99,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
-            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
         };
         server
             .mockEndpoint()
@@ -185,7 +171,6 @@ describe("SourceConnections", () => {
                         count: 1,
                     },
                 },
-                last_updated: "2024-01-15T09:30:00Z",
             },
         });
     });
@@ -240,7 +225,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
-            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
         };
         server
             .mockEndpoint()
@@ -308,7 +293,6 @@ describe("SourceConnections", () => {
                         count: 1,
                     },
                 },
-                last_updated: "2024-01-15T09:30:00Z",
             },
         });
     });
@@ -363,7 +347,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
-            entities: { total_entities: 1, by_type: { key: { count: 1 } }, last_updated: "2024-01-15T09:30:00Z" },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
         };
         server
             .mockEndpoint()
@@ -431,7 +415,129 @@ describe("SourceConnections", () => {
                         count: 1,
                     },
                 },
-                last_updated: "2024-01-15T09:30:00Z",
+            },
+        });
+    });
+
+    test("update", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {};
+        const rawResponseBody = {
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            status: "active",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_readable_id: "provider_readable_id",
+                provider_id: "provider_id",
+            },
+            config: { key: "value" },
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: { key: "value" },
+            },
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
+        };
+        server
+            .mockEndpoint()
+            .patch("/source-connections/source_connection_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.sourceConnections.update("source_connection_id");
+        expect(response).toEqual({
+            id: "id",
+            name: "name",
+            description: "description",
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            status: "active",
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T09:30:00Z",
+            auth: {
+                method: "direct",
+                authenticated: true,
+                authenticated_at: "2024-01-15T09:30:00Z",
+                expires_at: "2024-01-15T09:30:00Z",
+                auth_url: "auth_url",
+                auth_url_expires: "2024-01-15T09:30:00Z",
+                redirect_url: "redirect_url",
+                provider_readable_id: "provider_readable_id",
+                provider_id: "provider_id",
+            },
+            config: {
+                key: "value",
+            },
+            schedule: {
+                cron: "cron",
+                next_run: "2024-01-15T09:30:00Z",
+                continuous: true,
+                cursor_field: "cursor_field",
+                cursor_value: {
+                    key: "value",
+                },
+            },
+            sync: {
+                total_runs: 1,
+                successful_runs: 1,
+                failed_runs: 1,
+                last_job: {
+                    id: "id",
+                    status: "created",
+                    started_at: "2024-01-15T09:30:00Z",
+                    completed_at: "2024-01-15T09:30:00Z",
+                    duration_seconds: 1.1,
+                    entities_processed: 1,
+                    entities_inserted: 1,
+                    entities_updated: 1,
+                    entities_deleted: 1,
+                    entities_failed: 1,
+                    error: "error",
+                },
+            },
+            entities: {
+                total_entities: 1,
+                by_type: {
+                    key: {
+                        count: 1,
+                    },
+                },
             },
         });
     });
