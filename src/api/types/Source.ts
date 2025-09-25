@@ -28,10 +28,10 @@ export interface Source {
     class_name: string;
     /** List of entity definition IDs that this source can produce. Defines the data schema and structure that this connector outputs. */
     output_entity_definition_ids?: string[];
-    /** Organization identifier for custom source connectors. System sources have this set to null. */
-    organization_id?: string;
     /** Categorization tags to help users discover and filter sources by domain or use case. */
     labels?: string[];
+    /** Whether this source supports cursor-based continuous syncing for incremental data extraction. Sources with this capability can track their sync position and resume from where they left off. */
+    supports_continuous?: boolean;
     /** Unique system identifier for this source type. Generated automatically when the source is registered. */
     id: string;
     /** Timestamp when this source type was registered in the system (ISO 8601 format). */

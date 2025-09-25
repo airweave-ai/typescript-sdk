@@ -15,5 +15,4 @@ export interface SyncUpdate {
     status?: AirweaveSDK.SyncStatus;
     temporal_schedule_id?: string;
     sync_type?: string;
-    minute_level_cron_schedule?: string;
 }
