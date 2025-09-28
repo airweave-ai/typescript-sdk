@@ -41,84 +41,6 @@ export class Sources {
     }
 
     /**
-     * Get detailed information about a specific data source connector.
-     *
-     * @param {string} shortName - Technical identifier of the source type (e.g., 'github', 'stripe', 'slack')
-     * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.sources.read("short_name")
-     */
-    public read(
-        shortName: string,
-        requestOptions?: Sources.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.Source> {
-        return core.HttpResponsePromise.fromPromise(this.__read(shortName, requestOptions));
-    }
-
-    private async __read(
-        shortName: string,
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `sources/detail/${encodeURIComponent(shortName)}`,
-            ),
-            method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.Source, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /sources/detail/{short_name}.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
      * List all available data source connectors.
      *
      * <br/><br/>
@@ -141,7 +63,7 @@ export class Sources {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "sources/list",
+                "sources",
             ),
             method: "GET",
             headers: mergeHeaders(
@@ -181,7 +103,83 @@ export class Sources {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sources/list.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sources.");
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Get detailed information about a specific data source connector.
+     *
+     * @param {string} shortName - Technical identifier of the source type (e.g., 'github', 'stripe', 'slack')
+     * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.sources.read("short_name")
+     */
+    public read(
+        shortName: string,
+        requestOptions?: Sources.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.Source> {
+        return core.HttpResponsePromise.fromPromise(this.__read(shortName, requestOptions));
+    }
+
+    private async __read(
+        shortName: string,
+        requestOptions?: Sources.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `sources/${encodeURIComponent(shortName)}`,
+            ),
+            method: "GET",
+            headers: mergeHeaders(
+                this._options?.headers,
+                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+                requestOptions?.headers,
+            ),
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.Source, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /sources/{short_name}.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,

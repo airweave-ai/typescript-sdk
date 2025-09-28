@@ -6,6 +6,101 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 
 describe("Sources", () => {
+    test("list", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = [
+            {
+                name: "GitHub",
+                description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
+                auth_methods: ["auth_methods"],
+                oauth_type: "oauth_type",
+                requires_byoc: true,
+                auth_config_class: "GitHubAuthConfig",
+                config_class: "GitHubConfig",
+                short_name: "github",
+                class_name: "GitHubSource",
+                output_entity_definition_ids: [
+                    "def12345-6789-abcd-ef01-234567890abc",
+                    "def67890-abcd-ef01-2345-67890abcdef1",
+                ],
+                labels: ["code"],
+                supports_continuous: true,
+                id: "550e8400-e29b-41d4-a716-446655440000",
+                created_at: "2024-01-01T00:00:00Z",
+                modified_at: "2024-01-01T00:00:00Z",
+                auth_fields: {
+                    fields: [
+                        {
+                            name: "personal_access_token",
+                            title: "Personal Access Token",
+                            description: "GitHub Personal Access Token with repository read permissions",
+                            type: "string",
+                        },
+                        {
+                            name: "repo_name",
+                            title: "Repository Name",
+                            description: "Full repository name in format 'owner/repo'",
+                            type: "string",
+                        },
+                    ],
+                },
+                config_fields: { fields: [{ name: "name", title: "title", type: "type" }] },
+            },
+        ];
+        server.mockEndpoint().get("/sources").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+
+        const response = await client.sources.list();
+        expect(response).toEqual([
+            {
+                name: "GitHub",
+                description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
+                auth_methods: ["auth_methods"],
+                oauth_type: "oauth_type",
+                requires_byoc: true,
+                auth_config_class: "GitHubAuthConfig",
+                config_class: "GitHubConfig",
+                short_name: "github",
+                class_name: "GitHubSource",
+                output_entity_definition_ids: [
+                    "def12345-6789-abcd-ef01-234567890abc",
+                    "def67890-abcd-ef01-2345-67890abcdef1",
+                ],
+                labels: ["code"],
+                supports_continuous: true,
+                id: "550e8400-e29b-41d4-a716-446655440000",
+                created_at: "2024-01-01T00:00:00Z",
+                modified_at: "2024-01-01T00:00:00Z",
+                auth_fields: {
+                    fields: [
+                        {
+                            name: "personal_access_token",
+                            title: "Personal Access Token",
+                            description: "GitHub Personal Access Token with repository read permissions",
+                            type: "string",
+                        },
+                        {
+                            name: "repo_name",
+                            title: "Repository Name",
+                            description: "Full repository name in format 'owner/repo'",
+                            type: "string",
+                        },
+                    ],
+                },
+                config_fields: {
+                    fields: [
+                        {
+                            name: "name",
+                            title: "title",
+                            type: "type",
+                        },
+                    ],
+                },
+            },
+        ]);
+    });
+
     test("read", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
@@ -49,7 +144,7 @@ describe("Sources", () => {
         };
         server
             .mockEndpoint()
-            .get("/sources/detail/short_name")
+            .get("/sources/short_name")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
@@ -101,100 +196,5 @@ describe("Sources", () => {
                 ],
             },
         });
-    });
-
-    test("list", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-
-        const rawResponseBody = [
-            {
-                name: "GitHub",
-                description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-                auth_methods: ["auth_methods"],
-                oauth_type: "oauth_type",
-                requires_byoc: true,
-                auth_config_class: "GitHubAuthConfig",
-                config_class: "GitHubConfig",
-                short_name: "github",
-                class_name: "GitHubSource",
-                output_entity_definition_ids: [
-                    "def12345-6789-abcd-ef01-234567890abc",
-                    "def67890-abcd-ef01-2345-67890abcdef1",
-                ],
-                labels: ["code"],
-                supports_continuous: true,
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                created_at: "2024-01-01T00:00:00Z",
-                modified_at: "2024-01-01T00:00:00Z",
-                auth_fields: {
-                    fields: [
-                        {
-                            name: "personal_access_token",
-                            title: "Personal Access Token",
-                            description: "GitHub Personal Access Token with repository read permissions",
-                            type: "string",
-                        },
-                        {
-                            name: "repo_name",
-                            title: "Repository Name",
-                            description: "Full repository name in format 'owner/repo'",
-                            type: "string",
-                        },
-                    ],
-                },
-                config_fields: { fields: [{ name: "name", title: "title", type: "type" }] },
-            },
-        ];
-        server.mockEndpoint().get("/sources/list").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
-
-        const response = await client.sources.list();
-        expect(response).toEqual([
-            {
-                name: "GitHub",
-                description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
-                auth_methods: ["auth_methods"],
-                oauth_type: "oauth_type",
-                requires_byoc: true,
-                auth_config_class: "GitHubAuthConfig",
-                config_class: "GitHubConfig",
-                short_name: "github",
-                class_name: "GitHubSource",
-                output_entity_definition_ids: [
-                    "def12345-6789-abcd-ef01-234567890abc",
-                    "def67890-abcd-ef01-2345-67890abcdef1",
-                ],
-                labels: ["code"],
-                supports_continuous: true,
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                created_at: "2024-01-01T00:00:00Z",
-                modified_at: "2024-01-01T00:00:00Z",
-                auth_fields: {
-                    fields: [
-                        {
-                            name: "personal_access_token",
-                            title: "Personal Access Token",
-                            description: "GitHub Personal Access Token with repository read permissions",
-                            type: "string",
-                        },
-                        {
-                            name: "repo_name",
-                            title: "Repository Name",
-                            description: "Full repository name in format 'owner/repo'",
-                            type: "string",
-                        },
-                    ],
-                },
-                config_fields: {
-                    fields: [
-                        {
-                            name: "name",
-                            title: "title",
-                            type: "type",
-                        },
-                    ],
-                },
-            },
-        ]);
     });
 });
