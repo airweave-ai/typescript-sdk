@@ -23,7 +23,7 @@ export interface SourceConnectionCreate {
     /** Source-specific configuration */
     config?: Record<string, unknown>;
     schedule?: AirweaveSDK.ScheduleConfig;
-    /** Run initial sync after creation */
+    /** Run initial sync after creation. Defaults to True for direct/token/auth_provider, False for OAuth browser/BYOC flows (which sync after authentication) */
     sync_immediately?: boolean;
     /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
     authentication?: SourceConnectionCreate.Authentication;

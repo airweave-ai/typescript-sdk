@@ -320,83 +320,6 @@ await client.collections.get("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">update</a>(readableId, { ...params }) -> AirweaveSDK.Collection</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Update a collection's properties.
-
-Modifies the display name of an existing collection.
-Note that the readable ID cannot be changed after creation to maintain stable
-API endpoints and preserve any existing integrations or bookmarks.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.collections.update("readable_id", {
-    name: "Updated Finance Data",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**readableId:** `string` — The unique readable identifier of the collection to update
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.CollectionUpdate`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Collections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">delete</a>(readableId) -> AirweaveSDK.Collection</code></summary>
 <dl>
 <dd>
@@ -799,10 +722,14 @@ The authentication configuration determines the flow:
 BYOC (Bring Your Own Client) is detected when client_id and client_secret
 are provided in OAuthBrowserAuthentication.
 
-</dd>
-</dl>
-</dd>
-</dl>
+sync_immediately defaults:
+
+- True for: direct, oauth_token, auth_provider
+- False for: oauth_browser, oauth_byoc (these sync after authentication)
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -1204,8 +1131,9 @@ await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
 
 Cancel a running sync job for a source connection.
 
-This will update the job status in the database to CANCELLED and
-send a cancellation request to the Temporal workflow if it's running.
+This endpoint requests cancellation and marks the job as CANCELLING.
+The workflow updates the final status to CANCELLED when it processes
+the cancellation request.
 
 </dd>
 </dl>

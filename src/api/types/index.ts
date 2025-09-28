@@ -15,6 +15,7 @@ export * from "./CheckoutSessionRequest.js";
 export * from "./CheckoutSessionResponse.js";
 export * from "./Collection.js";
 export * from "./CollectionStatus.js";
+export * from "./CollectionUpdate.js";
 export * from "./ConfigField.js";
 export * from "./ConfigValues.js";
 export * from "./Connection.js";

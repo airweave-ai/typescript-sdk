@@ -146,6 +146,10 @@ export class SourceConnections {
      * BYOC (Bring Your Own Client) is detected when client_id and client_secret
      * are provided in OAuthBrowserAuthentication.
      *
+     * sync_immediately defaults:
+     * - True for: direct, oauth_token, auth_provider
+     * - False for: oauth_browser, oauth_byoc (these sync after authentication)
+     *
      * @param {AirweaveSDK.SourceConnectionCreate} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -644,8 +648,9 @@ export class SourceConnections {
     /**
      * Cancel a running sync job for a source connection.
      *
-     * This will update the job status in the database to CANCELLED and
-     * send a cancellation request to the Temporal workflow if it's running.
+     * This endpoint requests cancellation and marks the job as CANCELLING.
+     * The workflow updates the final status to CANCELLED when it processes
+     * the cancellation request.
      *
      * @param {string} sourceConnectionId
      * @param {string} jobId

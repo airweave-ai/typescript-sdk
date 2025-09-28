@@ -119,46 +119,6 @@ describe("Collections", () => {
         });
     });
 
-    test("update", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = { name: "Updated Finance Data" };
-        const rawResponseBody = {
-            name: "Finance Data",
-            readable_id: "finance-data-ab123",
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "admin@company.com",
-            modified_by_email: "finance@company.com",
-            status: "ACTIVE",
-        };
-        server
-            .mockEndpoint()
-            .put("/collections/readable_id")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.collections.update("readable_id", {
-            name: "Updated Finance Data",
-        });
-        expect(response).toEqual({
-            name: "Finance Data",
-            readable_id: "finance-data-ab123",
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T14:22:15Z",
-            organization_id: "org12345-6789-abcd-ef01-234567890abc",
-            created_by_email: "admin@company.com",
-            modified_by_email: "finance@company.com",
-            status: "ACTIVE",
-        });
-    });
-
     test("delete", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });

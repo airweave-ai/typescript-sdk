@@ -14,6 +14,17 @@ export interface SourceConnectionUpdate {
     /** Source-specific configuration */
     config?: Record<string, unknown>;
     schedule?: AirweaveSDK.ScheduleConfig;
-    /** Update credentials (direct auth only) */
-    credentials?: Record<string, unknown>;
+    /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
+    authentication?: SourceConnectionUpdate.Authentication;
+}
+
+export namespace SourceConnectionUpdate {
+    /**
+     * Authentication config (defaults to OAuth browser flow for OAuth sources)
+     */
+    export type Authentication =
+        | AirweaveSDK.DirectAuthentication
+        | AirweaveSDK.OAuthTokenAuthentication
+        | AirweaveSDK.OAuthBrowserAuthentication
+        | AirweaveSDK.AuthProviderAuthentication;
 }
