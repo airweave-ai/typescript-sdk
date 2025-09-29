@@ -19,4 +19,6 @@ export interface AuthProviderConnection {
     modified_by_email?: string;
     created_at: string;
     modified_at: string;
+    /** Masked client ID for OAuth providers (first 7 and last 4 characters visible) */
+    masked_client_id?: string;
 }
