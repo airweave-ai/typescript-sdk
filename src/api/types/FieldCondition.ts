@@ -22,9 +22,9 @@ export interface FieldCondition {
     geo_polygon?: AirweaveSDK.GeoPolygon;
     /** Check number of values of the field */
     values_count?: AirweaveSDK.ValuesCount;
-    /** Check that the field is empty, alternative syntax for `is_empty: \&quot;field_name\&quot;` */
+    /** Check that the field is empty, alternative syntax for `is_empty: 'field_name'` */
     is_empty?: boolean;
-    /** Check that the field is null, alternative syntax for `is_null: \&quot;field_name\&quot;` */
+    /** Check that the field is null, alternative syntax for `is_null: 'field_name'` */
     is_null?: boolean;
 }
 
@@ -32,5 +32,10 @@ export namespace FieldCondition {
     /**
      * Check if point has field with a given value
      */
-    export type Match = AirweaveSDK.MatchValue | AirweaveSDK.MatchText | AirweaveSDK.MatchAny | AirweaveSDK.MatchExcept;
+    export type Match =
+        | AirweaveSDK.MatchValue
+        | AirweaveSDK.MatchText
+        | AirweaveSDK.MatchPhrase
+        | AirweaveSDK.MatchAny
+        | AirweaveSDK.MatchExcept;
 }

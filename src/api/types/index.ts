@@ -60,6 +60,7 @@ export * from "./IsEmptyCondition.js";
 export * from "./IsNullCondition.js";
 export * from "./MatchAny.js";
 export * from "./MatchExcept.js";
+export * from "./MatchPhrase.js";
 export * from "./MatchText.js";
 export * from "./MatchValue.js";
 export * from "./MemberResponse.js";
