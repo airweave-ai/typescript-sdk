@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
+import * as AirweaveSDK from "../../src/api/index";
 
 describe("SourceConnections", () => {
-    test("list", async () => {
+    test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -49,7 +50,25 @@ describe("SourceConnections", () => {
         ]);
     });
 
-    test("create", async () => {
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/source-connections")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.list();
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { short_name: "short_name", readable_collection_id: "readable_collection_id" };
@@ -175,7 +194,44 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            short_name: "short_name",
+            readable_collection_id: "readable_collection_id",
+            description: undefined,
+            config: undefined,
+            schedule: undefined,
+            sync_immediately: undefined,
+            authentication: undefined,
+        };
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/source-connections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.create({
+                name: undefined,
+                short_name: "short_name",
+                readable_collection_id: "readable_collection_id",
+                description: undefined,
+                config: undefined,
+                schedule: undefined,
+                sync_immediately: undefined,
+                authentication: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -297,7 +353,25 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.get("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("delete (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -419,7 +493,25 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("update", async () => {
+    test("delete (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .delete("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.delete("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("update (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
@@ -542,7 +634,38 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("run", async () => {
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            config: undefined,
+            schedule: undefined,
+            authentication: undefined,
+        };
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .patch("/source-connections/source_connection_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.update("source_connection_id", {
+                name: undefined,
+                description: undefined,
+                config: undefined,
+                schedule: undefined,
+                authentication: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("run (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -589,7 +712,25 @@ describe("SourceConnections", () => {
         });
     });
 
-    test("getSourceConnectionJobs", async () => {
+    test("run (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/run")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.run("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("getSourceConnectionJobs (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -640,7 +781,25 @@ describe("SourceConnections", () => {
         ]);
     });
 
-    test("cancelJob", async () => {
+    test("getSourceConnectionJobs (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id/jobs")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("cancelJob (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -685,5 +844,23 @@ describe("SourceConnections", () => {
                 key: "value",
             },
         });
+    });
+
+    test("cancelJob (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/jobs/job_id/cancel")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });

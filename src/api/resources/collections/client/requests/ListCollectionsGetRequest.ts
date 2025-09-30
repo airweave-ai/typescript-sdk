@@ -7,12 +7,8 @@
  *     {}
  */
 export interface ListCollectionsGetRequest {
-    /**
-     * Number of collections to skip for pagination
-     */
+    /** Number of collections to skip for pagination */
     skip?: number;
-    /**
-     * Maximum number of collections to return (1-1000)
-     */
+    /** Maximum number of collections to return (1-1000) */
     limit?: number;
 }

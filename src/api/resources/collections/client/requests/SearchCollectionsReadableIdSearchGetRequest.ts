@@ -11,24 +11,14 @@ import * as AirweaveSDK from "../../../../index.js";
  *     }
  */
 export interface SearchCollectionsReadableIdSearchGetRequest {
-    /**
-     * The search query text to find relevant documents and data
-     */
+    /** The search query text to find relevant documents and data */
     query: string;
-    /**
-     * Format of the response: 'raw' returns search results, 'completion' returns AI-generated answers
-     */
+    /** Format of the response: 'raw' returns search results, 'completion' returns AI-generated answers */
     response_type?: AirweaveSDK.ResponseType;
-    /**
-     * Maximum number of results to return
-     */
+    /** Maximum number of results to return */
     limit?: number;
-    /**
-     * Number of results to skip for pagination
-     */
+    /** Number of results to skip for pagination */
     offset?: number;
-    /**
-     * How much to weigh recency vs similarity (0..1). 0 = no recency effect; 1 = rank by recency only.
-     */
+    /** How much to weigh recency vs similarity (0..1). 0 = no recency effect; 1 = rank by recency only. */
     recency_bias?: number;
 }

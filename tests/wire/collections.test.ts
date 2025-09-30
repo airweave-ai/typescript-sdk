@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
+import * as AirweaveSDK from "../../src/api/index";
 
 describe("Collections", () => {
-    test("list", async () => {
+    test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -41,7 +42,19 @@ describe("Collections", () => {
         ]);
     });
 
-    test("create", async () => {
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server.mockEndpoint().get("/collections").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.collections.list();
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("create (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Finance Data", readable_id: "finance-data-reports" };
@@ -82,7 +95,29 @@ describe("Collections", () => {
         });
     });
 
-    test("get", async () => {
+    test("create (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "buzz", readable_id: undefined };
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/collections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.create({
+                name: "buzz",
+                readable_id: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -119,7 +154,25 @@ describe("Collections", () => {
         });
     });
 
-    test("delete", async () => {
+    test("get (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.get("readable_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("delete (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -156,7 +209,25 @@ describe("Collections", () => {
         });
     });
 
-    test("search", async () => {
+    test("delete (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .delete("/collections/readable_id")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.delete("readable_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("search (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -261,7 +332,27 @@ describe("Collections", () => {
         });
     });
 
-    test("searchAdvanced", async () => {
+    test("search (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id/search")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.search("readable_id", {
+                query: "query",
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("searchAdvanced (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {
@@ -381,7 +472,50 @@ describe("Collections", () => {
         });
     });
 
-    test("refreshAllSourceConnections", async () => {
+    test("searchAdvanced (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            query: "x",
+            filter: undefined,
+            offset: undefined,
+            limit: undefined,
+            score_threshold: undefined,
+            response_type: undefined,
+            search_method: undefined,
+            recency_bias: undefined,
+            expansion_strategy: undefined,
+            enable_reranking: undefined,
+            enable_query_interpretation: undefined,
+        };
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.searchAdvanced("readable_id", {
+                query: "x",
+                filter: undefined,
+                offset: undefined,
+                limit: undefined,
+                score_threshold: undefined,
+                response_type: undefined,
+                search_method: undefined,
+                recency_bias: undefined,
+                expansion_strategy: undefined,
+                enable_reranking: undefined,
+                enable_query_interpretation: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("refreshAllSourceConnections (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -430,5 +564,23 @@ describe("Collections", () => {
                 },
             },
         ]);
+    });
+
+    test("refreshAllSourceConnections (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/refresh_all")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.refreshAllSourceConnections("readable_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });

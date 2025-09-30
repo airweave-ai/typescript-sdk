@@ -15,7 +15,7 @@ export declare namespace Sources {
         baseUrl?: core.Supplier<string>;
         apiKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
-        headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
+        headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
 
     export interface RequestOptions {
@@ -25,8 +25,10 @@ export declare namespace Sources {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
+        /** Additional query string parameters to include in the request. */
+        queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
-        headers?: Record<string, string | core.Supplier<string | undefined> | undefined>;
+        headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
 }
 
@@ -51,15 +53,18 @@ export class Sources {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.getSources()
+     *     await client.sources.list()
      */
-    public getSources(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
-        return core.HttpResponsePromise.fromPromise(this.__getSources(requestOptions));
+    public list(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
+        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
     }
 
-    private async __getSources(
-        requestOptions?: Sources.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
+    private async __list(requestOptions?: Sources.RequestOptions): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -68,11 +73,8 @@ export class Sources {
                 "sources",
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -136,6 +138,11 @@ export class Sources {
         shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??
@@ -144,11 +151,8 @@ export class Sources {
                 `sources/${encodeURIComponent(shortName)}`,
             ),
             method: "GET",
-            headers: mergeHeaders(
-                this._options?.headers,
-                mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-                requestOptions?.headers,
-            ),
+            headers: _headers,
+            queryParameters: requestOptions?.queryParams,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

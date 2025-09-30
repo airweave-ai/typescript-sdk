@@ -7,9 +7,7 @@
  *     {}
  */
 export interface ListSourceConnectionsGetRequest {
-    /**
-     * Filter by collection readable ID
-     */
+    /** Filter by collection readable ID */
     collection?: string;
     skip?: number;
     limit?: number;

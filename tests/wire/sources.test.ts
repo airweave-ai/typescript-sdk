@@ -4,9 +4,10 @@
 
 import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
+import * as AirweaveSDK from "../../src/api/index";
 
 describe("Sources", () => {
-    test("getSources", async () => {
+    test("list (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -51,7 +52,7 @@ describe("Sources", () => {
         ];
         server.mockEndpoint().get("/sources").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.sources.getSources();
+        const response = await client.sources.list();
         expect(response).toEqual([
             {
                 name: "GitHub",
@@ -101,7 +102,19 @@ describe("Sources", () => {
         ]);
     });
 
-    test("read", async () => {
+    test("list (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server.mockEndpoint().get("/sources").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.sources.list();
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("read (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -196,5 +209,23 @@ describe("Sources", () => {
                 ],
             },
         });
+    });
+
+    test("read (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/sources/short_name")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sources.read("short_name");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });
