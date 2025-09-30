@@ -2,7 +2,7 @@
 
 ## sources
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">list</a>() -> AirweaveSDK.Source[]</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">getSources</a>() -> AirweaveSDK.Source[]</code></summary>
 <dl>
 <dd>
 
@@ -33,7 +33,7 @@ Returns the complete catalog of source types that Airweave can connect to.
 <dd>
 
 ```typescript
-await client.sources.list();
+await client.sources.getSources();
 ```
 
 </dd>

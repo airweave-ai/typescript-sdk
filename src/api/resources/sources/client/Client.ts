@@ -51,13 +51,15 @@ export class Sources {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.list()
+     *     await client.sources.getSources()
      */
-    public list(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
-        return core.HttpResponsePromise.fromPromise(this.__list(requestOptions));
+    public getSources(requestOptions?: Sources.RequestOptions): core.HttpResponsePromise<AirweaveSDK.Source[]> {
+        return core.HttpResponsePromise.fromPromise(this.__getSources(requestOptions));
     }
 
-    private async __list(requestOptions?: Sources.RequestOptions): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
+    private async __getSources(
+        requestOptions?: Sources.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
         const _response = await core.fetcher({
             url: core.url.join(
                 (await core.Supplier.get(this._options.baseUrl)) ??

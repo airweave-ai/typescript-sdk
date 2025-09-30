@@ -6,7 +6,7 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 
 describe("Sources", () => {
-    test("list", async () => {
+    test("getSources", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -51,7 +51,7 @@ describe("Sources", () => {
         ];
         server.mockEndpoint().get("/sources").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.sources.list();
+        const response = await client.sources.getSources();
         expect(response).toEqual([
             {
                 name: "GitHub",
