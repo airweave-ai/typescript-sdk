@@ -114,7 +114,7 @@ describe("Sources", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("read (1)", async () => {
+    test("get (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -163,7 +163,7 @@ describe("Sources", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sources.read("short_name");
+        const response = await client.sources.get("short_name");
         expect(response).toEqual({
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
@@ -211,7 +211,7 @@ describe("Sources", () => {
         });
     });
 
-    test("read (2)", async () => {
+    test("get (2)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
@@ -225,7 +225,7 @@ describe("Sources", () => {
             .build();
 
         await expect(async () => {
-            return await client.sources.read("short_name");
+            return await client.sources.get("short_name");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });

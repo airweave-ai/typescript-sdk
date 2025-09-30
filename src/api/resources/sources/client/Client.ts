@@ -125,16 +125,16 @@ export class Sources {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.read("short_name")
+     *     await client.sources.get("short_name")
      */
-    public read(
+    public get(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Source> {
-        return core.HttpResponsePromise.fromPromise(this.__read(shortName, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(shortName, requestOptions));
     }
 
-    private async __read(
+    private async __get(
         shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {

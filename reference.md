@@ -60,7 +60,7 @@ await client.sources.list();
 </dl>
 </details>
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">read</a>(shortName) -> AirweaveSDK.Source</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">get</a>(shortName) -> AirweaveSDK.Source</code></summary>
 <dl>
 <dd>
 
@@ -88,7 +88,7 @@ Get detailed information about a specific data source connector.
 <dd>
 
 ```typescript
-await client.sources.read("short_name");
+await client.sources.get("short_name");
 ```
 
 </dd>
