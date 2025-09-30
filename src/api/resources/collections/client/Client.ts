@@ -51,7 +51,10 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.list()
+     *     await client.collections.list({
+     *         skip: 1,
+     *         limit: 1
+     *     })
      */
     public list(
         request: AirweaveSDK.ListCollectionsGetRequest = {},
@@ -395,7 +398,11 @@ export class Collections {
      *
      * @example
      *     await client.collections.search("readable_id", {
-     *         query: "customer payment issues"
+     *         query: "customer payment issues",
+     *         response_type: "raw",
+     *         limit: 1,
+     *         offset: 1,
+     *         recency_bias: 1.1
      *     })
      */
     public search(
@@ -688,7 +695,7 @@ export class Collections {
         }
     }
 
-    protected async _getCustomAuthorizationHeaders() {
+    protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string | undefined>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
         return { "x-api-key": apiKeyValue };
     }

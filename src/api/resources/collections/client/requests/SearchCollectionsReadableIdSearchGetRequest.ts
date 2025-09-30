@@ -7,7 +7,11 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         query: "customer payment issues"
+ *         query: "customer payment issues",
+ *         response_type: "raw",
+ *         limit: 1,
+ *         offset: 1,
+ *         recency_bias: 1.1
  *     }
  */
 export interface SearchCollectionsReadableIdSearchGetRequest {

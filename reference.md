@@ -153,7 +153,10 @@ List all collections that belong to your organization.
 <dd>
 
 ```typescript
-await client.collections.list();
+await client.collections.list({
+    skip: 1,
+    limit: 1,
+});
 ```
 
 </dd>
@@ -420,6 +423,10 @@ and options, use the POST /search endpoint.
 ```typescript
 await client.collections.search("readable_id", {
     query: "customer payment issues",
+    response_type: "raw",
+    limit: 1,
+    offset: 1,
+    recency_bias: 1.1,
 });
 ```
 
@@ -663,7 +670,11 @@ List source connections with minimal fields for performance.
 <dd>
 
 ```typescript
-await client.sourceConnections.list();
+await client.sourceConnections.list({
+    collection: "collection",
+    skip: 1,
+    limit: 1,
+});
 ```
 
 </dd>
@@ -1074,7 +1085,9 @@ Get sync jobs for a source connection.
 <dd>
 
 ```typescript
-await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
+await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
+    limit: 1,
+});
 ```
 
 </dd>

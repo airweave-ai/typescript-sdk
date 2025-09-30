@@ -194,7 +194,7 @@ export class Sources {
         }
     }
 
-    protected async _getCustomAuthorizationHeaders() {
+    protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string | undefined>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
         return { "x-api-key": apiKeyValue };
     }

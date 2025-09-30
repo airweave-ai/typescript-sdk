@@ -51,7 +51,11 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.list()
+     *     await client.sourceConnections.list({
+     *         collection: "collection",
+     *         skip: 1,
+     *         limit: 1
+     *     })
      */
     public list(
         request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
@@ -578,7 +582,9 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.getSourceConnectionJobs("source_connection_id")
+     *     await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
+     *         limit: 1
+     *     })
      */
     public getSourceConnectionJobs(
         sourceConnectionId: string,
@@ -746,7 +752,7 @@ export class SourceConnections {
         }
     }
 
-    protected async _getCustomAuthorizationHeaders() {
+    protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string | undefined>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
         return { "x-api-key": apiKeyValue };
     }

@@ -4,7 +4,11 @@
 
 /**
  * @example
- *     {}
+ *     {
+ *         collection: "collection",
+ *         skip: 1,
+ *         limit: 1
+ *     }
  */
 export interface ListSourceConnectionsGetRequest {
     /** Filter by collection readable ID */

@@ -26,7 +26,10 @@ describe("Collections", () => {
         ];
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.collections.list();
+        const response = await client.collections.list({
+            skip: 1,
+            limit: 1,
+        });
         expect(response).toEqual([
             {
                 name: "Finance Data",
@@ -285,6 +288,10 @@ describe("Collections", () => {
 
         const response = await client.collections.search("readable_id", {
             query: "customer payment issues",
+            response_type: "raw",
+            limit: 1,
+            offset: 1,
+            recency_bias: 1.1,
         });
         expect(response).toEqual({
             results: [

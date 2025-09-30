@@ -46,8 +46,8 @@ export class AirweaveSDKClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.6.25",
-                    "User-Agent": "@airweave/sdk/v0.6.25",
+                    "X-Fern-SDK-Version": "v0.6.26",
+                    "User-Agent": "@airweave/sdk/v0.6.26",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },

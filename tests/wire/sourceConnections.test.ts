@@ -33,7 +33,11 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.list();
+        const response = await client.sourceConnections.list({
+            collection: "collection",
+            skip: 1,
+            limit: 1,
+        });
         expect(response).toEqual([
             {
                 id: "id",
@@ -759,7 +763,9 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
+        const response = await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
+            limit: 1,
+        });
         expect(response).toEqual([
             {
                 id: "id",
