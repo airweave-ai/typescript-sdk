@@ -48,6 +48,7 @@ describe("Sources", () => {
                     ],
                 },
                 config_fields: { fields: [{ name: "name", title: "title", type: "type" }] },
+                supported_auth_providers: ["supported_auth_providers"],
             },
         ];
         server.mockEndpoint().get("/sources").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -98,6 +99,7 @@ describe("Sources", () => {
                         },
                     ],
                 },
+                supported_auth_providers: ["supported_auth_providers"],
             },
         ]);
     });
@@ -154,6 +156,7 @@ describe("Sources", () => {
                 ],
             },
             config_fields: { fields: [{ name: "name", title: "title", type: "type" }] },
+            supported_auth_providers: ["supported_auth_providers"],
         };
         server
             .mockEndpoint()
@@ -208,6 +211,7 @@ describe("Sources", () => {
                     },
                 ],
             },
+            supported_auth_providers: ["supported_auth_providers"],
         });
     });
 

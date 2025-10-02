@@ -42,4 +42,6 @@ export interface Source {
     auth_fields?: AirweaveSDK.Fields;
     /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */
     config_fields: AirweaveSDK.Fields;
+    /** List of auth provider short names that support this source (e.g., ['composio', 'pipedream']). Computed dynamically for API responses. This field is not stored in the database. */
+    supported_auth_providers?: string[];
 }
