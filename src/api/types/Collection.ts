@@ -27,6 +27,6 @@ export interface Collection {
     created_by_email?: string;
     /** Email address of the user who last modified this collection. */
     modified_by_email?: string;
-    /** Current operational status of the collection:<br/>• **NEEDS_SOURCE**: Collection exists but has no source connections configured yet<br/>• **ACTIVE**: All source connections are healthy and data is being synced successfully<br/>• **PARTIAL_ERROR**: Some source connections are failing but others are working<br/>• **ERROR**: All source connections are failing or in error state */
+    /** Current operational status of the collection:<br/>• **NEEDS_SOURCE**: Collection has no authenticated connections, or connections exist but haven't synced yet<br/>• **ACTIVE**: At least one connection has completed a sync or is currently syncing<br/>• **ERROR**: All connections have failed their last sync */
     status?: AirweaveSDK.CollectionStatus;
 }

@@ -5,10 +5,9 @@
 /**
  * Collection status enum.
  */
-export type CollectionStatus = "ACTIVE" | "PARTIAL ERROR" | "NEEDS SOURCE" | "ERROR";
+export type CollectionStatus = "ACTIVE" | "NEEDS SOURCE" | "ERROR";
 export const CollectionStatus = {
     Active: "ACTIVE",
-    PartialError: "PARTIAL ERROR",
     NeedsSource: "NEEDS SOURCE",
     Error: "ERROR",
 } as const;
