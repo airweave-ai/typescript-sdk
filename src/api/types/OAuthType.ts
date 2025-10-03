@@ -5,8 +5,9 @@
 /**
  * OAuth token types for sources.
  */
-export type OAuthType = "access_only" | "with_refresh" | "with_rotating_refresh";
+export type OAuthType = "oauth1" | "access_only" | "with_refresh" | "with_rotating_refresh";
 export const OAuthType = {
+    Oauth1: "oauth1",
     AccessOnly: "access_only",
     WithRefresh: "with_refresh",
     WithRotatingRefresh: "with_rotating_refresh",

@@ -4,12 +4,20 @@
 
 /**
  * OAuth authentication via browser flow.
+ *
+ * Supports both OAuth2 and OAuth1 BYOC (Bring Your Own Client):
+ * - OAuth2 BYOC: Provide client_id + client_secret
+ * - OAuth1 BYOC: Provide consumer_key + consumer_secret
  */
 export interface OAuthBrowserAuthentication {
     /** OAuth redirect URI */
     redirect_uri?: string;
-    /** OAuth client ID (for custom apps) */
+    /** OAuth2 client ID (for custom apps) */
     client_id?: string;
-    /** OAuth client secret (for custom apps) */
+    /** OAuth2 client secret (for custom apps) */
     client_secret?: string;
+    /** OAuth1 consumer key (for custom apps) */
+    consumer_key?: string;
+    /** OAuth1 consumer secret (for custom apps) */
+    consumer_secret?: string;
 }

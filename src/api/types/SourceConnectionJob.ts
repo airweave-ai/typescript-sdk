@@ -14,7 +14,6 @@ export interface SourceConnectionJob {
     started_at?: string;
     completed_at?: string;
     duration_seconds?: number;
-    entities_processed?: number;
     entities_inserted?: number;
     entities_updated?: number;
     entities_deleted?: number;
