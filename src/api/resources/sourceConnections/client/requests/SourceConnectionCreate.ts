@@ -27,6 +27,8 @@ export interface SourceConnectionCreate {
     sync_immediately?: boolean;
     /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
     authentication?: SourceConnectionCreate.Authentication;
+    /** URL to redirect to after OAuth flow completes (only used for OAuth flows) */
+    redirect_url?: string;
 }
 
 export namespace SourceConnectionCreate {

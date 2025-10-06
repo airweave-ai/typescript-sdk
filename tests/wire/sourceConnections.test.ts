@@ -208,6 +208,7 @@ describe("SourceConnections", () => {
             schedule: undefined,
             sync_immediately: undefined,
             authentication: undefined,
+            redirect_url: undefined,
         };
         const rawResponseBody = { detail: undefined };
         server
@@ -229,6 +230,7 @@ describe("SourceConnections", () => {
                 schedule: undefined,
                 sync_immediately: undefined,
                 authentication: undefined,
+                redirect_url: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
