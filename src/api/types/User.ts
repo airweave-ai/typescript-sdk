@@ -14,4 +14,5 @@ export interface User {
     auth0_id?: string;
     primary_organization_id?: string;
     user_organizations?: AirweaveSDK.UserOrganization[];
+    is_admin?: boolean;
 }

@@ -75,6 +75,7 @@ export * from "./OAuthTokenAuthentication.js";
 export * from "./OAuthType.js";
 export * from "./Organization.js";
 export * from "./OrganizationCreate.js";
+export * from "./OrganizationMetrics.js";
 export * from "./OrganizationWithRole.js";
 export * from "./PayloadField.js";
 export * from "./QueryExpansionStrategy.js";
