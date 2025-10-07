@@ -385,232 +385,6 @@ export class Collections {
     }
 
     /**
-     * Search across all data sources within the specified collection.
-     *
-     * This GET endpoint provides basic search functionality. For advanced filtering
-     * and options, use the POST /search endpoint.
-     *
-     * @param {string} readableId - The unique readable identifier of the collection to search
-     * @param {AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest} request
-     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.collections.search("readable_id", {
-     *         query: "customer payment issues",
-     *         response_type: "raw",
-     *         limit: 1,
-     *         offset: 1,
-     *         recency_bias: 1.1
-     *     })
-     */
-    public search(
-        readableId: string,
-        request: AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest,
-        requestOptions?: Collections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__search(readableId, request, requestOptions));
-    }
-
-    private async __search(
-        readableId: string,
-        request: AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest,
-        requestOptions?: Collections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
-        const { query, response_type: responseType, limit, offset, recency_bias: recencyBias } = request;
-        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        _queryParams["query"] = query;
-        if (responseType != null) {
-            _queryParams["response_type"] = responseType;
-        }
-
-        if (limit != null) {
-            _queryParams["limit"] = limit.toString();
-        }
-
-        if (offset != null) {
-            _queryParams["offset"] = offset.toString();
-        }
-
-        if (recencyBias != null) {
-            _queryParams["recency_bias"] = recencyBias.toString();
-        }
-
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `collections/${encodeURIComponent(readableId)}/search`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SearchResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /collections/{readable_id}/search.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Advanced search with comprehensive filtering and options.
-     *
-     * This endpoint supports:
-     * - Metadata filtering using Qdrant's native filter syntax
-     * - Pagination with offset and limit
-     * - Score threshold filtering
-     * - Query expansion strategies (default: AUTO, generates up to 4 variations)
-     * - Automatic filter extraction from natural language (default: ON)
-     * - LLM-based result reranking (default: ON)
-     *
-     * Default behavior:
-     * - Query expansion: ON (AUTO strategy)
-     * - Query interpretation: ON (extracts filters from natural language)
-     * - Reranking: ON (improves relevance using LLM)
-     * - Score threshold: None (no filtering)
-     *
-     * To disable features, explicitly set:
-     * - enable_reranking: false
-     * - enable_query_interpretation: false
-     * - expansion_strategy: "no_expansion"
-     *
-     * @param {string} readableId - The unique readable identifier of the collection to search
-     * @param {AirweaveSDK.SearchRequest} request
-     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.collections.searchAdvanced("readable_id", {
-     *         query: "customer payment issues",
-     *         filter: {
-     *             must: {
-     *                 key: "key"
-     *             }
-     *         },
-     *         limit: 10,
-     *         score_threshold: 0.7,
-     *         response_type: "completion"
-     *     })
-     */
-    public searchAdvanced(
-        readableId: string,
-        request: AirweaveSDK.SearchRequest,
-        requestOptions?: Collections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__searchAdvanced(readableId, request, requestOptions));
-    }
-
-    private async __searchAdvanced(
-        readableId: string,
-        request: AirweaveSDK.SearchRequest,
-        requestOptions?: Collections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `collections/${encodeURIComponent(readableId)}/search`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.SearchResponse, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling POST /collections/{readable_id}/search.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
      * Trigger data synchronization for all source connections in the collection.
      *
      * The sync jobs run asynchronously in the background, so this endpoint
@@ -686,6 +460,211 @@ export class Collections {
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
                     "Timeout exceeded when calling POST /collections/{readable_id}/refresh_all.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Legacy GET search endpoint for backwards compatibility.
+     *
+     * DEPRECATED: This endpoint uses the old schema. Please migrate to POST with the new
+     * SearchRequest format for access to all features.
+     *
+     * @param {string} readableId - The unique readable identifier of the collection to search
+     * @param {AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.searchGetLegacy("readable_id", {
+     *         query: "query",
+     *         response_type: "raw",
+     *         limit: 1,
+     *         offset: 1,
+     *         recency_bias: 1.1
+     *     })
+     */
+    public searchGetLegacy(
+        readableId: string,
+        request: AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.LegacySearchResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__searchGetLegacy(readableId, request, requestOptions));
+    }
+
+    private async __searchGetLegacy(
+        readableId: string,
+        request: AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.LegacySearchResponse>> {
+        const { query, response_type: responseType, limit, offset, recency_bias: recencyBias } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        _queryParams["query"] = query;
+        if (responseType != null) {
+            _queryParams["response_type"] = responseType;
+        }
+
+        if (limit != null) {
+            _queryParams["limit"] = limit.toString();
+        }
+
+        if (offset != null) {
+            _queryParams["offset"] = offset.toString();
+        }
+
+        if (recencyBias != null) {
+            _queryParams["recency_bias"] = recencyBias.toString();
+        }
+
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search`,
+            ),
+            method: "GET",
+            headers: _headers,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.LegacySearchResponse, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling GET /collections/{readable_id}/search.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Search your collection.
+     *
+     * Accepts both new SearchRequest and legacy LegacySearchRequest formats
+     * for backwards compatibility.
+     *
+     * @param {string} readableId - The unique readable identifier of the collection
+     * @param {AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.search("readable_id", {
+     *         query: "query"
+     *     })
+     */
+    public search(
+        readableId: string,
+        request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse> {
+        return core.HttpResponsePromise.fromPromise(this.__search(readableId, request, requestOptions));
+    }
+
+    private async __search(
+        readableId: string,
+        request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return {
+                data: _response.body as AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse,
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({

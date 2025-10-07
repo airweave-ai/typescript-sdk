@@ -7,14 +7,14 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         query: "customer payment issues",
+ *         query: "query",
  *         response_type: "raw",
  *         limit: 1,
  *         offset: 1,
  *         recency_bias: 1.1
  *     }
  */
-export interface SearchCollectionsReadableIdSearchGetRequest {
+export interface SearchGetLegacyCollectionsReadableIdSearchGetRequest {
     /** The search query text to find relevant documents and data */
     query: string;
     /** Format of the response: 'raw' returns search results, 'completion' returns AI-generated answers */
@@ -23,6 +23,6 @@ export interface SearchCollectionsReadableIdSearchGetRequest {
     limit?: number;
     /** Number of results to skip for pagination */
     offset?: number;
-    /** How much to weigh recency vs similarity (0..1). 0 = no recency effect; 1 = rank by recency only. */
+    /** How much to weigh recency vs similarity (0..1) */
     recency_bias?: number;
 }

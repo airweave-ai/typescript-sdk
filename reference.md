@@ -390,188 +390,6 @@ await client.collections.delete("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>(readableId, { ...params }) -> AirweaveSDK.SearchResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Search across all data sources within the specified collection.
-
-This GET endpoint provides basic search functionality. For advanced filtering
-and options, use the POST /search endpoint.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.collections.search("readable_id", {
-    query: "customer payment issues",
-    response_type: "raw",
-    limit: 1,
-    offset: 1,
-    recency_bias: 1.1,
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**readableId:** `string` — The unique readable identifier of the collection to search
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SearchCollectionsReadableIdSearchGetRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Collections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">searchAdvanced</a>(readableId, { ...params }) -> AirweaveSDK.SearchResponse</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Advanced search with comprehensive filtering and options.
-
-This endpoint supports:
-
-- Metadata filtering using Qdrant's native filter syntax
-- Pagination with offset and limit
-- Score threshold filtering
-- Query expansion strategies (default: AUTO, generates up to 4 variations)
-- Automatic filter extraction from natural language (default: ON)
-- LLM-based result reranking (default: ON)
-
-Default behavior:
-
-- Query expansion: ON (AUTO strategy)
-- Query interpretation: ON (extracts filters from natural language)
-- Reranking: ON (improves relevance using LLM)
-- Score threshold: None (no filtering)
-
-To disable features, explicitly set:
-
-- enable_reranking: false
-- enable_query_interpretation: false
-- expansion_strategy: "no_expansion"
-  </dd>
-  </dl>
-  </dd>
-  </dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.collections.searchAdvanced("readable_id", {
-    query: "customer payment issues",
-    filter: {
-        must: {
-            key: "key",
-        },
-    },
-    limit: 10,
-    score_threshold: 0.7,
-    response_type: "completion",
-});
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**readableId:** `string` — The unique readable identifier of the collection to search
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.SearchRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Collections.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
 <details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>(readableId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
 <dl>
 <dd>
@@ -622,6 +440,162 @@ await client.collections.refreshAllSourceConnections("readable_id");
 <dd>
 
 **readableId:** `string` — The unique readable identifier of the collection to refresh
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">searchGetLegacy</a>(readableId, { ...params }) -> AirweaveSDK.LegacySearchResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Legacy GET search endpoint for backwards compatibility.
+
+DEPRECATED: This endpoint uses the old schema. Please migrate to POST with the new
+SearchRequest format for access to all features.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.searchGetLegacy("readable_id", {
+    query: "query",
+    response_type: "raw",
+    limit: 1,
+    offset: 1,
+    recency_bias: 1.1,
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string` — The unique readable identifier of the collection to search
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>(readableId, { ...params }) -> AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Search your collection.
+
+Accepts both new SearchRequest and legacy LegacySearchRequest formats
+for backwards compatibility.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.search("readable_id", {
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string` — The unique readable identifier of the collection
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest`
 
 </dd>
 </dl>

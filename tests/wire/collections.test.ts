@@ -230,298 +230,6 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("search (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-
-        const rawResponseBody = {
-            results: [
-                {
-                    id: "f30bf505-cc33-4c74-920c-524eab49334c",
-                    score: 0.92,
-                    payload: {
-                        entity_id: "1207573546742333",
-                        source_name: "Asana",
-                        md_content: "Implement user authentication - Build secure login system with JWT tokens",
-                        md_type: "text",
-                        metadata: {
-                            project_name: "Q4 Development Sprint",
-                            assignee: "john.doe@company.com",
-                            due_date: "2024-01-20",
-                            priority: "high",
-                            tags: ["authentication", "security", "backend"],
-                        },
-                        md_position: 0,
-                        md_parent_title: "Authentication Module",
-                    },
-                },
-                {
-                    id: "fb6c49f7-2f9a-4000-ad50-96d1047a8f10",
-                    score: 0.87,
-                    payload: {
-                        entity_id: "1207921130902216",
-                        source_name: "Asana",
-                        md_content: "Review and update API authentication documentation",
-                        md_type: "text",
-                        metadata: {
-                            project_name: "Documentation Updates",
-                            assignee: "sarah.smith@company.com",
-                            status: "in_progress",
-                            last_modified: "2024-01-18T14:30:00Z",
-                        },
-                        md_position: 0,
-                        md_parent_title: "API Documentation",
-                    },
-                },
-            ],
-            response_type: "raw",
-            completion: "completion",
-            status: "success",
-        };
-        server
-            .mockEndpoint()
-            .get("/collections/readable_id/search")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.collections.search("readable_id", {
-            query: "customer payment issues",
-            response_type: "raw",
-            limit: 1,
-            offset: 1,
-            recency_bias: 1.1,
-        });
-        expect(response).toEqual({
-            results: [
-                {
-                    id: "f30bf505-cc33-4c74-920c-524eab49334c",
-                    score: 0.92,
-                    payload: {
-                        entity_id: "1207573546742333",
-                        source_name: "Asana",
-                        md_content: "Implement user authentication - Build secure login system with JWT tokens",
-                        md_type: "text",
-                        metadata: {
-                            project_name: "Q4 Development Sprint",
-                            assignee: "john.doe@company.com",
-                            due_date: "2024-01-20",
-                            priority: "high",
-                            tags: ["authentication", "security", "backend"],
-                        },
-                        md_position: 0,
-                        md_parent_title: "Authentication Module",
-                    },
-                },
-                {
-                    id: "fb6c49f7-2f9a-4000-ad50-96d1047a8f10",
-                    score: 0.87,
-                    payload: {
-                        entity_id: "1207921130902216",
-                        source_name: "Asana",
-                        md_content: "Review and update API authentication documentation",
-                        md_type: "text",
-                        metadata: {
-                            project_name: "Documentation Updates",
-                            assignee: "sarah.smith@company.com",
-                            status: "in_progress",
-                            last_modified: "2024-01-18T14:30:00Z",
-                        },
-                        md_position: 0,
-                        md_parent_title: "API Documentation",
-                    },
-                },
-            ],
-            response_type: "raw",
-            completion: "completion",
-            status: "success",
-        });
-    });
-
-    test("search (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-
-        const rawResponseBody = { detail: undefined };
-        server
-            .mockEndpoint()
-            .get("/collections/readable_id/search")
-            .respondWith()
-            .statusCode(422)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.collections.search("readable_id", {
-                query: "query",
-            });
-        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
-    });
-
-    test("searchAdvanced (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            query: "customer payment issues",
-            filter: { must: { key: "key" } },
-            limit: 10,
-            score_threshold: 0.7,
-            response_type: "completion",
-        };
-        const rawResponseBody = {
-            results: [
-                {
-                    id: "stripe_cust_1234567890",
-                    score: 0.94,
-                    payload: {
-                        entity_id: "cust_1234567890",
-                        source_name: "Stripe",
-                        title: "Customer Payment Record",
-                        content:
-                            "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
-                        metadata: {
-                            date: "2024-01-15T10:30:00Z",
-                            type: "payment",
-                            amount: 99,
-                            currency: "USD",
-                            customer_email: "john@company.com",
-                        },
-                    },
-                },
-                {
-                    id: "zendesk_ticket_789",
-                    score: 0.89,
-                    payload: {
-                        entity_id: "ticket_789",
-                        source_name: "Zendesk",
-                        title: "Billing Question - Subscription Upgrade",
-                        content:
-                            "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
-                        metadata: {
-                            date: "2024-01-14T14:22:00Z",
-                            type: "support_ticket",
-                            status: "resolved",
-                            priority: "medium",
-                            agent: "support@company.com",
-                        },
-                    },
-                },
-            ],
-            response_type: "completion",
-            completion:
-                "Based on your recent data:\n\n## Payment Processing\nCustomer John Doe successfully processed a **$99 monthly subscription payment** on January 15th using a Visa card ending in 4242.\n\n## Customer Support Activity\nThere was a related support ticket from January 14th where a customer inquired about **upgrading from Basic to Pro plan** for advanced analytics features. This ticket has been resolved.\n\n### Summary\nThis shows strong customer engagement with your premium offerings, with successful payment processing and interest in higher-tier features.",
-            status: "success",
-        };
-        server
-            .mockEndpoint()
-            .post("/collections/readable_id/search")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.collections.searchAdvanced("readable_id", {
-            query: "customer payment issues",
-            filter: {
-                must: {
-                    key: "key",
-                },
-            },
-            limit: 10,
-            score_threshold: 0.7,
-            response_type: "completion",
-        });
-        expect(response).toEqual({
-            results: [
-                {
-                    id: "stripe_cust_1234567890",
-                    score: 0.94,
-                    payload: {
-                        entity_id: "cust_1234567890",
-                        source_name: "Stripe",
-                        title: "Customer Payment Record",
-                        content:
-                            "Monthly subscription payment of $99.00 processed successfully for customer John Doe (john@company.com). Payment method: Visa ending in 4242.",
-                        metadata: {
-                            date: "2024-01-15T10:30:00Z",
-                            type: "payment",
-                            amount: 99,
-                            currency: "USD",
-                            customer_email: "john@company.com",
-                        },
-                    },
-                },
-                {
-                    id: "zendesk_ticket_789",
-                    score: 0.89,
-                    payload: {
-                        entity_id: "ticket_789",
-                        source_name: "Zendesk",
-                        title: "Billing Question - Subscription Upgrade",
-                        content:
-                            "Customer inquiry about upgrading from Basic to Pro plan. Customer mentioned they need advanced analytics features.",
-                        metadata: {
-                            date: "2024-01-14T14:22:00Z",
-                            type: "support_ticket",
-                            status: "resolved",
-                            priority: "medium",
-                            agent: "support@company.com",
-                        },
-                    },
-                },
-            ],
-            response_type: "completion",
-            completion:
-                "Based on your recent data:\n\n## Payment Processing\nCustomer John Doe successfully processed a **$99 monthly subscription payment** on January 15th using a Visa card ending in 4242.\n\n## Customer Support Activity\nThere was a related support ticket from January 14th where a customer inquired about **upgrading from Basic to Pro plan** for advanced analytics features. This ticket has been resolved.\n\n### Summary\nThis shows strong customer engagement with your premium offerings, with successful payment processing and interest in higher-tier features.",
-            status: "success",
-        });
-    });
-
-    test("searchAdvanced (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
-        const rawRequestBody = {
-            query: "x",
-            filter: undefined,
-            offset: undefined,
-            limit: undefined,
-            score_threshold: undefined,
-            response_type: undefined,
-            search_method: undefined,
-            recency_bias: undefined,
-            expansion_strategy: undefined,
-            enable_reranking: undefined,
-            enable_query_interpretation: undefined,
-        };
-        const rawResponseBody = { detail: undefined };
-        server
-            .mockEndpoint()
-            .post("/collections/readable_id/search")
-            .jsonBody(rawRequestBody)
-            .respondWith()
-            .statusCode(422)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.collections.searchAdvanced("readable_id", {
-                query: "x",
-                filter: undefined,
-                offset: undefined,
-                limit: undefined,
-                score_threshold: undefined,
-                response_type: undefined,
-                search_method: undefined,
-                recency_bias: undefined,
-                expansion_strategy: undefined,
-                enable_reranking: undefined,
-                enable_query_interpretation: undefined,
-            });
-        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
-    });
-
     test("refreshAllSourceConnections (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
@@ -586,6 +294,131 @@ describe("Collections", () => {
 
         await expect(async () => {
             return await client.collections.refreshAllSourceConnections("readable_id");
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("searchGetLegacy (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            results: [{ key: "value" }],
+            response_type: "raw",
+            completion: "completion",
+            status: "success",
+        };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id/search")
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.collections.searchGetLegacy("readable_id", {
+            query: "query",
+            response_type: "raw",
+            limit: 1,
+            offset: 1,
+            recency_bias: 1.1,
+        });
+        expect(response).toEqual({
+            results: [
+                {
+                    key: "value",
+                },
+            ],
+            response_type: "raw",
+            completion: "completion",
+            status: "success",
+        });
+    });
+
+    test("searchGetLegacy (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id/search")
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.searchGetLegacy("readable_id", {
+                query: "query",
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("search (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { query: "query" };
+        const rawResponseBody = { results: [{ key: "value" }], completion: "completion" };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.collections.search("readable_id", {
+            query: "query",
+        });
+        expect(response).toEqual({
+            results: [
+                {
+                    key: "value",
+                },
+            ],
+            completion: "completion",
+        });
+    });
+
+    test("search (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            query: "query",
+            retrieval_strategy: undefined,
+            filter: undefined,
+            offset: undefined,
+            limit: undefined,
+            temporal_relevance: undefined,
+            expand_query: undefined,
+            interpret_filters: undefined,
+            rerank: undefined,
+            generate_answer: undefined,
+        };
+        const rawResponseBody = { detail: undefined };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.search("readable_id", {
+                query: "query",
+                retrieval_strategy: undefined,
+                filter: undefined,
+                offset: undefined,
+                limit: undefined,
+                temporal_relevance: undefined,
+                expand_query: undefined,
+                interpret_filters: undefined,
+                rerank: undefined,
+                generate_answer: undefined,
+            });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });
