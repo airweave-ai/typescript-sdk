@@ -39,6 +39,7 @@ export * from "./EntityDefinitionCreate.js";
 export * from "./EntitySummary.js";
 export * from "./EntityType.js";
 export * from "./EntityTypeStats.js";
+export * from "./FeatureFlag.js";
 export * from "./Range.js";
 export * from "./FieldCondition.js";
 export * from "./Fields.js";
