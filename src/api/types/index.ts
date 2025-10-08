@@ -84,6 +84,8 @@ export * from "./PayloadField.js";
 export * from "./QueryExpansionStrategy.js";
 export * from "./ResponseType.js";
 export * from "./RetrievalStrategy.js";
+export * from "./S3ConfigRequest.js";
+export * from "./S3ConfigResponse.js";
 export * from "./ScheduleConfig.js";
 export * from "./ScheduleDetails.js";
 export * from "./ScheduleResponse.js";
