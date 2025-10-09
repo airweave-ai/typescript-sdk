@@ -16,6 +16,8 @@ export interface SourceConnectionListItem {
     modified_at: string;
     is_authenticated: boolean;
     entity_count?: number;
+    /** Whether this source uses federated search */
+    federated_search?: boolean;
     /** Get authentication method from database value. */
     auth_method: AirweaveSDK.AuthenticationMethod;
     /** Compute connection status from current state. */

@@ -20,5 +20,9 @@ export interface SourceConnection {
     config?: Record<string, unknown>;
     schedule?: AirweaveSDK.ScheduleDetails;
     sync?: AirweaveSDK.SyncDetails;
+    /** ID of the associated sync */
+    sync_id?: string;
     entities?: AirweaveSDK.EntitySummary;
+    /** Whether this source uses federated search */
+    federated_search?: boolean;
 }

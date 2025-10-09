@@ -32,6 +32,8 @@ export interface Source {
     labels?: string[];
     /** Whether this source supports cursor-based continuous syncing for incremental data extraction. Sources with this capability can track their sync position and resume from where they left off. */
     supports_continuous?: boolean;
+    /** Whether this source uses federated search instead of traditional syncing. Federated search sources query data in real-time during searches rather than syncing and indexing all data beforehand. */
+    federated_search?: boolean;
     /** Unique system identifier for this source type. Generated automatically when the source is registered. */
     id: string;
     /** Timestamp when this source type was registered in the system (ISO 8601 format). */

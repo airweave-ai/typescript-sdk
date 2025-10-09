@@ -21,6 +21,7 @@ describe("SourceConnections", () => {
                 modified_at: "2024-01-15T09:30:00Z",
                 is_authenticated: true,
                 entity_count: 1,
+                federated_search: true,
                 auth_method: "direct",
                 status: "active",
             },
@@ -48,6 +49,7 @@ describe("SourceConnections", () => {
                 modified_at: "2024-01-15T09:30:00Z",
                 is_authenticated: true,
                 entity_count: 1,
+                federated_search: true,
                 auth_method: "direct",
                 status: "active",
             },
@@ -121,7 +123,9 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: { total_entities: 1, by_type: { key: { count: 1 } } },
+            federated_search: true,
         };
         server
             .mockEndpoint()
@@ -185,6 +189,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: {
                 total_entities: 1,
                 by_type: {
@@ -193,6 +198,7 @@ describe("SourceConnections", () => {
                     },
                 },
             },
+            federated_search: true,
         });
     });
 
@@ -284,7 +290,9 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: { total_entities: 1, by_type: { key: { count: 1 } } },
+            federated_search: true,
         };
         server
             .mockEndpoint()
@@ -344,6 +352,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: {
                 total_entities: 1,
                 by_type: {
@@ -352,6 +361,7 @@ describe("SourceConnections", () => {
                     },
                 },
             },
+            federated_search: true,
         });
     });
 
@@ -422,7 +432,9 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: { total_entities: 1, by_type: { key: { count: 1 } } },
+            federated_search: true,
         };
         server
             .mockEndpoint()
@@ -482,6 +494,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: {
                 total_entities: 1,
                 by_type: {
@@ -490,6 +503,7 @@ describe("SourceConnections", () => {
                     },
                 },
             },
+            federated_search: true,
         });
     });
 
@@ -560,7 +574,9 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: { total_entities: 1, by_type: { key: { count: 1 } } },
+            federated_search: true,
         };
         server
             .mockEndpoint()
@@ -621,6 +637,7 @@ describe("SourceConnections", () => {
                     error: "error",
                 },
             },
+            sync_id: "sync_id",
             entities: {
                 total_entities: 1,
                 by_type: {
@@ -629,6 +646,7 @@ describe("SourceConnections", () => {
                     },
                 },
             },
+            federated_search: true,
         });
     });
 
