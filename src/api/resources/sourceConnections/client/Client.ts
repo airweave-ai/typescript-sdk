@@ -495,25 +495,45 @@ export class SourceConnections {
      *
      * Runs are always executed through Temporal workflow engine.
      *
+     * Args:
+     *     db: Database session
+     *     source_connection_id: ID of the source connection to run
+     *     ctx: API context with organization and user information
+     *     guard_rail: Guard rail service for usage limits
+     *     force_full_sync: If True, forces a full sync with orphaned entity cleanup
+     *                     for continuous syncs. Raises 400 error if used on
+     *                     non-continuous syncs (which are always full syncs).
+     *
      * @param {string} sourceConnectionId
+     * @param {AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.run("source_connection_id")
+     *     await client.sourceConnections.run("source_connection_id", {
+     *         force_full_sync: true
+     *     })
      */
     public run(
         sourceConnectionId: string,
+        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, request, requestOptions));
     }
 
     private async __run(
         sourceConnectionId: string,
+        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
+        const { force_full_sync: forceFullSync } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (forceFullSync != null) {
+            _queryParams["force_full_sync"] = forceFullSync.toString();
+        }
+
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
@@ -528,7 +548,7 @@ export class SourceConnections {
             ),
             method: "POST",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

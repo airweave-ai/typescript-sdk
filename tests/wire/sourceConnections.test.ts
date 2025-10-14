@@ -707,7 +707,9 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.run("source_connection_id");
+        const response = await client.sourceConnections.run("source_connection_id", {
+            force_full_sync: true,
+        });
         expect(response).toEqual({
             id: "id",
             source_connection_id: "source_connection_id",

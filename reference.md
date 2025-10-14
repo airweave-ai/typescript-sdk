@@ -966,7 +966,7 @@ await client.sourceConnections.update("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>(sourceConnectionId) -> AirweaveSDK.SourceConnectionJob</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
 <dl>
 <dd>
 
@@ -982,6 +982,15 @@ Trigger a sync run for a source connection.
 
 Runs are always executed through Temporal workflow engine.
 
+Args:
+db: Database session
+source_connection_id: ID of the source connection to run
+ctx: API context with organization and user information
+guard_rail: Guard rail service for usage limits
+force_full_sync: If True, forces a full sync with orphaned entity cleanup
+for continuous syncs. Raises 400 error if used on
+non-continuous syncs (which are always full syncs).
+
 </dd>
 </dl>
 </dd>
@@ -996,7 +1005,9 @@ Runs are always executed through Temporal workflow engine.
 <dd>
 
 ```typescript
-await client.sourceConnections.run("source_connection_id");
+await client.sourceConnections.run("source_connection_id", {
+    force_full_sync: true,
+});
 ```
 
 </dd>
@@ -1013,6 +1024,14 @@ await client.sourceConnections.run("source_connection_id");
 <dd>
 
 **sourceConnectionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest`
 
 </dd>
 </dl>
