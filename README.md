@@ -29,6 +29,22 @@ await client.collections.create({
 });
 ```
 
+## Framework Tracking
+
+If you're using Airweave with an agent framework like CrewAI, LangChain, or LlamaIndex, you can track which framework is making requests. This helps Airweave provide better analytics and support for your specific framework.
+
+```typescript
+import { AirweaveSDKClient } from "@airweave/sdk";
+
+const client = new AirweaveSDKClient({
+    apiKey: "YOUR_API_KEY",
+    frameworkName: "langchain",
+    frameworkVersion: "0.2.0",
+});
+```
+
+The framework information is automatically sent with every request as headers (`X-Framework-Name` and `X-Framework-Version`), enabling better insights and troubleshooting.
+
 ## Request And Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. Simply import them with the
