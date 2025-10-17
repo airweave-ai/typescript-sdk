@@ -19,4 +19,6 @@ export interface OrganizationWithRole {
     org_metadata?: Record<string, unknown>;
     /** List of enabled feature flags for this organization */
     enabled_features?: AirweaveSDK.FeatureFlag[];
+    /** Complete billing information including current period */
+    billing?: AirweaveSDK.OrganizationBilling;
 }

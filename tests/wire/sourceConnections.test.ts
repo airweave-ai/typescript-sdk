@@ -9,7 +9,12 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("SourceConnections", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = [
             {
@@ -58,7 +63,12 @@ describe("SourceConnections", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
@@ -76,7 +86,12 @@ describe("SourceConnections", () => {
 
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
         const rawRequestBody = { short_name: "short_name", readable_collection_id: "readable_collection_id" };
         const rawResponseBody = {
             id: "id",
@@ -204,7 +219,12 @@ describe("SourceConnections", () => {
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
         const rawRequestBody = {
             name: undefined,
             short_name: "short_name",
@@ -243,7 +263,12 @@ describe("SourceConnections", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = {
             id: "id",
@@ -367,7 +392,12 @@ describe("SourceConnections", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
@@ -385,7 +415,12 @@ describe("SourceConnections", () => {
 
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = {
             id: "id",
@@ -509,7 +544,12 @@ describe("SourceConnections", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
@@ -527,7 +567,12 @@ describe("SourceConnections", () => {
 
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
         const rawRequestBody = {};
         const rawResponseBody = {
             id: "id",
@@ -652,7 +697,12 @@ describe("SourceConnections", () => {
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
         const rawRequestBody = {
             name: undefined,
             description: undefined,
@@ -683,7 +733,12 @@ describe("SourceConnections", () => {
 
     test("run (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = {
             id: "id",
@@ -730,7 +785,12 @@ describe("SourceConnections", () => {
 
     test("run (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
@@ -748,7 +808,12 @@ describe("SourceConnections", () => {
 
     test("getSourceConnectionJobs (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = [
             {
@@ -799,7 +864,12 @@ describe("SourceConnections", () => {
 
     test("getSourceConnectionJobs (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
@@ -817,7 +887,12 @@ describe("SourceConnections", () => {
 
     test("cancelJob (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = {
             id: "id",
@@ -862,7 +937,12 @@ describe("SourceConnections", () => {
 
     test("cancelJob (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server

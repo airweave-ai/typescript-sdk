@@ -5,7 +5,16 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Organization schema.
+ * Organization schema with billing and feature information.
+ *
+ * This is the primary organization schema used in API contexts, enriched with
+ * billing (including current period) and feature flags for efficient access
+ * without additional database queries.
+ *
+ * Access billing info compositionally:
+ * - organization.billing.plan
+ * - organization.billing.status
+ * - organization.billing.current_period
  */
 export interface Organization {
     name: string;
@@ -17,4 +26,6 @@ export interface Organization {
     org_metadata?: Record<string, unknown>;
     /** List of enabled feature flags for this organization */
     enabled_features?: AirweaveSDK.FeatureFlag[];
+    /** Complete billing information including current period */
+    billing?: AirweaveSDK.OrganizationBilling;
 }

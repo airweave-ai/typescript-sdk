@@ -9,7 +9,12 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("Sources", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = [
             {
@@ -108,7 +113,12 @@ describe("Sources", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server.mockEndpoint().get("/sources").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
@@ -120,7 +130,12 @@ describe("Sources", () => {
 
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = {
             name: "GitHub",
@@ -221,7 +236,12 @@ describe("Sources", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const client = new AirweaveSDKClient({
+            apiKey: "test",
+            frameworkName: "test",
+            frameworkVersion: "test",
+            environment: server.baseUrl,
+        });
 
         const rawResponseBody = { detail: undefined };
         server
