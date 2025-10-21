@@ -15,4 +15,5 @@ export interface User {
     primary_organization_id?: string;
     user_organizations?: AirweaveSDK.UserOrganization[];
     is_admin?: boolean;
+    last_active_at?: string;
 }

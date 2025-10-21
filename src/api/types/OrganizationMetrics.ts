@@ -38,6 +38,8 @@ export interface OrganizationMetrics {
     entity_count?: number;
     /** Total number of queries (from Usage.queries) */
     query_count?: number;
+    /** Last active timestamp of any user in this organization */
+    last_active_at?: string;
     /** Whether the current admin user is already a member */
     is_member?: boolean;
     /** Admin's role in this organization (if member) */
