@@ -10,7 +10,6 @@ import * as AirweaveSDK from "../index.js";
 export interface SyncCreate {
     name: string;
     source_connection_id: string;
-    embedding_model_connection_id?: string;
     destination_connection_ids: string[];
     description?: string;
     cron_schedule?: string;
