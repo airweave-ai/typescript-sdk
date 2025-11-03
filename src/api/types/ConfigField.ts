@@ -11,4 +11,5 @@ export interface ConfigField {
     description?: string;
     type: string;
     required?: boolean;
+    items_type?: string;
 }
