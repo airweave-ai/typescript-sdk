@@ -8,7 +8,7 @@ import * as AirweaveSDK from "../index.js";
  * Legacy search request schema for backwards compatibility.
  */
 export interface LegacySearchRequest {
-    /** The search query text */
+    /** The search query text (max 2048 tokens) */
     query: string;
     /** Qdrant native filter for metadata-based filtering */
     filter?: AirweaveSDK.Filter;
