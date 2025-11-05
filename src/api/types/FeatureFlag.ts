@@ -7,8 +7,9 @@
  *
  * Add new flags here to enable feature gating at the organization level.
  */
-export type FeatureFlag = "s3_destination" | "priority_support";
+export type FeatureFlag = "s3_destination" | "priority_support" | "source_rate_limiting";
 export const FeatureFlag = {
     S3Destination: "s3_destination",
     PrioritySupport: "priority_support",
+    SourceRateLimiting: "source_rate_limiting",
 } as const;

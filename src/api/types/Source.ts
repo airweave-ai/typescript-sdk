@@ -36,6 +36,8 @@ export interface Source {
     federated_search?: boolean;
     /** Whether this source's entities have timestamps that enable recency-based ranking. Sources without file-level timestamps (e.g., code repositories) cannot use temporal relevance for search result weighting. */
     supports_temporal_relevance?: boolean;
+    /** Rate limiting level for this source: 'org' (organization-wide), 'connection' (per-connection/per-user), or None (no rate limiting). */
+    rate_limit_level?: string;
     /** Unique system identifier for this source type. Generated automatically when the source is registered. */
     id: string;
     /** Timestamp when this source type was registered in the system (ISO 8601 format). */
