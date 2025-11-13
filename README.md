@@ -5,6 +5,24 @@
 
 The Airweave TypeScript library provides convenient access to the Airweave APIs from TypeScript.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Reference](#reference)
+- [Usage](#usage)
+- [Framework Tracking](#framework-tracking)
+- [Request and Response Types](#request-and-response-types)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+    - [Additional Headers](#additional-headers)
+    - [Additional Query String Parameters](#additional-query-string-parameters)
+    - [Retries](#retries)
+    - [Timeouts](#timeouts)
+    - [Aborting Requests](#aborting-requests)
+    - [Access Raw Response Data](#access-raw-response-data)
+    - [Runtime Compatibility](#runtime-compatibility)
+- [Contributing](#contributing)
+
 ## Installation
 
 ```sh
@@ -49,7 +67,7 @@ const client = new AirweaveSDKClient({
 
 The framework information is automatically sent with every request as headers (`X-Framework-Name` and `X-Framework-Version`), enabling better insights and troubleshooting.
 
-## Request And Response Types
+## Request and Response Types
 
 The SDK exports all request and response types as TypeScript interfaces. Simply import them with the
 following namespace:

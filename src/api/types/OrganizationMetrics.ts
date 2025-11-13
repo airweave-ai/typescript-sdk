@@ -32,7 +32,7 @@ export interface OrganizationMetrics {
     trial_ends_at?: string;
     /** Number of users in organization */
     user_count?: number;
-    /** Number of source connections (from Usage.source_connections) */
+    /** Number of source connections (computed from source_connection table) */
     source_connection_count?: number;
     /** Total number of entities (from Usage.entities) */
     entity_count?: number;
