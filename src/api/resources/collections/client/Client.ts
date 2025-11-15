@@ -51,7 +51,9 @@ export class Collections {
     }
 
     /**
-     * List all collections that belong to your organization.
+     * List all collections that belong to your organization with optional search filtering.
+     *
+     * Collections are always sorted by creation date (newest first).
      *
      * @param {AirweaveSDK.ListCollectionsGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
@@ -61,7 +63,8 @@ export class Collections {
      * @example
      *     await client.collections.list({
      *         skip: 1,
-     *         limit: 1
+     *         limit: 1,
+     *         search: "search"
      *     })
      */
     public list(
@@ -75,7 +78,7 @@ export class Collections {
         request: AirweaveSDK.ListCollectionsGetRequest = {},
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection[]>> {
-        const { skip, limit } = request;
+        const { skip, limit, search } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (skip != null) {
             _queryParams["skip"] = skip.toString();
@@ -83,6 +86,10 @@ export class Collections {
 
         if (limit != null) {
             _queryParams["limit"] = limit.toString();
+        }
+
+        if (search != null) {
+            _queryParams["search"] = search;
         }
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(

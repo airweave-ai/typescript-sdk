@@ -36,6 +36,7 @@ describe("Collections", () => {
         const response = await client.collections.list({
             skip: 1,
             limit: 1,
+            search: "search",
         });
         expect(response).toEqual([
             {

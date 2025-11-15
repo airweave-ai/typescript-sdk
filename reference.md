@@ -137,7 +137,9 @@ await client.sources.get("short_name");
 <dl>
 <dd>
 
-List all collections that belong to your organization.
+List all collections that belong to your organization with optional search filtering.
+
+Collections are always sorted by creation date (newest first).
 
 </dd>
 </dl>
@@ -156,6 +158,7 @@ List all collections that belong to your organization.
 await client.collections.list({
     skip: 1,
     limit: 1,
+    search: "search",
 });
 ```
 

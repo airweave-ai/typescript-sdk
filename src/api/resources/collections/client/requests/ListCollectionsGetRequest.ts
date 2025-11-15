@@ -6,7 +6,8 @@
  * @example
  *     {
  *         skip: 1,
- *         limit: 1
+ *         limit: 1,
+ *         search: "search"
  *     }
  */
 export interface ListCollectionsGetRequest {
@@ -14,4 +15,6 @@ export interface ListCollectionsGetRequest {
     skip?: number;
     /** Maximum number of collections to return (1-1000) */
     limit?: number;
+    /** Search term to filter by name or readable_id */
+    search?: string;
 }
