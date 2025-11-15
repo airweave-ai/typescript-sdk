@@ -7,6 +7,25 @@ The Airweave TypeScript library provides convenient access to the Airweave APIs 
 
 ## Table of Contents
 
+- [Table of Contents](#table-of-contents)
+- [Installation](#installation)
+- [Reference](#reference)
+- [Usage](#usage)
+- [Framework Tracking](#framework-tracking)
+- [Request and Response Types](#request-and-response-types)
+- [Exception Handling](#exception-handling)
+- [Advanced](#advanced)
+    - [Additional Headers](#additional-headers)
+    - [Additional Query String Parameters](#additional-query-string-parameters)
+    - [Retries](#retries)
+    - [Timeouts](#timeouts)
+    - [Aborting Requests](#aborting-requests)
+    - [Access Raw Response Data](#access-raw-response-data)
+    - [Runtime Compatibility](#runtime-compatibility)
+- [Contributing](#contributing)
+
+## Table of Contents
+
 - [Installation](#installation)
 - [Reference](#reference)
 - [Usage](#usage)
