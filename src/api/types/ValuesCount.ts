@@ -7,11 +7,11 @@
  */
 export interface ValuesCount {
     /** point.key.length() &lt; values_count.lt */
-    lt?: number;
+    lt?: number | null;
     /** point.key.length() &gt; values_count.gt */
-    gt?: number;
+    gt?: number | null;
     /** point.key.length() &gt;= values_count.gte */
-    gte?: number;
+    gte?: number | null;
     /** point.key.length() &lt;= values_count.lte */
-    lte?: number;
+    lte?: number | null;
 }

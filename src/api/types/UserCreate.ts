@@ -7,6 +7,6 @@
  */
 export interface UserCreate {
     email: string;
-    full_name?: string;
-    auth0_id?: string;
+    full_name?: string | null;
+    auth0_id?: string | null;
 }

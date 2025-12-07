@@ -8,11 +8,11 @@
 export interface SourceRateLimitResponse {
     source_short_name: string;
     /** 'org' (organization-wide), 'connection' (per-user), or None (not supported) */
-    rate_limit_level?: string;
+    rate_limit_level?: string | null;
     /** Configured limit, None if not set */
-    limit?: number;
+    limit?: number | null;
     /** Configured window, None if not set */
-    window_seconds?: number;
+    window_seconds?: number | null;
     /** DB record ID, None if not configured */
-    id?: string;
+    id?: string | null;
 }

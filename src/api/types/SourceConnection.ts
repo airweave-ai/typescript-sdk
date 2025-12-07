@@ -10,19 +10,19 @@ import * as AirweaveSDK from "../index.js";
 export interface SourceConnection {
     id: string;
     name: string;
-    description?: string;
+    description: string | null;
     short_name: string;
     readable_collection_id: string;
     status: AirweaveSDK.SourceConnectionStatus;
     created_at: string;
     modified_at: string;
     auth: AirweaveSDK.AuthenticationDetails;
-    config?: Record<string, unknown>;
-    schedule?: AirweaveSDK.ScheduleDetails;
-    sync?: AirweaveSDK.SyncDetails;
+    config?: Record<string, unknown> | null;
+    schedule?: AirweaveSDK.ScheduleDetails | null;
+    sync?: AirweaveSDK.SyncDetails | null;
     /** ID of the associated sync */
-    sync_id?: string;
-    entities?: AirweaveSDK.EntitySummary;
+    sync_id?: string | null;
+    entities?: AirweaveSDK.EntitySummary | null;
     /** Whether this source uses federated search */
     federated_search?: boolean;
 }

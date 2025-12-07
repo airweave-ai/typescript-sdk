@@ -18,6 +18,10 @@ export declare namespace Collections {
         frameworkName?: core.Supplier<string | undefined>;
         /** Override the X-Framework-Version header */
         frameworkVersion?: core.Supplier<string | undefined>;
+        /** Override the X-Organization-ID header */
+        organizationId?: core.Supplier<(string | null) | undefined>;
+        /** Override the x-agent-key header */
+        agentKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -33,6 +37,10 @@ export declare namespace Collections {
         frameworkName?: string | undefined;
         /** Override the X-Framework-Version header */
         frameworkVersion?: string | undefined;
+        /** Override the X-Organization-ID header */
+        organizationId?: (string | null) | undefined;
+        /** Override the x-agent-key header */
+        agentKey?: string;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -61,11 +69,7 @@ export class Collections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.list({
-     *         skip: 1,
-     *         limit: 1,
-     *         search: "search"
-     *     })
+     *     await client.collections.list()
      */
     public list(
         request: AirweaveSDK.ListCollectionsGetRequest = {},
@@ -97,6 +101,8 @@ export class Collections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -155,6 +161,9 @@ export class Collections {
     /**
      * Create a new collection.
      *
+     * Only organization owners and admins can create collections.
+     * The creator is automatically assigned as collection_owner.
+     *
      * The newly created collection is initially empty and does not contain any data
      * until you explicitly add source connections to it.
      *
@@ -166,6 +175,9 @@ export class Collections {
      * @example
      *     await client.collections.create({
      *         name: "Finance Data",
+     *         description: "Financial reports and analytics data",
+     *         color: "#10b981",
+     *         icon: "chart-bar",
      *         readable_id: "finance-data-reports"
      *     })
      */
@@ -185,6 +197,8 @@ export class Collections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -246,30 +260,35 @@ export class Collections {
     /**
      * Retrieve a specific collection by its readable ID.
      *
-     * @param {string} readableId - The unique readable identifier of the collection (e.g., 'finance-data-ab123')
+     * @param {AirweaveSDK.GetCollectionsReadableIdGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.get("readable_id")
+     *     await client.collections.get({
+     *         readable_id: "readable_id"
+     *     })
      */
     public get(
-        readableId: string,
+        request: AirweaveSDK.GetCollectionsReadableIdGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__get(readableId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
     }
 
     private async __get(
-        readableId: string,
+        request: AirweaveSDK.GetCollectionsReadableIdGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
+        const { readable_id: readableId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -330,34 +349,41 @@ export class Collections {
     /**
      * Delete a collection and all associated data.
      *
+     * Only organization owners/admins and collection owners can delete collections.
+     *
      * Permanently removes a collection from your organization including all synced data
      * from the destination systems. All source connections within this collection
      * will also be deleted as part of the cleanup process. This action cannot be undone.
      *
-     * @param {string} readableId - The unique readable identifier of the collection to delete
+     * @param {AirweaveSDK.DeleteCollectionsReadableIdDeleteRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.delete("readable_id")
+     *     await client.collections.delete({
+     *         readable_id: "readable_id"
+     *     })
      */
     public delete(
-        readableId: string,
+        request: AirweaveSDK.DeleteCollectionsReadableIdDeleteRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Collection> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(readableId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
     }
 
     private async __delete(
-        readableId: string,
+        request: AirweaveSDK.DeleteCollectionsReadableIdDeleteRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
+        const { readable_id: readableId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -418,35 +444,42 @@ export class Collections {
     /**
      * Trigger data synchronization for all source connections in the collection.
      *
+     * Only organization owners/admins, collection owners and collection editors can refresh collections.
+     *
      * The sync jobs run asynchronously in the background, so this endpoint
      * returns immediately with job details that you can use to track progress. You can
      * monitor the status of individual data synchronization using the source connection
      * endpoints.
      *
-     * @param {string} readableId - The unique readable identifier of the collection to refresh
+     * @param {AirweaveSDK.RefreshAllSourceConnectionsCollectionsReadableIdRefreshAllPostRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.refreshAllSourceConnections("readable_id")
+     *     await client.collections.refreshAllSourceConnections({
+     *         readable_id: "readable_id"
+     *     })
      */
     public refreshAllSourceConnections(
-        readableId: string,
+        request: AirweaveSDK.RefreshAllSourceConnectionsCollectionsReadableIdRefreshAllPostRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob[]> {
-        return core.HttpResponsePromise.fromPromise(this.__refreshAllSourceConnections(readableId, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__refreshAllSourceConnections(request, requestOptions));
     }
 
     private async __refreshAllSourceConnections(
-        readableId: string,
+        request: AirweaveSDK.RefreshAllSourceConnectionsCollectionsReadableIdRefreshAllPostRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
+        const { readable_id: readableId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -510,35 +543,36 @@ export class Collections {
      * DEPRECATED: This endpoint uses the old schema. Please migrate to POST with the new
      * SearchRequest format for access to all features.
      *
-     * @param {string} readableId - The unique readable identifier of the collection to search
      * @param {AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.searchGetLegacy("readable_id", {
-     *         query: "query",
-     *         response_type: "raw",
-     *         limit: 1,
-     *         offset: 1,
-     *         recency_bias: 1.1
+     *     await client.collections.searchGetLegacy({
+     *         readable_id: "readable_id",
+     *         query: "query"
      *     })
      */
     public searchGetLegacy(
-        readableId: string,
         request: AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.LegacySearchResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__searchGetLegacy(readableId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__searchGetLegacy(request, requestOptions));
     }
 
     private async __searchGetLegacy(
-        readableId: string,
         request: AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.LegacySearchResponse>> {
-        const { query, response_type: responseType, limit, offset, recency_bias: recencyBias } = request;
+        const {
+            readable_id: readableId,
+            query,
+            response_type: responseType,
+            limit,
+            offset,
+            recency_bias: recencyBias,
+        } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         _queryParams["query"] = query;
         if (responseType != null) {
@@ -553,8 +587,8 @@ export class Collections {
             _queryParams["offset"] = offset.toString();
         }
 
-        if (recencyBias != null) {
-            _queryParams["recency_bias"] = recencyBias.toString();
+        if (recencyBias !== undefined) {
+            _queryParams["recency_bias"] = recencyBias?.toString() ?? null;
         }
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
@@ -562,6 +596,8 @@ export class Collections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -625,35 +661,38 @@ export class Collections {
      * Accepts both new SearchRequest and legacy LegacySearchRequest formats
      * for backwards compatibility.
      *
-     * @param {string} readableId - The unique readable identifier of the collection
      * @param {AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.collections.search("readable_id", {
-     *         query: "query"
+     *     await client.collections.search({
+     *         readable_id: "readable_id",
+     *         body: {
+     *             query: "query"
+     *         }
      *     })
      */
     public search(
-        readableId: string,
         request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
         requestOptions?: Collections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse> {
-        return core.HttpResponsePromise.fromPromise(this.__search(readableId, request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__search(request, requestOptions));
     }
 
     private async __search(
-        readableId: string,
         request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
         requestOptions?: Collections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse>> {
+        const { readable_id: readableId, body: _body } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
+                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
+                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -670,7 +709,7 @@ export class Collections {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: request,
+            body: _body,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,

@@ -3,7 +3,7 @@
  */
 
 export const AirweaveSDKEnvironment = {
-    Production: "https://api.airweave.ai",
+    Production: "https://api.graffo.io",
     Local: "http://localhost:8001",
 } as const;
 

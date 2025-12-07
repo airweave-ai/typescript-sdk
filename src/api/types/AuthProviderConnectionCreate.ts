@@ -11,11 +11,11 @@ export interface AuthProviderConnectionCreate {
     /** Human-readable name for this auth provider connection */
     name: string;
     /** URL-safe unique identifier for the connection. Must contain only lowercase letters, numbers, and hyphens. If not provided, it will be automatically generated from the connection name with a random suffix for uniqueness (e.g., 'composio-connection-ab123'). */
-    readable_id?: string;
+    readable_id?: string | null;
     /** Optional detailed description of what this auth provider connection provides. */
-    description?: string;
+    description?: string | null;
     /** Technical identifier of the auth provider */
     short_name: string;
     /** Authentication credentials required to access the auth provider. The required fields vary by auth provider type. */
-    auth_fields?: AirweaveSDK.ConfigValues;
+    auth_fields?: AirweaveSDK.ConfigValues | null;
 }

@@ -13,10 +13,10 @@ import * as AirweaveSDK from "../index.js";
 export interface IntegrationCredentialRawCreate {
     name: string;
     integration_short_name: string;
-    description?: string;
+    description?: string | null;
     integration_type: AirweaveSDK.IntegrationType;
     authentication_method: AirweaveSDK.AuthenticationMethod;
-    oauth_type?: AirweaveSDK.OAuthType;
-    auth_config_class?: string;
+    oauth_type?: AirweaveSDK.OAuthType | null;
+    auth_config_class?: string | null;
     auth_fields: Record<string, unknown>;
 }

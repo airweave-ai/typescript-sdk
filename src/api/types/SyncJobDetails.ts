@@ -10,12 +10,12 @@ import * as AirweaveSDK from "../index.js";
 export interface SyncJobDetails {
     id: string;
     status: AirweaveSDK.SyncJobStatus;
-    started_at?: string;
-    completed_at?: string;
-    duration_seconds?: number;
+    started_at?: string | null;
+    completed_at?: string | null;
+    duration_seconds?: number | null;
     entities_inserted?: number;
     entities_updated?: number;
     entities_deleted?: number;
     entities_failed?: number;
-    error?: string;
+    error?: string | null;
 }

@@ -9,5 +9,5 @@ export interface AuthProviderAuthentication {
     /** Auth provider readable ID */
     provider_readable_id: string;
     /** Provider-specific configuration */
-    provider_config?: Record<string, unknown>;
+    provider_config?: Record<string, unknown> | null;
 }

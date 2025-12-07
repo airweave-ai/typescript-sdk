@@ -10,15 +10,16 @@ import * as AirweaveSDK from "../index.js";
 export interface OrganizationWithRole {
     id: string;
     name: string;
-    description?: string;
+    description?: string | null;
     created_at: string;
     modified_at: string;
     role: string;
     is_primary: boolean;
-    auth0_org_id?: string;
-    org_metadata?: Record<string, unknown>;
+    auth0_org_id?: string | null;
+    org_type?: string;
+    org_metadata?: Record<string, unknown> | null;
     /** List of enabled feature flags for this organization */
     enabled_features?: AirweaveSDK.FeatureFlag[];
     /** Complete billing information including current period */
-    billing?: AirweaveSDK.OrganizationBilling;
+    billing?: AirweaveSDK.OrganizationBilling | null;
 }

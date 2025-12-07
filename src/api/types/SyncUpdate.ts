@@ -8,11 +8,11 @@ import * as AirweaveSDK from "../index.js";
  * Schema for updating a Sync object.
  */
 export interface SyncUpdate {
-    name?: string;
-    cron_schedule?: string;
-    next_scheduled_run?: string;
-    sync_metadata?: Record<string, unknown>;
-    status?: AirweaveSDK.SyncStatus;
-    temporal_schedule_id?: string;
-    sync_type?: string;
+    name?: string | null;
+    cron_schedule?: string | null;
+    next_scheduled_run?: string | null;
+    sync_metadata?: Record<string, unknown> | null;
+    status?: AirweaveSDK.SyncStatus | null;
+    temporal_schedule_id?: string | null;
+    sync_type?: string | null;
 }

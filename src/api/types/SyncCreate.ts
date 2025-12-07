@@ -11,12 +11,12 @@ export interface SyncCreate {
     name: string;
     source_connection_id: string;
     destination_connection_ids: string[];
-    description?: string;
-    cron_schedule?: string;
-    next_scheduled_run?: string;
-    temporal_schedule_id?: string;
+    description?: string | null;
+    cron_schedule?: string | null;
+    next_scheduled_run?: string | null;
+    temporal_schedule_id?: string | null;
     sync_type?: string;
-    sync_metadata?: Record<string, unknown>;
-    status?: AirweaveSDK.SyncStatus;
+    sync_metadata?: Record<string, unknown> | null;
+    status?: AirweaveSDK.SyncStatus | null;
     run_immediately?: boolean;
 }

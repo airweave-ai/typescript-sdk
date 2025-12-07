@@ -1,9 +1,9 @@
-# Airweave TypeScript Library
+# Graffo TypeScript Library
 
 [![fern shield](https://img.shields.io/badge/%F0%9F%8C%BF-Built%20with%20Fern-brightgreen)](https://buildwithfern.com?utm_source=github&utm_medium=github&utm_campaign=readme&utm_source=https%3A%2F%2Fgithub.com%2Fairweave-ai%2Ftypescript-sdk)
 [![npm shield](https://img.shields.io/npm/v/@airweave/sdk)](https://www.npmjs.com/package/@airweave/sdk)
 
-The Airweave TypeScript library provides convenient access to the Airweave APIs from TypeScript.
+The Graffo TypeScript library provides convenient access to the Graffo APIs from TypeScript.
 
 ## Table of Contents
 
@@ -43,9 +43,14 @@ const client = new AirweaveSDKClient({
     apiKey: "YOUR_API_KEY",
     frameworkName: "YOUR_FRAMEWORK_NAME",
     frameworkVersion: "YOUR_FRAMEWORK_VERSION",
+    organizationId: "YOUR_ORGANIZATION_ID",
+    agentKey: "YOUR_AGENT_KEY",
 });
 await client.collections.create({
     name: "Finance Data",
+    description: "Financial reports and analytics data",
+    color: "#10b981",
+    icon: "chart-bar",
     readable_id: "finance-data-reports",
 });
 ```
@@ -58,7 +63,7 @@ following namespace:
 ```typescript
 import { AirweaveSDK } from "@airweave/sdk";
 
-const request: AirweaveSDK.ListCollectionsGetRequest = {
+const request: AirweaveSDK.GetSourcesShortNameGetRequest = {
     ...
 };
 ```

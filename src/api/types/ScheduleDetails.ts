@@ -6,9 +6,9 @@
  * Schedule information.
  */
 export interface ScheduleDetails {
-    cron?: string;
-    next_run?: string;
+    cron?: string | null;
+    next_run?: string | null;
     continuous?: boolean;
-    cursor_field?: string;
-    cursor_value?: unknown;
+    cursor_field?: string | null;
+    cursor_value?: unknown | null;
 }

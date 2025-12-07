@@ -19,6 +19,10 @@ export declare namespace AirweaveSDKClient {
         frameworkName?: core.Supplier<string | undefined>;
         /** Override the X-Framework-Version header */
         frameworkVersion?: core.Supplier<string | undefined>;
+        /** Override the X-Organization-ID header */
+        organizationId?: core.Supplier<(string | null) | undefined>;
+        /** Override the x-agent-key header */
+        agentKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -34,6 +38,10 @@ export declare namespace AirweaveSDKClient {
         frameworkName?: string | undefined;
         /** Override the X-Framework-Version header */
         frameworkVersion?: string | undefined;
+        /** Override the X-Organization-ID header */
+        organizationId?: (string | null) | undefined;
+        /** Override the x-agent-key header */
+        agentKey?: string;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -54,10 +62,12 @@ export class AirweaveSDKClient {
                 {
                     "X-Framework-Name": _options?.frameworkName,
                     "X-Framework-Version": _options?.frameworkVersion,
+                    "X-Organization-ID": _options?.organizationId,
+                    "x-agent-key": _options?.agentKey,
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.7.19",
-                    "User-Agent": "@airweave/sdk/v0.7.19",
+                    "X-Fern-SDK-Version": "v0.1.54",
+                    "User-Agent": "@airweave/sdk/v0.1.54",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },

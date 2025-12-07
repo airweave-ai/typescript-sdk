@@ -17,7 +17,7 @@
 List all available data source connectors.
 
 <br/><br/>
-Returns the complete catalog of source types that Airweave can connect to.
+Returns the complete catalog of source types that Graffo can connect to.
 
 </dd>
 </dl>
@@ -60,7 +60,7 @@ await client.sources.list();
 </dl>
 </details>
 
-<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">get</a>(shortName) -> AirweaveSDK.Source</code></summary>
+<details><summary><code>client.sources.<a href="/src/api/resources/sources/client/Client.ts">get</a>({ ...params }) -> AirweaveSDK.Source</code></summary>
 <dl>
 <dd>
 
@@ -88,7 +88,9 @@ Get detailed information about a specific data source connector.
 <dd>
 
 ```typescript
-await client.sources.get("short_name");
+await client.sources.get({
+    short_name: "short_name",
+});
 ```
 
 </dd>
@@ -104,7 +106,7 @@ await client.sources.get("short_name");
 <dl>
 <dd>
 
-**shortName:** `string` — Technical identifier of the source type (e.g., 'github', 'stripe', 'slack')
+**request:** `AirweaveSDK.GetSourcesShortNameGetRequest`
 
 </dd>
 </dl>
@@ -155,11 +157,7 @@ Collections are always sorted by creation date (newest first).
 <dd>
 
 ```typescript
-await client.collections.list({
-    skip: 1,
-    limit: 1,
-    search: "search",
-});
+await client.collections.list();
 ```
 
 </dd>
@@ -208,6 +206,9 @@ await client.collections.list({
 
 Create a new collection.
 
+Only organization owners and admins can create collections.
+The creator is automatically assigned as collection_owner.
+
 The newly created collection is initially empty and does not contain any data
 until you explicitly add source connections to it.
 
@@ -227,6 +228,9 @@ until you explicitly add source connections to it.
 ```typescript
 await client.collections.create({
     name: "Finance Data",
+    description: "Financial reports and analytics data",
+    color: "#10b981",
+    icon: "chart-bar",
     readable_id: "finance-data-reports",
 });
 ```
@@ -263,7 +267,7 @@ await client.collections.create({
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">get</a>(readableId) -> AirweaveSDK.Collection</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">get</a>({ ...params }) -> AirweaveSDK.Collection</code></summary>
 <dl>
 <dd>
 
@@ -291,7 +295,9 @@ Retrieve a specific collection by its readable ID.
 <dd>
 
 ```typescript
-await client.collections.get("readable_id");
+await client.collections.get({
+    readable_id: "readable_id",
+});
 ```
 
 </dd>
@@ -307,7 +313,7 @@ await client.collections.get("readable_id");
 <dl>
 <dd>
 
-**readableId:** `string` — The unique readable identifier of the collection (e.g., 'finance-data-ab123')
+**request:** `AirweaveSDK.GetCollectionsReadableIdGetRequest`
 
 </dd>
 </dl>
@@ -326,7 +332,7 @@ await client.collections.get("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">delete</a>(readableId) -> AirweaveSDK.Collection</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">delete</a>({ ...params }) -> AirweaveSDK.Collection</code></summary>
 <dl>
 <dd>
 
@@ -339,6 +345,8 @@ await client.collections.get("readable_id");
 <dd>
 
 Delete a collection and all associated data.
+
+Only organization owners/admins and collection owners can delete collections.
 
 Permanently removes a collection from your organization including all synced data
 from the destination systems. All source connections within this collection
@@ -358,7 +366,9 @@ will also be deleted as part of the cleanup process. This action cannot be undon
 <dd>
 
 ```typescript
-await client.collections.delete("readable_id");
+await client.collections.delete({
+    readable_id: "readable_id",
+});
 ```
 
 </dd>
@@ -374,7 +384,7 @@ await client.collections.delete("readable_id");
 <dl>
 <dd>
 
-**readableId:** `string` — The unique readable identifier of the collection to delete
+**request:** `AirweaveSDK.DeleteCollectionsReadableIdDeleteRequest`
 
 </dd>
 </dl>
@@ -393,7 +403,7 @@ await client.collections.delete("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>(readableId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>({ ...params }) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
 <dl>
 <dd>
 
@@ -406,6 +416,8 @@ await client.collections.delete("readable_id");
 <dd>
 
 Trigger data synchronization for all source connections in the collection.
+
+Only organization owners/admins, collection owners and collection editors can refresh collections.
 
 The sync jobs run asynchronously in the background, so this endpoint
 returns immediately with job details that you can use to track progress. You can
@@ -426,7 +438,9 @@ endpoints.
 <dd>
 
 ```typescript
-await client.collections.refreshAllSourceConnections("readable_id");
+await client.collections.refreshAllSourceConnections({
+    readable_id: "readable_id",
+});
 ```
 
 </dd>
@@ -442,7 +456,7 @@ await client.collections.refreshAllSourceConnections("readable_id");
 <dl>
 <dd>
 
-**readableId:** `string` — The unique readable identifier of the collection to refresh
+**request:** `AirweaveSDK.RefreshAllSourceConnectionsCollectionsReadableIdRefreshAllPostRequest`
 
 </dd>
 </dl>
@@ -461,7 +475,7 @@ await client.collections.refreshAllSourceConnections("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">searchGetLegacy</a>(readableId, { ...params }) -> AirweaveSDK.LegacySearchResponse</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">searchGetLegacy</a>({ ...params }) -> AirweaveSDK.LegacySearchResponse</code></summary>
 <dl>
 <dd>
 
@@ -492,12 +506,9 @@ SearchRequest format for access to all features.
 <dd>
 
 ```typescript
-await client.collections.searchGetLegacy("readable_id", {
+await client.collections.searchGetLegacy({
+    readable_id: "readable_id",
     query: "query",
-    response_type: "raw",
-    limit: 1,
-    offset: 1,
-    recency_bias: 1.1,
 });
 ```
 
@@ -510,14 +521,6 @@ await client.collections.searchGetLegacy("readable_id", {
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**readableId:** `string` — The unique readable identifier of the collection to search
-
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -541,7 +544,7 @@ await client.collections.searchGetLegacy("readable_id", {
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>(readableId, { ...params }) -> AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>({ ...params }) -> AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse</code></summary>
 <dl>
 <dd>
 
@@ -572,8 +575,11 @@ for backwards compatibility.
 <dd>
 
 ```typescript
-await client.collections.search("readable_id", {
-    query: "query",
+await client.collections.search({
+    readable_id: "readable_id",
+    body: {
+        query: "query",
+    },
 });
 ```
 
@@ -586,14 +592,6 @@ await client.collections.search("readable_id", {
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**readableId:** `string` — The unique readable identifier of the collection
-
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -647,11 +645,7 @@ List source connections with minimal fields for performance.
 <dd>
 
 ```typescript
-await client.sourceConnections.list({
-    collection: "collection",
-    skip: 1,
-    limit: 1,
-});
+await client.sourceConnections.list();
 ```
 
 </dd>
@@ -766,7 +760,7 @@ await client.sourceConnections.create({
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">get</a>(sourceConnectionId) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">get</a>({ ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -794,7 +788,9 @@ Get a source connection with optional depth expansion.
 <dd>
 
 ```typescript
-await client.sourceConnections.get("source_connection_id");
+await client.sourceConnections.get({
+    source_connection_id: "source_connection_id",
+});
 ```
 
 </dd>
@@ -810,7 +806,7 @@ await client.sourceConnections.get("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**request:** `AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest`
 
 </dd>
 </dl>
@@ -829,7 +825,7 @@ await client.sourceConnections.get("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">delete</a>(sourceConnectionId) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">delete</a>({ ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -857,7 +853,9 @@ Delete a source connection and all related data.
 <dd>
 
 ```typescript
-await client.sourceConnections.delete("source_connection_id");
+await client.sourceConnections.delete({
+    source_connection_id: "source_connection_id",
+});
 ```
 
 </dd>
@@ -873,7 +871,7 @@ await client.sourceConnections.delete("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**request:** `AirweaveSDK.DeleteSourceConnectionsSourceConnectionIdDeleteRequest`
 
 </dd>
 </dl>
@@ -892,7 +890,7 @@ await client.sourceConnections.delete("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">update</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnection</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">update</a>({ ...params }) -> AirweaveSDK.SourceConnection</code></summary>
 <dl>
 <dd>
 
@@ -926,7 +924,9 @@ Updateable fields:
 <dd>
 
 ```typescript
-await client.sourceConnections.update("source_connection_id");
+await client.sourceConnections.update({
+    source_connection_id: "source_connection_id",
+});
 ```
 
 </dd>
@@ -938,14 +938,6 @@ await client.sourceConnections.update("source_connection_id");
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**sourceConnectionId:** `string`
-
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -969,7 +961,7 @@ await client.sourceConnections.update("source_connection_id");
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">run</a>({ ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
 <dl>
 <dd>
 
@@ -1008,8 +1000,8 @@ non-continuous syncs (which are always full syncs).
 <dd>
 
 ```typescript
-await client.sourceConnections.run("source_connection_id", {
-    force_full_sync: true,
+await client.sourceConnections.run({
+    source_connection_id: "source_connection_id",
 });
 ```
 
@@ -1022,14 +1014,6 @@ await client.sourceConnections.run("source_connection_id", {
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**sourceConnectionId:** `string`
-
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -1053,7 +1037,7 @@ await client.sourceConnections.run("source_connection_id", {
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">getSourceConnectionJobs</a>(sourceConnectionId, { ...params }) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">getSourceConnectionJobs</a>({ ...params }) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
 <dl>
 <dd>
 
@@ -1081,8 +1065,8 @@ Get sync jobs for a source connection.
 <dd>
 
 ```typescript
-await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
-    limit: 1,
+await client.sourceConnections.getSourceConnectionJobs({
+    source_connection_id: "source_connection_id",
 });
 ```
 
@@ -1095,14 +1079,6 @@ await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
 
 <dl>
 <dd>
-
-<dl>
-<dd>
-
-**sourceConnectionId:** `string`
-
-</dd>
-</dl>
 
 <dl>
 <dd>
@@ -1126,7 +1102,7 @@ await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
 </dl>
 </details>
 
-<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">cancelJob</a>(sourceConnectionId, jobId) -> AirweaveSDK.SourceConnectionJob</code></summary>
+<details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">cancelJob</a>({ ...params }) -> AirweaveSDK.SourceConnectionJob</code></summary>
 <dl>
 <dd>
 
@@ -1158,7 +1134,10 @@ the cancellation request.
 <dd>
 
 ```typescript
-await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+await client.sourceConnections.cancelJob({
+    source_connection_id: "source_connection_id",
+    job_id: "job_id",
+});
 ```
 
 </dd>
@@ -1174,15 +1153,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**jobId:** `string`
+**request:** `AirweaveSDK.CancelJobSourceConnectionsSourceConnectionIdJobsJobIdCancelPostRequest`
 
 </dd>
 </dl>

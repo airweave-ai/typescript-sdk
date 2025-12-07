@@ -4,5 +4,5 @@
 
 export interface BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost {
     token: string;
-    name?: string;
+    name?: string | null;
 }

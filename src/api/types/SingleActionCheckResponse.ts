@@ -11,9 +11,9 @@ export interface SingleActionCheckResponse {
     /** The action type that was checked */
     action: string;
     /** Reason why the action is not allowed (if applicable) */
-    reason?: SingleActionCheckResponse.Reason;
+    reason?: SingleActionCheckResponse.Reason | null;
     /** Additional details about why the action is not allowed */
-    details?: Record<string, unknown>;
+    details?: Record<string, unknown> | null;
 }
 
 export namespace SingleActionCheckResponse {

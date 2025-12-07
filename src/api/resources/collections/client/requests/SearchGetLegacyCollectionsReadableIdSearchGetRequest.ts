@@ -7,14 +7,13 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         query: "query",
- *         response_type: "raw",
- *         limit: 1,
- *         offset: 1,
- *         recency_bias: 1.1
+ *         readable_id: "readable_id",
+ *         query: "query"
  *     }
  */
 export interface SearchGetLegacyCollectionsReadableIdSearchGetRequest {
+    /** The unique readable identifier of the collection to search */
+    readable_id: string;
     /** The search query text to find relevant documents and data */
     query: string;
     /** Format of the response: 'raw' returns search results, 'completion' returns AI-generated answers */
@@ -24,5 +23,5 @@ export interface SearchGetLegacyCollectionsReadableIdSearchGetRequest {
     /** Number of results to skip for pagination */
     offset?: number;
     /** How much to weigh recency vs similarity (0..1) */
-    recency_bias?: number;
+    recency_bias?: number | null;
 }

@@ -12,12 +12,12 @@ export interface S3ConfigRequest {
     aws_secret_access_key: string;
     /** S3 bucket name */
     bucket_name: string;
-    /** Prefix for Airweave data */
+    /** Prefix for Graffo data */
     bucket_prefix?: string;
     /** AWS region */
     aws_region?: string;
     /** Custom S3 endpoint */
-    endpoint_url?: string;
+    endpoint_url?: string | null;
     /** Use SSL/TLS */
     use_ssl?: boolean;
 }

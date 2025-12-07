@@ -7,5 +7,5 @@
  */
 export interface ApiKeyCreate {
     /** Number of days until the API key expires (default: 90, max: 365) */
-    expiration_days?: number;
+    expiration_days?: number | null;
 }

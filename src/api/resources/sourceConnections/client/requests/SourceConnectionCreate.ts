@@ -13,22 +13,22 @@ import * as AirweaveSDK from "../../../../index.js";
  */
 export interface SourceConnectionCreate {
     /** Connection name (defaults to '{Source Name} Connection') */
-    name?: string;
+    name?: string | null;
     /** Source identifier (e.g., 'slack', 'github') */
     short_name: string;
     /** Collection readable ID */
     readable_collection_id: string;
     /** Connection description */
-    description?: string;
+    description?: string | null;
     /** Source-specific configuration */
-    config?: Record<string, unknown>;
-    schedule?: AirweaveSDK.ScheduleConfig;
+    config?: Record<string, unknown> | null;
+    schedule?: AirweaveSDK.ScheduleConfig | null;
     /** Run initial sync after creation. Defaults to True for direct/token/auth_provider, False for OAuth browser/BYOC flows (which sync after authentication) */
-    sync_immediately?: boolean;
+    sync_immediately?: boolean | null;
     /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
-    authentication?: SourceConnectionCreate.Authentication;
+    authentication?: SourceConnectionCreate.Authentication | null;
     /** URL to redirect to after OAuth flow completes (only used for OAuth flows) */
-    redirect_url?: string;
+    redirect_url?: string | null;
 }
 
 export namespace SourceConnectionCreate {

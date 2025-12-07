@@ -4,11 +4,7 @@
 
 /**
  * @example
- *     {
- *         skip: 1,
- *         limit: 1,
- *         search: "search"
- *     }
+ *     {}
  */
 export interface ListCollectionsGetRequest {
     /** Number of collections to skip for pagination */

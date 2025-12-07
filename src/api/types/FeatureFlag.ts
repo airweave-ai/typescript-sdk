@@ -3,7 +3,7 @@
  */
 
 /**
- * Available feature flags in Airweave.
+ * Available feature flags in Graffo.
  *
  * Add new flags here to enable feature gating at the organization level.
  */

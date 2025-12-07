@@ -23,7 +23,7 @@ export interface BillingPeriodUsage {
     /** Daily snapshots for trend visualization */
     daily_usage?: AirweaveSDK.UsageSnapshot[];
     /** Days left in period */
-    days_remaining?: number;
+    days_remaining?: number | null;
     /** Whether this is the current period */
     is_current?: boolean;
 }

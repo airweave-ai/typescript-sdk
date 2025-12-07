@@ -10,13 +10,13 @@ import * as AirweaveSDK from "../index.js";
 export interface EmbeddingModelWithAuthenticationFields {
     name: string;
     short_name: string;
-    description?: string;
+    description?: string | null;
     provider: string;
-    model_name?: string;
-    model_version?: string;
-    auth_config_class?: string;
+    model_name?: string | null;
+    model_version?: string | null;
+    auth_config_class?: string | null;
     id: string;
     created_at: string;
     modified_at: string;
-    auth_fields?: AirweaveSDK.Fields;
+    auth_fields?: AirweaveSDK.Fields | null;
 }

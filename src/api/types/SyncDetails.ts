@@ -11,5 +11,5 @@ export interface SyncDetails {
     total_runs?: number;
     successful_runs?: number;
     failed_runs?: number;
-    last_job?: AirweaveSDK.SyncJobDetails;
+    last_job?: AirweaveSDK.SyncJobDetails | null;
 }

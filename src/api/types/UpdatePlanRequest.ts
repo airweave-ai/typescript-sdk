@@ -9,5 +9,5 @@ export interface UpdatePlanRequest {
     /** New plan (developer, startup) */
     plan: string;
     /** Billing period for the plan: 'monthly' or 'yearly' */
-    period?: string;
+    period?: string | null;
 }

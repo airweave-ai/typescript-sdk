@@ -13,6 +13,8 @@ describe("Sources", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
+            organizationId: "test",
+            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -121,6 +123,8 @@ describe("Sources", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
+            organizationId: "test",
+            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -138,6 +142,8 @@ describe("Sources", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
+            organizationId: "test",
+            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -190,7 +196,9 @@ describe("Sources", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sources.get("short_name");
+        const response = await client.sources.get({
+            short_name: "short_name",
+        });
         expect(response).toEqual({
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
@@ -248,6 +256,8 @@ describe("Sources", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
+            organizationId: "test",
+            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -261,7 +271,9 @@ describe("Sources", () => {
             .build();
 
         await expect(async () => {
-            return await client.sources.get("short_name");
+            return await client.sources.get({
+                short_name: "short_name",
+            });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });

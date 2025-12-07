@@ -10,6 +10,6 @@ export interface EntityCountWithDefinition {
     entity_definition_id: string;
     entity_definition_name: string;
     entity_definition_type: string;
-    entity_definition_description?: string;
+    entity_definition_description?: string | null;
     modified_at: string;
 }

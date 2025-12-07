@@ -7,13 +7,13 @@
  */
 export interface DatetimeRange {
     /** point.key &lt; range.lt */
-    lt?: DatetimeRange.Lt;
+    lt?: DatetimeRange.Lt | null;
     /** point.key &gt; range.gt */
-    gt?: DatetimeRange.Gt;
+    gt?: DatetimeRange.Gt | null;
     /** point.key &gt;= range.gte */
-    gte?: DatetimeRange.Gte;
+    gte?: DatetimeRange.Gte | null;
     /** point.key &lt;= range.lte */
-    lte?: DatetimeRange.Lte;
+    lte?: DatetimeRange.Lte | null;
 }
 
 export namespace DatetimeRange {

@@ -10,5 +10,5 @@ export interface InvitationResponse {
     email: string;
     role: string;
     status: string;
-    invited_at?: string;
+    invited_at?: string | null;
 }
