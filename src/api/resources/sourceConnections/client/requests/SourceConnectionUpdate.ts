@@ -6,19 +6,16 @@ import * as AirweaveSDK from "../../../../index.js";
 
 /**
  * @example
- *     {
- *         source_connection_id: "source_connection_id"
- *     }
+ *     {}
  */
 export interface SourceConnectionUpdate {
-    source_connection_id: string;
-    name?: string | null;
-    description?: string | null;
+    name?: string;
+    description?: string;
     /** Source-specific configuration */
-    config?: Record<string, unknown> | null;
-    schedule?: AirweaveSDK.ScheduleConfig | null;
+    config?: Record<string, unknown>;
+    schedule?: AirweaveSDK.ScheduleConfig;
     /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
-    authentication?: SourceConnectionUpdate.Authentication | null;
+    authentication?: SourceConnectionUpdate.Authentication;
 }
 
 export namespace SourceConnectionUpdate {

@@ -8,11 +8,11 @@
 export interface EmbeddingModel {
     name: string;
     short_name: string;
-    description?: string | null;
+    description?: string;
     provider: string;
-    model_name?: string | null;
-    model_version?: string | null;
-    auth_config_class?: string | null;
+    model_name?: string;
+    model_version?: string;
+    auth_config_class?: string;
     id: string;
     created_at: string;
     modified_at: string;

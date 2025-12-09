@@ -6,13 +6,13 @@ import * as AirweaveSDK from "../index.js";
 
 export interface Filter {
     /** At least one of those conditions should match */
-    should?: Filter.Should | null;
+    should?: Filter.Should;
     /** At least minimum amount of given conditions should match */
-    min_should?: AirweaveSDK.MinShould | null;
+    min_should?: AirweaveSDK.MinShould;
     /** All conditions must match */
-    must?: Filter.Must | null;
+    must?: Filter.Must;
     /** All conditions must NOT match */
-    must_not?: Filter.MustNot | null;
+    must_not?: Filter.MustNot;
 }
 
 export namespace Filter {

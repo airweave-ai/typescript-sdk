@@ -11,13 +11,13 @@
  */
 export interface OAuthBrowserAuthentication {
     /** OAuth redirect URI */
-    redirect_uri?: string | null;
+    redirect_uri?: string;
     /** OAuth2 client ID (for custom apps) */
-    client_id?: string | null;
+    client_id?: string;
     /** OAuth2 client secret (for custom apps) */
-    client_secret?: string | null;
+    client_secret?: string;
     /** OAuth1 consumer key (for custom apps) */
-    consumer_key?: string | null;
+    consumer_key?: string;
     /** OAuth1 consumer secret (for custom apps) */
-    consumer_secret?: string | null;
+    consumer_secret?: string;
 }

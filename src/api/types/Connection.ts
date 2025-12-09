@@ -12,9 +12,9 @@ export interface Connection {
     name: string;
     /** URL-safe unique identifier used in API endpoints. This becomes non-optional once the connection is created. */
     readable_id: string;
-    description?: string | null;
+    description?: string;
     integration_type: AirweaveSDK.IntegrationType;
-    integration_credential_id?: string | null;
+    integration_credential_id?: string;
     status: AirweaveSDK.ConnectionStatus;
     short_name: string;
     /** Unique system identifier for the connection. */
@@ -23,7 +23,7 @@ export interface Connection {
     created_at: string;
     /** Timestamp when the connection was last modified (ISO 8601 format). */
     modified_at: string;
-    organization_id?: string | null;
-    created_by_email?: string | null;
-    modified_by_email?: string | null;
+    organization_id?: string;
+    created_by_email?: string;
+    modified_by_email?: string;
 }

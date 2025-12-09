@@ -21,12 +21,12 @@ export interface BillingPeriod {
     /** How this period was created */
     created_from: AirweaveSDK.BillingTransition;
     id: string;
-    stripe_subscription_id?: string | null;
-    stripe_invoice_id?: string | null;
-    amount_cents?: number | null;
-    currency?: string | null;
-    paid_at?: string | null;
-    previous_period_id?: string | null;
+    stripe_subscription_id?: string;
+    stripe_invoice_id?: string;
+    amount_cents?: number;
+    currency?: string;
+    paid_at?: string;
+    previous_period_id?: string;
     created_at: string;
     modified_at: string;
 }

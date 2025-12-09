@@ -9,14 +9,14 @@ import * as AirweaveSDK from "../index.js";
  */
 export interface EntityDefinition {
     name: string;
-    description?: string | null;
+    description?: string;
     type: AirweaveSDK.EntityType;
     entity_schema: EntityDefinition.EntitySchema;
-    parent_id?: string | null;
+    parent_id?: string;
     module_name: string;
     class_name: string;
     id: string;
-    organization_id?: string | null;
+    organization_id?: string;
 }
 
 export namespace EntityDefinition {

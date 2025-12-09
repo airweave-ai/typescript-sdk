@@ -18,10 +18,6 @@ export declare namespace Sources {
         frameworkName?: core.Supplier<string | undefined>;
         /** Override the X-Framework-Version header */
         frameworkVersion?: core.Supplier<string | undefined>;
-        /** Override the X-Organization-ID header */
-        organizationId?: core.Supplier<(string | null) | undefined>;
-        /** Override the x-agent-key header */
-        agentKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -37,10 +33,6 @@ export declare namespace Sources {
         frameworkName?: string | undefined;
         /** Override the X-Framework-Version header */
         frameworkVersion?: string | undefined;
-        /** Override the X-Organization-ID header */
-        organizationId?: (string | null) | undefined;
-        /** Override the x-agent-key header */
-        agentKey?: string;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -62,7 +54,7 @@ export class Sources {
      * List all available data source connectors.
      *
      * <br/><br/>
-     * Returns the complete catalog of source types that Graffo can connect to.
+     * Returns the complete catalog of source types that Airweave can connect to.
      *
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
@@ -81,8 +73,6 @@ export class Sources {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -141,35 +131,30 @@ export class Sources {
     /**
      * Get detailed information about a specific data source connector.
      *
-     * @param {AirweaveSDK.GetSourcesShortNameGetRequest} request
+     * @param {string} shortName - Technical identifier of the source type (e.g., 'github', 'stripe', 'slack')
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sources.get({
-     *         short_name: "short_name"
-     *     })
+     *     await client.sources.get("short_name")
      */
     public get(
-        request: AirweaveSDK.GetSourcesShortNameGetRequest,
+        shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.Source> {
-        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(shortName, requestOptions));
     }
 
     private async __get(
-        request: AirweaveSDK.GetSourcesShortNameGetRequest,
+        shortName: string,
         requestOptions?: Sources.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
-        const { short_name: shortName } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,

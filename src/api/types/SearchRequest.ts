@@ -10,24 +10,22 @@ import * as AirweaveSDK from "../index.js";
 export interface SearchRequest {
     /** The search query text */
     query: string;
-    /** Optional list of context cluster IDs to restrict results to */
-    context_cluster_ids?: string[] | null;
     /** The retrieval strategy to use */
-    retrieval_strategy?: AirweaveSDK.RetrievalStrategy | null;
+    retrieval_strategy?: AirweaveSDK.RetrievalStrategy;
     /** Qdrant native filter for metadata-based filtering */
-    filter?: AirweaveSDK.Filter | null;
+    filter?: AirweaveSDK.Filter;
     /** Number of results to skip */
-    offset?: number | null;
+    offset?: number;
     /** Maximum number of results to return */
-    limit?: number | null;
+    limit?: number;
     /** Weight recent content higher than older content; 0 = no recency effect, 1 = only recent items matter */
-    temporal_relevance?: number | null;
+    temporal_relevance?: number;
     /** Generate a few query variations to improve recall */
-    expand_query?: boolean | null;
+    expand_query?: boolean;
     /** Extract structured filters from natural-language query */
-    interpret_filters?: boolean | null;
+    interpret_filters?: boolean;
     /** Reorder the top candidate results for improved relevance. Max number of results that can be reranked is capped to around 1000. */
-    rerank?: boolean | null;
+    rerank?: boolean;
     /** Generate a natural-language answer to the query */
-    generate_answer?: boolean | null;
+    generate_answer?: boolean;
 }

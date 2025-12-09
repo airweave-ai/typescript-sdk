@@ -7,5 +7,5 @@
  */
 export interface EntityTypeStats {
     count: number;
-    last_updated?: string | null;
+    last_updated?: string;
 }

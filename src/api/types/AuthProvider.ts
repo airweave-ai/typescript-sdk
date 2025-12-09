@@ -19,14 +19,14 @@ export interface AuthProvider {
     /** Python class name that defines the auth provider-specific configuration */
     config_class: string;
     /** Detailed description explaining what this auth provider offers */
-    description?: string | null;
+    description?: string;
     /** Organization identifier for custom auth providers. System providers have this set to null. */
-    organization_id?: string | null;
+    organization_id?: string;
     id: string;
     created_at: string;
     modified_at: string;
     /** Dynamically populated field definitions for authentication configuration. These describe what credentials are required to connect to this auth provider. */
-    auth_fields?: AirweaveSDK.Fields | null;
+    auth_fields?: AirweaveSDK.Fields;
     /** Dynamically populated field definitions for auth provider-specific configuration. These describe what additional configuration is required when using this auth provider to connect to a source (e.g., auth_config_id and account_id for Composio). */
-    config_fields?: AirweaveSDK.Fields | null;
+    config_fields?: AirweaveSDK.Fields;
 }

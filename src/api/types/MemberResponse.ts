@@ -12,5 +12,5 @@ export interface MemberResponse {
     role: string;
     status?: string;
     is_primary?: boolean;
-    auth0_id?: string | null;
+    auth0_id?: string;
 }

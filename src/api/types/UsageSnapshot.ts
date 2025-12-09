@@ -15,13 +15,13 @@ export interface UsageSnapshot {
     /** Team members in the organization */
     team_members: number;
     /** Maximum entities allowed */
-    max_entities?: number | null;
+    max_entities?: number;
     /** Maximum queries allowed */
-    max_queries?: number | null;
+    max_queries?: number;
     /** Maximum source connections allowed */
-    max_source_connections?: number | null;
+    max_source_connections?: number;
     /** Maximum team members allowed */
-    max_team_members?: number | null;
+    max_team_members?: number;
     /** When this snapshot was taken */
     timestamp: string;
     /** Associated billing period */

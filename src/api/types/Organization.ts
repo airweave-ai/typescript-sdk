@@ -18,18 +18,14 @@ import * as AirweaveSDK from "../index.js";
  */
 export interface Organization {
     name: string;
-    description?: string | null;
-    auth0_org_id?: string | null;
-    /** Organization type (personal or manual) */
-    org_type?: string;
+    description?: string;
+    auth0_org_id?: string;
     id: string;
     created_at: string;
     modified_at: string;
-    org_metadata?: Record<string, unknown> | null;
+    org_metadata?: Record<string, unknown>;
     /** List of enabled feature flags for this organization */
     enabled_features?: AirweaveSDK.FeatureFlag[];
     /** Complete billing information including current period */
-    billing?: AirweaveSDK.OrganizationBilling | null;
-    /** Stripe checkout URL for completing paid plan setup, when applicable */
-    checkout_url?: string | null;
+    billing?: AirweaveSDK.OrganizationBilling;
 }

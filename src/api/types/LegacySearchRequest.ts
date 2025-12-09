@@ -11,25 +11,25 @@ export interface LegacySearchRequest {
     /** The search query text (max 2048 tokens) */
     query: string;
     /** Qdrant native filter for metadata-based filtering */
-    filter?: AirweaveSDK.Filter | null;
+    filter?: AirweaveSDK.Filter;
     /** Number of results to skip */
-    offset?: number | null;
+    offset?: number;
     /** Maximum number of results */
-    limit?: number | null;
+    limit?: number;
     /** Minimum similarity score threshold (deprecated, will be ignored) */
-    score_threshold?: number | null;
+    score_threshold?: number;
     /** Type of response - 'raw' or 'completion' */
     response_type?: AirweaveSDK.ResponseType;
     /** Search method to use */
-    search_method?: LegacySearchRequest.SearchMethod | null;
+    search_method?: LegacySearchRequest.SearchMethod;
     /** How much document age affects the similarity score (0..1) */
-    recency_bias?: number | null;
+    recency_bias?: number;
     /** Query expansion strategy */
-    expansion_strategy?: AirweaveSDK.QueryExpansionStrategy | null;
+    expansion_strategy?: AirweaveSDK.QueryExpansionStrategy;
     /** Enable LLM-based reranking to improve result relevance */
-    enable_reranking?: boolean | null;
+    enable_reranking?: boolean;
     /** Enable automatic filter extraction from natural language query */
-    enable_query_interpretation?: boolean | null;
+    enable_query_interpretation?: boolean;
 }
 
 export namespace LegacySearchRequest {

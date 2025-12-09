@@ -11,5 +11,5 @@ export interface GeoPolygon {
     /** Geo filter request  Matches coordinates inside the polygon, defined by `exterior` and `interiors` */
     exterior: AirweaveSDK.GeoLineString;
     /** Interior lines (if present) bound holes within the surface each GeoLineString must consist of a minimum of 4 points, and the first and last points must be the same. */
-    interiors?: AirweaveSDK.GeoLineString[] | null;
+    interiors?: AirweaveSDK.GeoLineString[];
 }

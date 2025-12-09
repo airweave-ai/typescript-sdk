@@ -9,16 +9,16 @@ import * as AirweaveSDK from "../index.js";
  */
 export interface DestinationWithAuthenticationFields {
     name: string;
-    description?: string | null;
+    description?: string;
     short_name: string;
     class_name: string;
-    auth_config_class?: string | null;
-    input_entity_definition_ids?: string[] | null;
-    organization_id?: string | null;
-    config_schema?: Record<string, unknown> | null;
-    labels?: string[] | null;
+    auth_config_class?: string;
+    input_entity_definition_ids?: string[];
+    organization_id?: string;
+    config_schema?: Record<string, unknown>;
+    labels?: string[];
     id: string;
     created_at: string;
     modified_at: string;
-    auth_fields?: AirweaveSDK.Fields | null;
+    auth_fields?: AirweaveSDK.Fields;
 }

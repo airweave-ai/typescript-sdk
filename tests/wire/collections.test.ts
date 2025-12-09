@@ -13,17 +13,12 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
         const rawResponseBody = [
             {
                 name: "Finance Data",
-                description: "description",
-                color: "color",
-                icon: "icon",
                 readable_id: "finance-data-ab123",
                 id: "550e8400-e29b-41d4-a716-446655440000",
                 vector_size: 1,
@@ -38,13 +33,14 @@ describe("Collections", () => {
         ];
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.collections.list();
+        const response = await client.collections.list({
+            skip: 1,
+            limit: 1,
+            search: "search",
+        });
         expect(response).toEqual([
             {
                 name: "Finance Data",
-                description: "description",
-                color: "color",
-                icon: "icon",
                 readable_id: "finance-data-ab123",
                 id: "550e8400-e29b-41d4-a716-446655440000",
                 vector_size: 1,
@@ -65,8 +61,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -84,22 +78,11 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
-        const rawRequestBody = {
-            name: "Finance Data",
-            description: "Financial reports and analytics data",
-            color: "#10b981",
-            icon: "chart-bar",
-            readable_id: "finance-data-reports",
-        };
+        const rawRequestBody = { name: "Finance Data", readable_id: "finance-data-reports" };
         const rawResponseBody = {
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -122,16 +105,10 @@ describe("Collections", () => {
 
         const response = await client.collections.create({
             name: "Finance Data",
-            description: "Financial reports and analytics data",
-            color: "#10b981",
-            icon: "chart-bar",
             readable_id: "finance-data-reports",
         });
         expect(response).toEqual({
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -151,17 +128,9 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
-        const rawRequestBody = {
-            name: "buzz",
-            description: undefined,
-            color: undefined,
-            icon: undefined,
-            readable_id: undefined,
-        };
+        const rawRequestBody = { name: "buzz", readable_id: undefined };
         const rawResponseBody = { detail: undefined };
         server
             .mockEndpoint()
@@ -175,9 +144,6 @@ describe("Collections", () => {
         await expect(async () => {
             return await client.collections.create({
                 name: "buzz",
-                description: undefined,
-                color: undefined,
-                icon: undefined,
                 readable_id: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
@@ -189,16 +155,11 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
         const rawResponseBody = {
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -218,14 +179,9 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.get({
-            readable_id: "readable_id",
-        });
+        const response = await client.collections.get("readable_id");
         expect(response).toEqual({
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -245,8 +201,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -260,9 +214,7 @@ describe("Collections", () => {
             .build();
 
         await expect(async () => {
-            return await client.collections.get({
-                readable_id: "readable_id",
-            });
+            return await client.collections.get("readable_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -272,16 +224,11 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
         const rawResponseBody = {
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -301,14 +248,9 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.delete({
-            readable_id: "readable_id",
-        });
+        const response = await client.collections.delete("readable_id");
         expect(response).toEqual({
             name: "Finance Data",
-            description: "Financial reports and analytics collection",
-            color: "#3b82f6",
-            icon: "chart-line",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
@@ -328,8 +270,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -343,9 +283,7 @@ describe("Collections", () => {
             .build();
 
         await expect(async () => {
-            return await client.collections.delete({
-                readable_id: "readable_id",
-            });
+            return await client.collections.delete("readable_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -355,8 +293,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -384,9 +320,7 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.refreshAllSourceConnections({
-            readable_id: "readable_id",
-        });
+        const response = await client.collections.refreshAllSourceConnections("readable_id");
         expect(response).toEqual([
             {
                 id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
@@ -413,8 +347,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -428,9 +360,7 @@ describe("Collections", () => {
             .build();
 
         await expect(async () => {
-            return await client.collections.refreshAllSourceConnections({
-                readable_id: "readable_id",
-            });
+            return await client.collections.refreshAllSourceConnections("readable_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -440,8 +370,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -459,9 +387,12 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.searchGetLegacy({
-            readable_id: "readable_id",
+        const response = await client.collections.searchGetLegacy("readable_id", {
             query: "query",
+            response_type: "raw",
+            limit: 1,
+            offset: 1,
+            recency_bias: 1.1,
         });
         expect(response).toEqual({
             results: [
@@ -481,8 +412,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -496,8 +425,7 @@ describe("Collections", () => {
             .build();
 
         await expect(async () => {
-            return await client.collections.searchGetLegacy({
-                readable_id: "readable_id",
+            return await client.collections.searchGetLegacy("readable_id", {
                 query: "query",
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
@@ -509,8 +437,6 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = { query: "query" };
@@ -524,11 +450,8 @@ describe("Collections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.search({
-            readable_id: "readable_id",
-            body: {
-                query: "query",
-            },
+        const response = await client.collections.search("readable_id", {
+            query: "query",
         });
         expect(response).toEqual({
             results: [
@@ -546,13 +469,10 @@ describe("Collections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = {
             query: "query",
-            context_cluster_ids: undefined,
             retrieval_strategy: undefined,
             filter: undefined,
             offset: undefined,
@@ -574,21 +494,17 @@ describe("Collections", () => {
             .build();
 
         await expect(async () => {
-            return await client.collections.search({
-                readable_id: "readable_id",
-                body: {
-                    query: "query",
-                    context_cluster_ids: undefined,
-                    retrieval_strategy: undefined,
-                    filter: undefined,
-                    offset: undefined,
-                    limit: undefined,
-                    temporal_relevance: undefined,
-                    expand_query: undefined,
-                    interpret_filters: undefined,
-                    rerank: undefined,
-                    generate_answer: undefined,
-                },
+            return await client.collections.search("readable_id", {
+                query: "query",
+                retrieval_strategy: undefined,
+                filter: undefined,
+                offset: undefined,
+                limit: undefined,
+                temporal_relevance: undefined,
+                expand_query: undefined,
+                interpret_filters: undefined,
+                rerank: undefined,
+                generate_answer: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });

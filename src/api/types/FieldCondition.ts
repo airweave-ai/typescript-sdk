@@ -11,21 +11,21 @@ export interface FieldCondition {
     /** Payload key */
     key: string;
     /** Check if point has field with a given value */
-    match?: FieldCondition.Match | null;
+    match?: FieldCondition.Match;
     /** Check if points value lies in a given range */
-    range?: FieldCondition.Range | null;
+    range?: AirweaveSDK.Range;
     /** Check if points geolocation lies in a given area */
-    geo_bounding_box?: AirweaveSDK.GeoBoundingBox | null;
+    geo_bounding_box?: AirweaveSDK.GeoBoundingBox;
     /** Check if geo point is within a given radius */
-    geo_radius?: AirweaveSDK.GeoRadius | null;
+    geo_radius?: AirweaveSDK.GeoRadius;
     /** Check if geo point is within a given polygon */
-    geo_polygon?: AirweaveSDK.GeoPolygon | null;
+    geo_polygon?: AirweaveSDK.GeoPolygon;
     /** Check number of values of the field */
-    values_count?: AirweaveSDK.ValuesCount | null;
+    values_count?: AirweaveSDK.ValuesCount;
     /** Check that the field is empty, alternative syntax for `is_empty: 'field_name'` */
-    is_empty?: boolean | null;
+    is_empty?: boolean;
     /** Check that the field is null, alternative syntax for `is_null: 'field_name'` */
-    is_null?: boolean | null;
+    is_null?: boolean;
 }
 
 export namespace FieldCondition {
@@ -35,12 +35,7 @@ export namespace FieldCondition {
     export type Match =
         | AirweaveSDK.MatchValue
         | AirweaveSDK.MatchText
-        | AirweaveSDK.MatchTextAny
         | AirweaveSDK.MatchPhrase
         | AirweaveSDK.MatchAny
         | AirweaveSDK.MatchExcept;
-    /**
-     * Check if points value lies in a given range
-     */
-    export type Range = AirweaveSDK.Range | AirweaveSDK.DatetimeRange;
 }

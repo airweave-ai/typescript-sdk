@@ -10,11 +10,11 @@ import * as AirweaveSDK from "../index.js";
 export interface IntegrationCredentialInDb {
     name: string;
     integration_short_name: string;
-    description?: string | null;
+    description?: string;
     integration_type: AirweaveSDK.IntegrationType;
     authentication_method: AirweaveSDK.AuthenticationMethod;
-    oauth_type?: AirweaveSDK.OAuthType | null;
-    auth_config_class?: string | null;
+    oauth_type?: AirweaveSDK.OAuthType;
+    auth_config_class?: string;
     id: string;
     organization_id: string;
     encrypted_credentials: string;

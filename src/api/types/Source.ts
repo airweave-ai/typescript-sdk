@@ -11,25 +11,25 @@ export interface Source {
     /** Human-readable name of the data source connector (e.g., 'GitHub', 'Stripe', 'PostgreSQL'). */
     name: string;
     /** Detailed description explaining what data this source can extract and its typical use cases. */
-    description?: string | null;
+    description?: string;
     /** List of supported authentication methods (e.g., 'direct', 'oauth_browser'). */
-    auth_methods?: string[] | null;
+    auth_methods?: string[];
     /** OAuth token type for OAuth sources (e.g., 'access_only', 'with_refresh'). */
-    oauth_type?: string | null;
+    oauth_type?: string;
     /** Whether this OAuth source requires users to bring their own client. */
     requires_byoc?: boolean;
     /** Python class name that defines the authentication configuration fields required for this source (only for DIRECT auth). */
-    auth_config_class?: string | null;
+    auth_config_class?: string;
     /** Python class name that defines the source-specific configuration options and parameters. */
-    config_class?: string | null;
+    config_class?: string;
     /** Technical identifier used internally to reference this source type. Must be unique across all sources. */
     short_name: string;
     /** Python class name of the source implementation that handles data extraction logic. */
     class_name: string;
     /** List of entity definition IDs that this source can produce. Defines the data schema and structure that this connector outputs. */
-    output_entity_definition_ids?: string[] | null;
+    output_entity_definition_ids?: string[];
     /** Categorization tags to help users discover and filter sources by domain or use case. */
-    labels?: string[] | null;
+    labels?: string[];
     /** Whether this source supports cursor-based continuous syncing for incremental data extraction. Sources with this capability can track their sync position and resume from where they left off. */
     supports_continuous?: boolean;
     /** Whether this source uses federated search instead of traditional syncing. Federated search sources query data in real-time during searches rather than syncing and indexing all data beforehand. */
@@ -37,7 +37,7 @@ export interface Source {
     /** Whether this source's entities have timestamps that enable recency-based ranking. Sources without file-level timestamps (e.g., code repositories) cannot use temporal relevance for search result weighting. */
     supports_temporal_relevance?: boolean;
     /** Rate limiting level for this source: 'org' (organization-wide), 'connection' (per-connection/per-user), or None (no rate limiting). */
-    rate_limit_level?: string | null;
+    rate_limit_level?: string;
     /** Unique system identifier for this source type. Generated automatically when the source is registered. */
     id: string;
     /** Timestamp when this source type was registered in the system (ISO 8601 format). */
@@ -45,9 +45,9 @@ export interface Source {
     /** Timestamp when this source type was last updated (ISO 8601 format). */
     modified_at: string;
     /** Schema definition for authentication fields required to connect to this source. Only present for sources using DIRECT authentication. OAuth sources handle authentication through browser flows. */
-    auth_fields?: AirweaveSDK.Fields | null;
+    auth_fields?: AirweaveSDK.Fields;
     /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */
     config_fields: AirweaveSDK.Fields;
     /** List of auth provider short names that support this source (e.g., ['composio', 'pipedream']). Computed dynamically for API responses. This field is not stored in the database. */
-    supported_auth_providers?: string[] | null;
+    supported_auth_providers?: string[];
 }

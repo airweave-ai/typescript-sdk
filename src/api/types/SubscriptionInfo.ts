@@ -11,13 +11,13 @@ export interface SubscriptionInfo {
     /** Subscription status */
     status: string;
     /** Trial end date */
-    trial_ends_at?: string | null;
+    trial_ends_at?: string;
     /** Grace period end date */
-    grace_period_ends_at?: string | null;
+    grace_period_ends_at?: string;
     /** Current billing period start */
-    current_period_start?: string | null;
+    current_period_start?: string;
     /** Current billing period end */
-    current_period_end?: string | null;
+    current_period_end?: string;
     /** Whether subscription will cancel at period end */
     cancel_at_period_end?: boolean;
     /** Plan limits */
@@ -35,19 +35,19 @@ export interface SubscriptionInfo {
     /** Whether payment method is required now */
     requires_payment_method?: boolean;
     /** Plan that will take effect at period end */
-    pending_plan_change?: string | null;
+    pending_plan_change?: string;
     /** When the pending plan change takes effect */
-    pending_plan_change_at?: string | null;
+    pending_plan_change_at?: string;
     /** Whether organization has an active yearly prepay credit */
     has_yearly_prepay?: boolean;
     /** When yearly prepay was started */
-    yearly_prepay_started_at?: string | null;
+    yearly_prepay_started_at?: string;
     /** When yearly prepay expires */
-    yearly_prepay_expires_at?: string | null;
+    yearly_prepay_expires_at?: string;
     /** Total amount (in cents) credited for yearly prepay */
-    yearly_prepay_amount_cents?: number | null;
+    yearly_prepay_amount_cents?: number;
     /** Coupon ID used for yearly prepay */
-    yearly_prepay_coupon_id?: string | null;
+    yearly_prepay_coupon_id?: string;
     /** Payment intent ID used for yearly prepay */
-    yearly_prepay_payment_intent_id?: string | null;
+    yearly_prepay_payment_intent_id?: string;
 }

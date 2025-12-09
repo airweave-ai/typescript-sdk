@@ -11,13 +11,13 @@ export interface SourceConnectionJob {
     id: string;
     source_connection_id: string;
     status: AirweaveSDK.SyncJobStatus;
-    started_at?: string | null;
-    completed_at?: string | null;
-    duration_seconds?: number | null;
+    started_at?: string;
+    completed_at?: string;
+    duration_seconds?: number;
     entities_inserted?: number;
     entities_updated?: number;
     entities_deleted?: number;
     entities_failed?: number;
-    error?: string | null;
-    error_details?: Record<string, unknown> | null;
+    error?: string;
+    error_details?: Record<string, unknown>;
 }

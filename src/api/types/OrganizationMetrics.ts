@@ -15,21 +15,21 @@ export interface OrganizationMetrics {
     /** Organization name */
     name: string;
     /** Organization description */
-    description?: string | null;
+    description?: string;
     /** When organization was created */
     created_at: string;
     /** Last modification time */
     modified_at: string;
     /** Auth0 organization ID */
-    auth0_org_id?: string | null;
+    auth0_org_id?: string;
     /** Current billing plan (trial, starter, pro, enterprise) */
-    billing_plan?: string | null;
+    billing_plan?: string;
     /** Billing status (active, cancelled, past_due, etc.) */
-    billing_status?: string | null;
+    billing_status?: string;
     /** Stripe customer ID */
-    stripe_customer_id?: string | null;
+    stripe_customer_id?: string;
     /** When trial ends */
-    trial_ends_at?: string | null;
+    trial_ends_at?: string;
     /** Number of users in organization */
     user_count?: number;
     /** Number of source connections (computed from source_connection table) */
@@ -39,11 +39,11 @@ export interface OrganizationMetrics {
     /** Total number of queries (from Usage.queries) */
     query_count?: number;
     /** Last active timestamp of any user in this organization */
-    last_active_at?: string | null;
+    last_active_at?: string;
     /** Whether the current admin user is already a member */
     is_member?: boolean;
     /** Admin's role in this organization (if member) */
-    member_role?: string | null;
+    member_role?: string;
     /** List of enabled feature flags for this organization */
     enabled_features?: AirweaveSDK.FeatureFlag[];
 }

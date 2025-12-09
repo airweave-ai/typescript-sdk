@@ -9,5 +9,5 @@ export interface SearchResponse {
     /** Array of search result objects containing the found documents, records, or data entities. */
     results: Record<string, unknown>[];
     /** This provides natural language answers to your query based on the content found across your connected data sources when generate_answer is true. */
-    completion: string | null;
+    completion?: string;
 }

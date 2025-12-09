@@ -10,12 +10,12 @@ import * as AirweaveSDK from "../index.js";
 export interface AuthenticationDetails {
     method: AirweaveSDK.AuthenticationMethod;
     authenticated: boolean;
-    authenticated_at?: string | null;
-    expires_at?: string | null;
+    authenticated_at?: string;
+    expires_at?: string;
     /** For pending OAuth flows */
-    auth_url?: string | null;
-    auth_url_expires?: string | null;
-    redirect_url?: string | null;
-    provider_readable_id?: string | null;
-    provider_id?: string | null;
+    auth_url?: string;
+    auth_url_expires?: string;
+    redirect_url?: string;
+    provider_readable_id?: string;
+    provider_id?: string;
 }

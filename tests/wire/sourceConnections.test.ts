@@ -13,8 +13,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -41,7 +39,11 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.list();
+        const response = await client.sourceConnections.list({
+            collection: "collection",
+            skip: 1,
+            limit: 1,
+        });
         expect(response).toEqual([
             {
                 id: "id",
@@ -65,8 +67,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -90,8 +90,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = { short_name: "short_name", readable_collection_id: "readable_collection_id" };
@@ -225,8 +223,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = {
@@ -271,8 +267,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -333,9 +327,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.get({
-            source_connection_id: "source_connection_id",
-        });
+        const response = await client.sourceConnections.get("source_connection_id");
         expect(response).toEqual({
             id: "id",
             name: "name",
@@ -404,8 +396,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -419,9 +409,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.get({
-                source_connection_id: "source_connection_id",
-            });
+            return await client.sourceConnections.get("source_connection_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -431,8 +419,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -493,9 +479,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.delete({
-            source_connection_id: "source_connection_id",
-        });
+        const response = await client.sourceConnections.delete("source_connection_id");
         expect(response).toEqual({
             id: "id",
             name: "name",
@@ -564,8 +548,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -579,9 +561,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.delete({
-                source_connection_id: "source_connection_id",
-            });
+            return await client.sourceConnections.delete("source_connection_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -591,8 +571,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = {};
@@ -654,9 +632,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.update({
-            source_connection_id: "source_connection_id",
-        });
+        const response = await client.sourceConnections.update("source_connection_id");
         expect(response).toEqual({
             id: "id",
             name: "name",
@@ -725,8 +701,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
         const rawRequestBody = {
@@ -747,8 +721,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.update({
-                source_connection_id: "source_connection_id",
+            return await client.sourceConnections.update("source_connection_id", {
                 name: undefined,
                 description: undefined,
                 config: undefined,
@@ -764,8 +737,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -791,8 +762,8 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.run({
-            source_connection_id: "source_connection_id",
+        const response = await client.sourceConnections.run("source_connection_id", {
+            force_full_sync: true,
         });
         expect(response).toEqual({
             id: "id",
@@ -818,8 +789,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -833,9 +802,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.run({
-                source_connection_id: "source_connection_id",
-            });
+            return await client.sourceConnections.run("source_connection_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -845,8 +812,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -874,8 +839,8 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.getSourceConnectionJobs({
-            source_connection_id: "source_connection_id",
+        const response = await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
+            limit: 1,
         });
         expect(response).toEqual([
             {
@@ -903,8 +868,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -918,9 +881,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.getSourceConnectionJobs({
-                source_connection_id: "source_connection_id",
-            });
+            return await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -930,8 +891,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -957,10 +916,7 @@ describe("SourceConnections", () => {
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.cancelJob({
-            source_connection_id: "source_connection_id",
-            job_id: "job_id",
-        });
+        const response = await client.sourceConnections.cancelJob("source_connection_id", "job_id");
         expect(response).toEqual({
             id: "id",
             source_connection_id: "source_connection_id",
@@ -985,8 +941,6 @@ describe("SourceConnections", () => {
             apiKey: "test",
             frameworkName: "test",
             frameworkVersion: "test",
-            organizationId: "test",
-            agentKey: "test",
             environment: server.baseUrl,
         });
 
@@ -1000,10 +954,7 @@ describe("SourceConnections", () => {
             .build();
 
         await expect(async () => {
-            return await client.sourceConnections.cancelJob({
-                source_connection_id: "source_connection_id",
-                job_id: "job_id",
-            });
+            return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 });

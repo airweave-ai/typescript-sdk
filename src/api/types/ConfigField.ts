@@ -8,8 +8,8 @@
 export interface ConfigField {
     name: string;
     title: string;
-    description?: string | null;
+    description?: string;
     type: string;
     required?: boolean;
-    items_type?: string | null;
+    items_type?: string;
 }

@@ -18,10 +18,6 @@ export declare namespace SourceConnections {
         frameworkName?: core.Supplier<string | undefined>;
         /** Override the X-Framework-Version header */
         frameworkVersion?: core.Supplier<string | undefined>;
-        /** Override the X-Organization-ID header */
-        organizationId?: core.Supplier<(string | null) | undefined>;
-        /** Override the x-agent-key header */
-        agentKey: core.Supplier<string>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -37,10 +33,6 @@ export declare namespace SourceConnections {
         frameworkName?: string | undefined;
         /** Override the X-Framework-Version header */
         frameworkVersion?: string | undefined;
-        /** Override the X-Organization-ID header */
-        organizationId?: (string | null) | undefined;
-        /** Override the x-agent-key header */
-        agentKey?: string;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -49,7 +41,7 @@ export declare namespace SourceConnections {
 }
 
 /**
- * API endpoints for managing live connections to data sources. Source connections are the configured instances Graffo uses to sync data from your apps and databases into collections
+ * API endpoints for managing live connections to data sources. Source connections are the actual configured instances that Airweave uses to sync data from your apps and databases, transforming it into searchable, structured information within collections
  */
 export class SourceConnections {
     protected readonly _options: SourceConnections.Options;
@@ -67,7 +59,11 @@ export class SourceConnections {
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.list()
+     *     await client.sourceConnections.list({
+     *         collection: "collection",
+     *         skip: 1,
+     *         limit: 1
+     *     })
      */
     public list(
         request: AirweaveSDK.ListSourceConnectionsGetRequest = {},
@@ -82,7 +78,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionListItem[]>> {
         const { collection, skip, limit } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
-        if (collection !== undefined) {
+        if (collection != null) {
             _queryParams["collection"] = collection;
         }
 
@@ -99,8 +95,6 @@ export class SourceConnections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -202,8 +196,6 @@ export class SourceConnections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -265,35 +257,30 @@ export class SourceConnections {
     /**
      * Get a source connection with optional depth expansion.
      *
-     * @param {AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest} request
+     * @param {string} sourceConnectionId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.get({
-     *         source_connection_id: "source_connection_id"
-     *     })
+     *     await client.sourceConnections.get("source_connection_id")
      */
     public get(
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest,
+        sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__get(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__get(sourceConnectionId, requestOptions));
     }
 
     private async __get(
-        request: AirweaveSDK.GetSourceConnectionsSourceConnectionIdGetRequest,
+        sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { source_connection_id: sourceConnectionId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -354,35 +341,30 @@ export class SourceConnections {
     /**
      * Delete a source connection and all related data.
      *
-     * @param {AirweaveSDK.DeleteSourceConnectionsSourceConnectionIdDeleteRequest} request
+     * @param {string} sourceConnectionId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.delete({
-     *         source_connection_id: "source_connection_id"
-     *     })
+     *     await client.sourceConnections.delete("source_connection_id")
      */
     public delete(
-        request: AirweaveSDK.DeleteSourceConnectionsSourceConnectionIdDeleteRequest,
+        sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__delete(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__delete(sourceConnectionId, requestOptions));
     }
 
     private async __delete(
-        request: AirweaveSDK.DeleteSourceConnectionsSourceConnectionIdDeleteRequest,
+        sourceConnectionId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { source_connection_id: sourceConnectionId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -449,35 +431,33 @@ export class SourceConnections {
      * - cron_schedule
      * - auth_fields (direct auth only)
      *
+     * @param {string} sourceConnectionId
      * @param {AirweaveSDK.SourceConnectionUpdate} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.update({
-     *         source_connection_id: "source_connection_id"
-     *     })
+     *     await client.sourceConnections.update("source_connection_id")
      */
     public update(
-        request: AirweaveSDK.SourceConnectionUpdate,
+        sourceConnectionId: string,
+        request: AirweaveSDK.SourceConnectionUpdate = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnection> {
-        return core.HttpResponsePromise.fromPromise(this.__update(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__update(sourceConnectionId, request, requestOptions));
     }
 
     private async __update(
-        request: AirweaveSDK.SourceConnectionUpdate,
+        sourceConnectionId: string,
+        request: AirweaveSDK.SourceConnectionUpdate = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
-        const { source_connection_id: sourceConnectionId, ..._body } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -494,7 +474,7 @@ export class SourceConnections {
             contentType: "application/json",
             queryParameters: requestOptions?.queryParams,
             requestType: "json",
-            body: _body,
+            body: request,
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
@@ -552,28 +532,31 @@ export class SourceConnections {
      *                     for continuous syncs. Raises 400 error if used on
      *                     non-continuous syncs (which are always full syncs).
      *
+     * @param {string} sourceConnectionId
      * @param {AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.run({
-     *         source_connection_id: "source_connection_id"
+     *     await client.sourceConnections.run("source_connection_id", {
+     *         force_full_sync: true
      *     })
      */
     public run(
-        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest,
+        sourceConnectionId: string,
+        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__run(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__run(sourceConnectionId, request, requestOptions));
     }
 
     private async __run(
-        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest,
+        sourceConnectionId: string,
+        request: AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const { source_connection_id: sourceConnectionId, force_full_sync: forceFullSync } = request;
+        const { force_full_sync: forceFullSync } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (forceFullSync != null) {
             _queryParams["force_full_sync"] = forceFullSync.toString();
@@ -584,8 +567,6 @@ export class SourceConnections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -646,28 +627,33 @@ export class SourceConnections {
     /**
      * Get sync jobs for a source connection.
      *
+     * @param {string} sourceConnectionId
      * @param {AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.getSourceConnectionJobs({
-     *         source_connection_id: "source_connection_id"
+     *     await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
+     *         limit: 1
      *     })
      */
     public getSourceConnectionJobs(
-        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest,
+        sourceConnectionId: string,
+        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob[]> {
-        return core.HttpResponsePromise.fromPromise(this.__getSourceConnectionJobs(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(
+            this.__getSourceConnectionJobs(sourceConnectionId, request, requestOptions),
+        );
     }
 
     private async __getSourceConnectionJobs(
-        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest,
+        sourceConnectionId: string,
+        request: AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest = {},
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
-        const { source_connection_id: sourceConnectionId, limit } = request;
+        const { limit } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (limit != null) {
             _queryParams["limit"] = limit.toString();
@@ -678,8 +664,6 @@ export class SourceConnections {
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,
@@ -744,36 +728,33 @@ export class SourceConnections {
      * The workflow updates the final status to CANCELLED when it processes
      * the cancellation request.
      *
-     * @param {AirweaveSDK.CancelJobSourceConnectionsSourceConnectionIdJobsJobIdCancelPostRequest} request
+     * @param {string} sourceConnectionId
+     * @param {string} jobId
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      *
      * @example
-     *     await client.sourceConnections.cancelJob({
-     *         source_connection_id: "source_connection_id",
-     *         job_id: "job_id"
-     *     })
+     *     await client.sourceConnections.cancelJob("source_connection_id", "job_id")
      */
     public cancelJob(
-        request: AirweaveSDK.CancelJobSourceConnectionsSourceConnectionIdJobsJobIdCancelPostRequest,
+        sourceConnectionId: string,
+        jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.SourceConnectionJob> {
-        return core.HttpResponsePromise.fromPromise(this.__cancelJob(request, requestOptions));
+        return core.HttpResponsePromise.fromPromise(this.__cancelJob(sourceConnectionId, jobId, requestOptions));
     }
 
     private async __cancelJob(
-        request: AirweaveSDK.CancelJobSourceConnectionsSourceConnectionIdJobsJobIdCancelPostRequest,
+        sourceConnectionId: string,
+        jobId: string,
         requestOptions?: SourceConnections.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
-        const { source_connection_id: sourceConnectionId, job_id: jobId } = request;
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
             mergeOnlyDefinedHeaders({
                 "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
                 "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                "X-Organization-ID": requestOptions?.organizationId ?? this._options?.organizationId,
-                "x-agent-key": requestOptions?.agentKey ?? this._options?.agentKey,
                 ...(await this._getCustomAuthorizationHeaders()),
             }),
             requestOptions?.headers,

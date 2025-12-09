@@ -12,13 +12,13 @@ export interface AuthProviderConnection {
     readable_id: string;
     short_name: string;
     /** Description of the connection */
-    description?: string | null;
+    description?: string;
     /** Email of the user who created this connection */
-    created_by_email?: string | null;
+    created_by_email?: string;
     /** Email of the user who last modified this connection */
-    modified_by_email?: string | null;
+    modified_by_email?: string;
     created_at: string;
     modified_at: string;
     /** Masked client ID for OAuth providers (first 7 and last 4 characters visible) */
-    masked_client_id?: string | null;
+    masked_client_id?: string;
 }

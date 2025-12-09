@@ -7,9 +7,9 @@
  */
 export interface ScheduleConfig {
     /** Cron expression for scheduled syncs */
-    cron?: string | null;
+    cron?: string;
     /** Enable continuous sync mode */
     continuous?: boolean;
     /** Field for incremental sync */
-    cursor_field?: string | null;
+    cursor_field?: string;
 }

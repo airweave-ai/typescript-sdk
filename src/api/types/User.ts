@@ -9,12 +9,12 @@ import * as AirweaveSDK from "../index.js";
  */
 export interface User {
     email: string;
-    full_name?: string | null;
+    full_name?: string;
     id: string;
-    auth0_id?: string | null;
-    primary_organization_id?: string | null;
+    auth0_id?: string;
+    primary_organization_id?: string;
     user_organizations?: AirweaveSDK.UserOrganization[];
     is_admin?: boolean;
     is_superuser?: boolean;
-    last_active_at?: string | null;
+    last_active_at?: string;
 }

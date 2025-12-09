@@ -5,15 +5,10 @@
 /**
  * Schema for updating an existing collection.
  *
- * The readable_id is immutable to maintain stable API endpoints and references.
+ * Only the collection's display name can be updated. The readable_id is immutable
+ * to maintain stable API endpoints and references.
  */
 export interface CollectionUpdate {
     /** Updated display name for the collection. Must be between 4 and 64 characters. */
-    name?: string | null;
-    /** Updated description of the collection. */
-    description?: string | null;
-    /** Updated color for the collection (hex code, CSS color name, or RGB). */
-    color?: string | null;
-    /** Updated icon name or identifier for the collection. */
-    icon?: string | null;
+    name?: string;
 }

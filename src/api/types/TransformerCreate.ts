@@ -7,7 +7,7 @@
  */
 export interface TransformerCreate {
     name: string;
-    description?: string | null;
+    description?: string;
     method_name: string;
     module_name: string;
     input_entity_definition_ids: string[];

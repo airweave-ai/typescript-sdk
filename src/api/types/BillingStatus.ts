@@ -12,10 +12,7 @@ export type BillingStatus =
     | "paused"
     | "trialing"
     | "trial_expired"
-    | "grace_period"
-    | "incomplete"
-    | "incomplete_expired"
-    | "unpaid";
+    | "grace_period";
 export const BillingStatus = {
     Active: "active",
     PastDue: "past_due",
@@ -24,7 +21,4 @@ export const BillingStatus = {
     Trialing: "trialing",
     TrialExpired: "trial_expired",
     GracePeriod: "grace_period",
-    Incomplete: "incomplete",
-    IncompleteExpired: "incomplete_expired",
-    Unpaid: "unpaid",
 } as const;

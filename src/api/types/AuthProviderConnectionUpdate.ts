@@ -9,9 +9,9 @@ import * as AirweaveSDK from "../index.js";
  */
 export interface AuthProviderConnectionUpdate {
     /** Human-readable name for this auth provider connection */
-    name?: string | null;
+    name?: string;
     /** Optional detailed description of what this auth provider connection provides. */
-    description?: string | null;
+    description?: string;
     /** Updated authentication credentials for the auth provider. The required fields vary by auth provider type. If provided, all existing credentials will be replaced. */
-    auth_fields?: AirweaveSDK.ConfigValues | null;
+    auth_fields?: AirweaveSDK.ConfigValues;
 }

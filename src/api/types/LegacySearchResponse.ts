@@ -13,7 +13,7 @@ export interface LegacySearchResponse {
     /** Indicates whether results are raw search matches or AI-generated completions */
     response_type: AirweaveSDK.ResponseType;
     /** AI-generated natural language answer when response_type is 'completion' */
-    completion?: string | null;
+    completion?: string;
     /** Status of the search operation */
     status: AirweaveSDK.SearchStatus;
 }

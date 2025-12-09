@@ -11,17 +11,17 @@ export interface Sync {
     name: string;
     source_connection_id: string;
     destination_connection_ids: string[];
-    description?: string | null;
-    cron_schedule?: string | null;
-    next_scheduled_run?: string | null;
-    temporal_schedule_id?: string | null;
+    description?: string;
+    cron_schedule?: string;
+    next_scheduled_run?: string;
+    temporal_schedule_id?: string;
     sync_type?: string;
-    sync_metadata?: Record<string, unknown> | null;
+    sync_metadata?: Record<string, unknown>;
     status: AirweaveSDK.SyncStatus;
     id: string;
     organization_id: string;
     created_at: string;
     modified_at: string;
-    created_by_email?: string | null;
-    modified_by_email?: string | null;
+    created_by_email?: string;
+    modified_by_email?: string;
 }

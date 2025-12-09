@@ -7,11 +7,11 @@
  */
 export interface Range {
     /** point.key &lt; range.lt */
-    lt?: number | null;
+    lt?: number;
     /** point.key &gt; range.gt */
-    gt?: number | null;
+    gt?: number;
     /** point.key &gt;= range.gte */
-    gte?: number | null;
+    gte?: number;
     /** point.key &lt;= range.lte */
-    lte?: number | null;
+    lte?: number;
 }

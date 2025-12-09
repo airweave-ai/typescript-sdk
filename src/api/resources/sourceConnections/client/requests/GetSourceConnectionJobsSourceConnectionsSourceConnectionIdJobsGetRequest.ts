@@ -5,10 +5,9 @@
 /**
  * @example
  *     {
- *         source_connection_id: "source_connection_id"
+ *         limit: 1
  *     }
  */
 export interface GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest {
-    source_connection_id: string;
     limit?: number;
 }

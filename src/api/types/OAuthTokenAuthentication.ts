@@ -9,7 +9,7 @@ export interface OAuthTokenAuthentication {
     /** OAuth access token */
     access_token: string;
     /** OAuth refresh token */
-    refresh_token?: string | null;
+    refresh_token?: string;
     /** Token expiry time */
-    expires_at?: string | null;
+    expires_at?: string;
 }

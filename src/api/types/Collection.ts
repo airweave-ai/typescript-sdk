@@ -13,12 +13,6 @@ import * as AirweaveSDK from "../index.js";
 export interface Collection {
     /** Human-readable display name for the collection. */
     name: string;
-    /** Description of the collection. */
-    description?: string | null;
-    /** Color for the collection. */
-    color?: string | null;
-    /** Icon for the collection. */
-    icon?: string | null;
     /** URL-safe unique identifier used in API endpoints. This becomes non-optional once the collection is created. */
     readable_id: string;
     /** Unique system identifier for the collection. This UUID is generated automatically and used for internal references. */
@@ -34,9 +28,9 @@ export interface Collection {
     /** Identifier of the organization that owns this collection. Collections are isolated per organization. */
     organization_id: string;
     /** Email address of the user who created this collection. */
-    created_by_email?: string | null;
+    created_by_email?: string;
     /** Email address of the user who last modified this collection. */
-    modified_by_email?: string | null;
+    modified_by_email?: string;
     /** Current operational status of the collection:<br/>• **NEEDS_SOURCE**: Collection has no authenticated connections, or connections exist but haven't synced yet<br/>• **ACTIVE**: At least one connection has completed a sync or is currently syncing<br/>• **ERROR**: All connections have failed their last sync */
     status?: AirweaveSDK.CollectionStatus;
 }

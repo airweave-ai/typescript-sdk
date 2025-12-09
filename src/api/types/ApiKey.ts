@@ -10,9 +10,9 @@ export interface ApiKey {
     organization_id: string;
     created_at: string;
     modified_at: string;
-    last_used_date?: string | null;
+    last_used_date?: string;
     expiration_date: string;
-    created_by_email?: string | null;
-    modified_by_email?: string | null;
-    decrypted_key?: string | null;
+    created_by_email?: string;
+    modified_by_email?: string;
+    decrypted_key?: string;
 }
