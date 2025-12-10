@@ -12,4 +12,6 @@ export interface ConfigField {
     type: string;
     required?: boolean;
     items_type?: string;
+    feature_flag?: string;
+    is_secret?: boolean;
 }
