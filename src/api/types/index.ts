@@ -106,6 +106,7 @@ export * from "./SubscriptionInfo.js";
 export * from "./Sync.js";
 export * from "./SyncCreate.js";
 export * from "./SyncDetails.js";
+export * from "./SyncExecutionConfig.js";
 export * from "./SyncJob.js";
 export * from "./SyncJobDetails.js";
 export * from "./SyncJobStatus.js";
