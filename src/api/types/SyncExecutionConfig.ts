@@ -25,4 +25,6 @@ export interface SyncExecutionConfig {
     skip_cursor_load?: boolean;
     /** Don't save cursor progress (for ARF-only syncs) */
     skip_cursor_updates?: boolean;
+    /** Replay entities from ARF storage instead of calling the source. Uses the sync's existing ARF data. */
+    replay_from_arf?: boolean;
 }
