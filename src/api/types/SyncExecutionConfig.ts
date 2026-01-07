@@ -13,11 +13,15 @@ export interface SyncExecutionConfig {
     target_destinations?: string[];
     /** Skip these destinations */
     exclude_destinations?: string[];
+    /** Skip writing to native Qdrant destination */
+    skip_qdrant?: boolean;
+    /** Skip writing to native Vespa destination */
+    skip_vespa?: boolean;
     /** Enable VectorDBHandler */
     enable_vector_handlers?: boolean;
     /** Enable RawDataHandler (ARF) */
     enable_raw_data_handler?: boolean;
-    /** Enable PostgresMetadataHandler */
+    /** Enable EntityPostgresHandler */
     enable_postgres_handler?: boolean;
     /** Force INSERT for all entities */
     skip_hash_comparison?: boolean;

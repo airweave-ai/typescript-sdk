@@ -7,10 +7,16 @@
  *
  * Add new flags here to enable feature gating at the organization level.
  */
-export type FeatureFlag = "s3_destination" | "priority_support" | "source_rate_limiting" | "zephyr_scale";
+export type FeatureFlag =
+    | "s3_destination"
+    | "priority_support"
+    | "source_rate_limiting"
+    | "zephyr_scale"
+    | "api_key_admin_sync";
 export const FeatureFlag = {
     S3Destination: "s3_destination",
     PrioritySupport: "priority_support",
     SourceRateLimiting: "source_rate_limiting",
     ZephyrScale: "zephyr_scale",
+    ApiKeyAdminSync: "api_key_admin_sync",
 } as const;

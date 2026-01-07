@@ -12,8 +12,8 @@ export interface SearchRequest {
     query: string;
     /** The retrieval strategy to use */
     retrieval_strategy?: AirweaveSDK.RetrievalStrategy;
-    /** Qdrant native filter for metadata-based filtering */
-    filter?: AirweaveSDK.Filter;
+    /** Filter for metadata-based filtering */
+    filter?: Record<string, unknown>;
     /** Number of results to skip */
     offset?: number;
     /** Maximum number of results to return */
