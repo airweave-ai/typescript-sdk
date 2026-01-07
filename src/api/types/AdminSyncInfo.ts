@@ -32,5 +32,4 @@ export interface AdminSyncInfo {
     last_vespa_job_id?: string;
     last_vespa_job_status?: string;
     last_vespa_job_at?: string;
-    last_vespa_job_config?: Record<string, unknown>;
 }
