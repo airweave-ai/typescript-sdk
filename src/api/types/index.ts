@@ -2,6 +2,8 @@ export * from "./ApiKey.js";
 export * from "./ApiKeyCreate.js";
 export * from "./ActionCheckRequest.js";
 export * from "./ActionCheckResponse.js";
+export * from "./AdminSearchDestination.js";
+export * from "./AdminSyncInfo.js";
 export * from "./AuthProvider.js";
 export * from "./AuthProviderAuthentication.js";
 export * from "./AuthProviderConnection.js";
