@@ -114,7 +114,6 @@ export * from "./SyncJobDetails.js";
 export * from "./SyncJobStatus.js";
 export * from "./SyncStatus.js";
 export * from "./SyncUpdate.js";
-export * from "./SyncWithSourceConnection.js";
 export * from "./Transformer.js";
 export * from "./TransformerCreate.js";
 export * from "./TransformerUpdate.js";
