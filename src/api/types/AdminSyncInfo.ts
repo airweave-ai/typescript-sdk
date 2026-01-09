@@ -30,6 +30,7 @@ export interface AdminSyncInfo {
     total_vespa_entity_count?: number;
     last_job_status?: string;
     last_job_at?: string;
+    last_job_error?: string;
     source_short_name?: string;
     source_is_authenticated?: boolean;
     readable_collection_id?: string;
