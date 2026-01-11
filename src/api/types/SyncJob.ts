@@ -22,7 +22,7 @@ export interface SyncJob {
     failed_at?: string;
     error?: string;
     access_token?: string;
-    execution_config_json?: Record<string, unknown>;
+    sync_config?: AirweaveSDK.SyncConfig;
     id: string;
     organization_id: string;
     created_by_email?: string;

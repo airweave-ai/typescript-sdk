@@ -17,6 +17,7 @@ export interface Sync {
     temporal_schedule_id?: string;
     sync_type?: string;
     sync_metadata?: Record<string, unknown>;
+    sync_config?: AirweaveSDK.SyncConfig;
     status: AirweaveSDK.SyncStatus;
     id: string;
     organization_id: string;

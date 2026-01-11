@@ -17,6 +17,7 @@ export interface SyncCreate {
     temporal_schedule_id?: string;
     sync_type?: string;
     sync_metadata?: Record<string, unknown>;
+    sync_config?: AirweaveSDK.SyncConfig;
     status?: AirweaveSDK.SyncStatus;
     run_immediately?: boolean;
 }

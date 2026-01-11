@@ -21,6 +21,8 @@ export interface Collection {
     vector_size: number;
     /** Name of the embedding model used for this collection (e.g., 'text-embedding-3-large', 'text-embedding-3-small'). This ensures queries use the same model as the indexed data. */
     embedding_model_name: string;
+    /** Default sync configuration for all syncs in this collection. Overridable at sync and job level. */
+    sync_config?: AirweaveSDK.SyncConfig;
     /** Timestamp when the collection was created (ISO 8601 format). */
     created_at: string;
     /** Timestamp when the collection was last modified (ISO 8601 format). */

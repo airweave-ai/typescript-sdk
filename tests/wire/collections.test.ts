@@ -87,6 +87,21 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: { skip_load: true, skip_updates: true },
+                behavior: { skip_hash_comparison: true, replay_from_arf: true, skip_guardrails: true },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -113,6 +128,28 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: {
+                    skip_load: true,
+                    skip_updates: true,
+                },
+                behavior: {
+                    skip_hash_comparison: true,
+                    replay_from_arf: true,
+                    skip_guardrails: true,
+                },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -130,7 +167,7 @@ describe("Collections", () => {
             frameworkVersion: "test",
             environment: server.baseUrl,
         });
-        const rawRequestBody = { name: "buzz", readable_id: undefined };
+        const rawRequestBody = { name: "buzz", readable_id: undefined, sync_config: undefined };
         const rawResponseBody = { detail: undefined };
         server
             .mockEndpoint()
@@ -145,6 +182,7 @@ describe("Collections", () => {
             return await client.collections.create({
                 name: "buzz",
                 readable_id: undefined,
+                sync_config: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
@@ -164,6 +202,21 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: { skip_load: true, skip_updates: true },
+                behavior: { skip_hash_comparison: true, replay_from_arf: true, skip_guardrails: true },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -186,6 +239,28 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: {
+                    skip_load: true,
+                    skip_updates: true,
+                },
+                behavior: {
+                    skip_hash_comparison: true,
+                    replay_from_arf: true,
+                    skip_guardrails: true,
+                },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -233,6 +308,21 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: { skip_load: true, skip_updates: true },
+                behavior: { skip_hash_comparison: true, replay_from_arf: true, skip_guardrails: true },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
@@ -255,6 +345,28 @@ describe("Collections", () => {
             id: "550e8400-e29b-41d4-a716-446655440000",
             vector_size: 1,
             embedding_model_name: "embedding_model_name",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: {
+                    skip_load: true,
+                    skip_updates: true,
+                },
+                behavior: {
+                    skip_hash_comparison: true,
+                    replay_from_arf: true,
+                    skip_guardrails: true,
+                },
+            },
             created_at: "2024-01-15T09:30:00Z",
             modified_at: "2024-01-15T14:22:15Z",
             organization_id: "org12345-6789-abcd-ef01-234567890abc",
