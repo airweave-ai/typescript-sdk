@@ -3,21 +3,17 @@
  */
 
 /**
- * Request to configure S3 destination.
+ * Request to configure S3 destination with IAM role.
  */
 export interface S3ConfigRequest {
-    /** AWS access key ID */
-    aws_access_key_id: string;
-    /** AWS secret access key */
-    aws_secret_access_key: string;
+    /** IAM Role ARN to assume (e.g., arn:aws:iam::123456789012:role/airweave-writer) */
+    role_arn: string;
+    /** External ID for secure cross-account trust policy */
+    external_id: string;
     /** S3 bucket name */
     bucket_name: string;
     /** Prefix for Airweave data */
     bucket_prefix?: string;
     /** AWS region */
     aws_region?: string;
-    /** Custom S3 endpoint */
-    endpoint_url?: string;
-    /** Use SSL/TLS */
-    use_ssl?: boolean;
 }

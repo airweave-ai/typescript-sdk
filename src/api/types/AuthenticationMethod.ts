@@ -5,11 +5,18 @@
 /**
  * Authentication methods for source connections.
  */
-export type AuthenticationMethod = "direct" | "oauth_browser" | "oauth_token" | "oauth_byoc" | "auth_provider";
+export type AuthenticationMethod =
+    | "direct"
+    | "oauth_browser"
+    | "oauth_token"
+    | "oauth_byoc"
+    | "auth_provider"
+    | "iam_role";
 export const AuthenticationMethod = {
     Direct: "direct",
     OauthBrowser: "oauth_browser",
     OauthToken: "oauth_token",
     OauthByoc: "oauth_byoc",
     AuthProvider: "auth_provider",
+    IamRole: "iam_role",
 } as const;
