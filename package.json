@@ -1,6 +1,6 @@
 {
     "name": "@airweave/sdk",
-    "version": "v0.8.32",
+    "version": "v0.8.33",
     "private": false,
     "repository": "github:airweave-ai/typescript-sdk",
     "type": "commonjs",
