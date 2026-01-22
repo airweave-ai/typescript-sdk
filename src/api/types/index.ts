@@ -19,6 +19,7 @@ export * from "./BillingPlan.js";
 export * from "./BillingStatus.js";
 export * from "./BillingTransition.js";
 export * from "./BodyConnectSlackWithTokenConnectionsDirectTokenSlackPost.js";
+export * from "./BodyResyncWithExecutionConfigAdminResyncSyncIdPost.js";
 export * from "./CheckoutSessionRequest.js";
 export * from "./CheckoutSessionResponse.js";
 export * from "./Collection.js";

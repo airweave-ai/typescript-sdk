@@ -8,7 +8,7 @@
 export interface DestinationConfig {
     /** Skip writing to native Qdrant */
     skip_qdrant?: boolean;
-    /** Skip writing to native Vespa (default: true for local) */
+    /** Skip writing to native Vespa */
     skip_vespa?: boolean;
     /** If set, ONLY write to these destination UUIDs */
     target_destinations?: string[];

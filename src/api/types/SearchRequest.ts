@@ -18,7 +18,7 @@ export interface SearchRequest {
     offset?: number;
     /** Maximum number of results to return */
     limit?: number;
-    /** Weight recent content higher than older content; 0 = no recency effect, 1 = only recent items matter */
+    /** Weight recent content higher than older content; 0 = no recency effect, 1 = only recent items matter. NOTE: This feature is currently under construction and will be ignored. */
     temporal_relevance?: number;
     /** Generate a few query variations to improve recall */
     expand_query?: boolean;

@@ -32,10 +32,8 @@ export interface AdminSyncInfo {
     last_job_status?: string;
     last_job_at?: string;
     last_job_error?: string;
+    all_tags?: string[];
     source_short_name?: string;
     source_is_authenticated?: boolean;
     readable_collection_id?: string;
-    last_vespa_job_id?: string;
-    last_vespa_job_status?: string;
-    last_vespa_job_at?: string;
 }
