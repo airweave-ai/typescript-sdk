@@ -17,9 +17,9 @@ export interface Collection {
     readable_id: string;
     /** Unique system identifier for the collection. This UUID is generated automatically and used for internal references. */
     id: string;
-    /** Vector dimensions used by this collection. Determines which embedding model is used: 3072 (text-embedding-3-large), 1536 (text-embedding-3-small), or 384 (MiniLM-L6-v2). */
+    /** Vector dimensions used by this collection. Determines which embedding model is used: 3072 (text-embedding-3-large), 1536 (text-embedding-3-small), 1024 (mistral-embed), or 384 (MiniLM-L6-v2). */
     vector_size: number;
-    /** Name of the embedding model used for this collection (e.g., 'text-embedding-3-large', 'text-embedding-3-small'). This ensures queries use the same model as the indexed data. */
+    /** Name of the embedding model used for this collection (e.g., 'text-embedding-3-large', 'text-embedding-3-small', 'mistral-embed'). This ensures queries use the same model as the indexed data. */
     embedding_model_name: string;
     /** Default sync configuration for all syncs in this collection. Overridable at sync and job level. */
     sync_config?: AirweaveSDK.SyncConfig;
