@@ -36,8 +36,12 @@ export interface Source {
     federated_search?: boolean;
     /** Whether this source's entities have timestamps that enable recency-based ranking. Sources without file-level timestamps (e.g., code repositories) cannot use temporal relevance for search result weighting. */
     supports_temporal_relevance?: boolean;
+    /** Whether this source supports document-level access control. Sources with this capability extract ACL information from the source and apply it during search to filter results based on user permissions. */
+    supports_access_control?: boolean;
     /** Rate limiting level for this source: 'org' (organization-wide), 'connection' (per-connection/per-user), or None (no rate limiting). */
     rate_limit_level?: string;
+    /** Feature flag required to access this source. If set, only organizations with this feature enabled can see/use this source. */
+    feature_flag?: string;
     /** Unique system identifier for this source type. Generated automatically when the source is registered. */
     id: string;
     /** Timestamp when this source type was registered in the system (ISO 8601 format). */

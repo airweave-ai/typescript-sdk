@@ -12,11 +12,13 @@ export type FeatureFlag =
     | "priority_support"
     | "source_rate_limiting"
     | "zephyr_scale"
+    | "sharepoint_2019_v2"
     | "api_key_admin_sync";
 export const FeatureFlag = {
     S3Destination: "s3_destination",
     PrioritySupport: "priority_support",
     SourceRateLimiting: "source_rate_limiting",
     ZephyrScale: "zephyr_scale",
+    Sharepoint2019V2: "sharepoint_2019_v2",
     ApiKeyAdminSync: "api_key_admin_sync",
 } as const;
