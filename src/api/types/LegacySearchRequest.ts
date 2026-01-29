@@ -10,8 +10,8 @@ import * as AirweaveSDK from "../index.js";
 export interface LegacySearchRequest {
     /** The search query text (max 2048 tokens) */
     query: string;
-    /** Qdrant native filter for metadata-based filtering */
-    filter?: AirweaveSDK.Filter;
+    /** Filter for metadata-based filtering */
+    filter?: Record<string, unknown>;
     /** Number of results to skip */
     offset?: number;
     /** Maximum number of results */
