@@ -1200,3 +1200,799 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 </dd>
 </dl>
 </details>
+
+## events
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessages</a>({ ...params }) -> AirweaveSDK.MessageOut[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get event messages for the current organization.
+
+Args:
+ctx: The API context containing organization info.
+event_types: Optional list of event types to filter by.
+
+Returns:
+List of event messages.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getMessages();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetMessagesEventsMessagesGetRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessage</a>(messageId) -> AirweaveSDK.MessageOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific event message by ID.
+
+Args:
+message_id: The ID of the message to retrieve.
+ctx: The API context containing organization info.
+
+Returns:
+The event message with its payload.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getMessage("message_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**messageId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessageAttempts</a>(messageId) -> AirweaveSDK.MessageAttemptOut[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get delivery attempts for a specific message.
+
+Args:
+message_id: The ID of the message.
+ctx: The API context containing organization info.
+
+Returns:
+List of delivery attempts for this message.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getMessageAttempts("message_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**messageId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptions</a>() -> AirweaveSDK.EndpointOut[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get all webhook subscriptions for the current organization.
+
+Args:
+ctx: The API context containing organization info.
+
+Returns:
+List of webhook subscriptions.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getSubscriptions();
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">createSubscription</a>({ ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Create a new webhook subscription.
+
+Args:
+request: The subscription creation request.
+ctx: The API context containing organization info.
+
+Returns:
+The created subscription.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.createSubscription({
+    url: "url",
+    event_types: ["sync.pending"],
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.CreateSubscriptionRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscription</a>(subscriptionId) -> AirweaveSDK.SubscriptionWithAttemptsOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get a specific webhook subscription with its delivery attempts.
+
+Args:
+subscription_id: The ID of the subscription to retrieve.
+ctx: The API context containing organization info.
+
+Returns:
+The subscription details with message delivery attempts.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getSubscription("subscription_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">deleteSubscription</a>(subscriptionId) -> unknown</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Delete a webhook subscription.
+
+Args:
+subscription_id: The ID of the subscription to delete.
+ctx: The API context containing organization info.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.deleteSubscription("subscription_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">patchSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Update a webhook subscription.
+
+Args:
+subscription_id: The ID of the subscription to update.
+request: The subscription update request.
+ctx: The API context containing organization info.
+
+Returns:
+The updated subscription.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.patchSubscription("subscription_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.PatchSubscriptionRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">enableSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Enable a disabled webhook subscription, optionally recovering failed messages.
+
+Args:
+subscription_id: The ID of the subscription to enable.
+request: Optional request with recovery time range.
+ctx: The API context containing organization info.
+
+Returns:
+The enabled subscription.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.enableSubscription("subscription_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.EnableEndpointRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptionSecret</a>(subscriptionId) -> AirweaveSDK.EndpointSecretOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Get the signing secret for a webhook subscription.
+
+Args:
+subscription_id: The ID of the subscription.
+ctx: The API context containing organization info.
+
+Returns:
+The subscription's signing secret.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.getSubscriptionSecret("subscription_id");
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">recoverFailedMessages</a>(subscriptionId, { ...params }) -> AirweaveSDK.RecoverOut</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Recover (retry) failed messages for a webhook subscription.
+
+This endpoint triggers a recovery of all failed messages since the specified
+time. Useful after re-enabling a disabled endpoint to retry messages that
+failed while the endpoint was down.
+
+Args:
+subscription_id: The ID of the subscription to recover messages for.
+request: The recovery request with time range.
+ctx: The API context containing organization info.
+
+Returns:
+Information about the recovery task.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.events.recoverFailedMessages("subscription_id", {
+    since: "2024-01-15T09:30:00Z",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**subscriptionId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.RecoverMessagesRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Events.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
