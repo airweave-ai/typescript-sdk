@@ -5,27 +5,30 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Search request schema.
+ * Search request for querying a collection.
+ *
+ * Provides fine-grained control over the search pipeline including retrieval strategy,
+ * filtering, and AI-powered features like query expansion and answer generation.
  */
 export interface SearchRequest {
-    /** The search query text */
+    /** The search query text (required, max 2048 tokens) */
     query: string;
-    /** The retrieval strategy to use */
+    /** Search strategy: 'hybrid' (default), 'neural' (semantic only), or 'keyword' (BM25 only) */
     retrieval_strategy?: AirweaveSDK.RetrievalStrategy;
-    /** Filter for metadata-based filtering */
+    /** Structured filter for metadata-based filtering (Qdrant filter format) */
     filter?: Record<string, unknown>;
-    /** Number of results to skip */
+    /** Number of results to skip for pagination (default: 0) */
     offset?: number;
-    /** Maximum number of results to return */
+    /** Maximum number of results to return (default: 1000) */
     limit?: number;
     /** Weight recent content higher than older content; 0 = no recency effect, 1 = only recent items matter. NOTE: This feature is currently under construction and will be ignored. */
     temporal_relevance?: number;
-    /** Generate a few query variations to improve recall */
+    /** Generate query variations to improve recall (default: true) */
     expand_query?: boolean;
-    /** Extract structured filters from natural-language query */
+    /** Extract structured filters from natural language (e.g., 'from last week' becomes a date filter) */
     interpret_filters?: boolean;
-    /** Reorder the top candidate results for improved relevance. Max number of results that can be reranked is capped to around 1000. */
+    /** LLM-based reranking for improved relevance (default: true) */
     rerank?: boolean;
-    /** Generate a natural-language answer to the query */
+    /** Generate an AI answer based on search results (default: true) */
     generate_answer?: boolean;
 }

@@ -39,11 +39,7 @@ Instantiate and use the client with the following:
 ```typescript
 import { AirweaveSDKClient } from "@airweave/sdk";
 
-const client = new AirweaveSDKClient({
-    apiKey: "YOUR_API_KEY",
-    frameworkName: "YOUR_FRAMEWORK_NAME",
-    frameworkVersion: "YOUR_FRAMEWORK_VERSION",
-});
+const client = new AirweaveSDKClient({ apiKey: "YOUR_API_KEY" });
 await client.collections.create({
     name: "Finance Data",
     readable_id: "finance-data-reports",

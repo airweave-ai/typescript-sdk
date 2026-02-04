@@ -14,10 +14,6 @@ export declare namespace Sources {
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
         apiKey: core.Supplier<string>;
-        /** Override the X-Framework-Name header */
-        frameworkName?: core.Supplier<string | undefined>;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -29,10 +25,6 @@ export declare namespace Sources {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-Framework-Name header */
-        frameworkName?: string | undefined;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: string | undefined;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -51,14 +43,22 @@ export class Sources {
     }
 
     /**
-     * List all available data source connectors.
+     * Retrieve all available data source connectors.
      *
-     * <br/><br/>
-     * Returns the complete catalog of source types that Airweave can connect to.
+     * Returns the complete catalog of source types that Airweave can connect to,
+     * including their authentication methods, configuration requirements, and
+     * supported features. Use this endpoint to discover which integrations are
+     * available for your organization.
+     *
+     * Each source includes:
+     * - **Authentication methods**: How to connect (OAuth, API key, etc.)
+     * - **Configuration schemas**: What settings are required or optional
+     * - **Supported auth providers**: Pre-configured OAuth providers available
      *
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.sources.list()
@@ -70,11 +70,7 @@ export class Sources {
     private async __list(requestOptions?: Sources.RequestOptions): Promise<core.WithRawResponse<AirweaveSDK.Source[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -99,7 +95,12 @@ export class Sources {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -129,15 +130,26 @@ export class Sources {
     }
 
     /**
-     * Get detailed information about a specific data source connector.
+     * Retrieve detailed information about a specific data source connector.
+     *
+     * Returns the complete configuration for a source type, including:
+     *
+     * - **Authentication fields**: Schema for credentials required to connect
+     * - **Configuration fields**: Schema for optional settings and customization
+     * - **Supported auth providers**: Pre-configured OAuth providers available for this source
+     *
+     * Use this endpoint before creating a source connection to understand what
+     * authentication and configuration values are required.
      *
      * @param {string} shortName - Technical identifier of the source type (e.g., 'github', 'stripe', 'slack')
      * @param {Sources.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sources.get("short_name")
+     *     await client.sources.get("github")
      */
     public get(
         shortName: string,
@@ -152,11 +164,7 @@ export class Sources {
     ): Promise<core.WithRawResponse<AirweaveSDK.Source>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -179,9 +187,19 @@ export class Sources {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:

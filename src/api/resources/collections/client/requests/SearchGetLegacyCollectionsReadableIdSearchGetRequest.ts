@@ -7,10 +7,10 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         query: "query",
+ *         query: "How do I reset my password?",
  *         response_type: "raw",
- *         limit: 1,
- *         offset: 1,
+ *         limit: 10,
+ *         offset: 0,
  *         recency_bias: 1.1
  *     }
  */
@@ -23,6 +23,6 @@ export interface SearchGetLegacyCollectionsReadableIdSearchGetRequest {
     limit?: number;
     /** Number of results to skip for pagination */
     offset?: number;
-    /** How much to weigh recency vs similarity (0..1) */
+    /** How much to weigh recency vs similarity (0=similarity only, 1=recency only) */
     recency_bias?: number;
 }

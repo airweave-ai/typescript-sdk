@@ -9,12 +9,7 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("Sources", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -121,14 +116,9 @@ describe("Sources", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/sources").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -136,14 +126,21 @@ describe("Sources", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server.mockEndpoint().get("/sources").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.sources.list();
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "GitHub",
@@ -188,15 +185,9 @@ describe("Sources", () => {
             config_fields: { fields: [{ name: "name", title: "title", type: "type" }] },
             supported_auth_providers: ["supported_auth_providers"],
         };
-        server
-            .mockEndpoint()
-            .get("/sources/short_name")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
+        server.mockEndpoint().get("/sources/github").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.sources.get("short_name");
+        const response = await client.sources.get("github");
         expect(response).toEqual({
             name: "GitHub",
             description: "Connect to GitHub repositories for code, issues, pull requests, and documentation",
@@ -252,14 +243,27 @@ describe("Sources", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/sources/short_name")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sources.get("short_name");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/sources/short_name")
@@ -271,5 +275,23 @@ describe("Sources", () => {
         await expect(async () => {
             return await client.sources.get("short_name");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/sources/short_name")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sources.get("short_name");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 });

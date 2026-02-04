@@ -5,10 +5,12 @@
 /**
  * @example
  *     {
- *         since: "2024-01-15T09:30:00Z"
+ *         since: "2024-03-14T00:00:00Z"
  *     }
  */
 export interface RecoverMessagesRequest {
+    /** Start of the recovery time window (inclusive). All failed messages from this time onward will be retried. */
     since: string;
+    /** End of the recovery time window (exclusive). If not specified, recovers all failed messages up to now. */
     until?: string;
 }

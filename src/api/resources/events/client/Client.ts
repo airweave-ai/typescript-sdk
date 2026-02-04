@@ -14,10 +14,6 @@ export declare namespace Events {
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
         apiKey: core.Supplier<string>;
-        /** Override the X-Framework-Name header */
-        frameworkName?: core.Supplier<string | undefined>;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -29,10 +25,6 @@ export declare namespace Events {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-Framework-Name header */
-        frameworkName?: string | undefined;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: string | undefined;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -51,19 +43,20 @@ export class Events {
     }
 
     /**
-     * Get event messages for the current organization.
+     * Retrieve all event messages for your organization.
      *
-     * Args:
-     *     ctx: The API context containing organization info.
-     *     event_types: Optional list of event types to filter by.
+     * Event messages represent webhook payloads that were sent (or attempted to be sent)
+     * to your subscribed endpoints. Each message contains the event type, payload data,
+     * and delivery status information.
      *
-     * Returns:
-     *     List of event messages.
+     * Use the `event_types` query parameter to filter messages by specific event types,
+     * such as `sync.completed` or `sync.failed`.
      *
      * @param {AirweaveSDK.GetMessagesEventsMessagesGetRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.events.getMessages()
@@ -71,14 +64,14 @@ export class Events {
     public getMessages(
         request: AirweaveSDK.GetMessagesEventsMessagesGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.MessageOut[]> {
+    ): core.HttpResponsePromise<AirweaveSDK.EventMessage[]> {
         return core.HttpResponsePromise.fromPromise(this.__getMessages(request, requestOptions));
     }
 
     private async __getMessages(
         request: AirweaveSDK.GetMessagesEventsMessagesGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.MessageOut[]>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.EventMessage[]>> {
         const { event_types: eventTypes } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (eventTypes != null) {
@@ -91,11 +84,7 @@ export class Events {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -113,14 +102,19 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.MessageOut[], rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.EventMessage[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -150,41 +144,51 @@ export class Events {
     }
 
     /**
-     * Get a specific event message by ID.
+     * Retrieve a specific event message by its ID.
      *
-     * Args:
-     *     message_id: The ID of the message to retrieve.
-     *     ctx: The API context containing organization info.
+     * Returns the full message details including the event type, payload data,
+     * timestamp, and delivery channel information. Use this to inspect the
+     * exact payload that was sent to your webhook endpoints.
      *
-     * Returns:
-     *     The event message with its payload.
+     * Use `include_attempts=true` to also retrieve delivery attempts for this message,
+     * which include HTTP response codes, response bodies, and timestamps for debugging
+     * delivery failures.
      *
-     * @param {string} messageId
+     * @param {string} messageId - The unique identifier of the message to retrieve (UUID).
+     * @param {AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getMessage("message_id")
+     *     await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+     *         include_attempts: true
+     *     })
      */
     public getMessage(
         messageId: string,
+        request: AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.MessageOut> {
-        return core.HttpResponsePromise.fromPromise(this.__getMessage(messageId, requestOptions));
+    ): core.HttpResponsePromise<AirweaveSDK.EventMessageWithAttempts> {
+        return core.HttpResponsePromise.fromPromise(this.__getMessage(messageId, request, requestOptions));
     }
 
     private async __getMessage(
         messageId: string,
+        request: AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.MessageOut>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.EventMessageWithAttempts>> {
+        const { include_attempts: includeAttempts } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (includeAttempts != null) {
+            _queryParams["include_attempts"] = includeAttempts.toString();
+        }
+
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -196,20 +200,30 @@ export class Events {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.MessageOut, rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.EventMessageWithAttempts, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -241,128 +255,32 @@ export class Events {
     }
 
     /**
-     * Get delivery attempts for a specific message.
+     * List all webhook subscriptions for your organization.
      *
-     * Args:
-     *     message_id: The ID of the message.
-     *     ctx: The API context containing organization info.
-     *
-     * Returns:
-     *     List of delivery attempts for this message.
-     *
-     * @param {string} messageId
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.events.getMessageAttempts("message_id")
-     */
-    public getMessageAttempts(
-        messageId: string,
-        requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.MessageAttemptOut[]> {
-        return core.HttpResponsePromise.fromPromise(this.__getMessageAttempts(messageId, requestOptions));
-    }
-
-    private async __getMessageAttempts(
-        messageId: string,
-        requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.MessageAttemptOut[]>> {
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `events/messages/${encodeURIComponent(messageId)}/attempts`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.MessageAttemptOut[], rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /events/messages/{message_id}/attempts.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Get all webhook subscriptions for the current organization.
-     *
-     * Args:
-     *     ctx: The API context containing organization info.
-     *
-     * Returns:
-     *     List of webhook subscriptions.
+     * Returns all configured webhook endpoints, including their URLs, subscribed
+     * event types, and current status (enabled/disabled). Use this to audit
+     * your webhook configuration or find a specific subscription.
      *
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.events.getSubscriptions()
      */
     public getSubscriptions(
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EndpointOut[]> {
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription[]> {
         return core.HttpResponsePromise.fromPromise(this.__getSubscriptions(requestOptions));
     }
 
     private async __getSubscriptions(
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EndpointOut[]>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -380,14 +298,19 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EndpointOut[], rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.WebhookSubscription[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -419,42 +342,42 @@ export class Events {
     /**
      * Create a new webhook subscription.
      *
-     * Args:
-     *     request: The subscription creation request.
-     *     ctx: The API context containing organization info.
+     * Webhook subscriptions allow you to receive real-time notifications when events
+     * occur in Airweave. When you create a subscription, you specify:
      *
-     * Returns:
-     *     The created subscription.
+     * - **URL**: The HTTPS endpoint where events will be delivered
+     * - **Event Types**: Which events you want to receive (e.g., `sync.completed`, `sync.failed`)
+     * - **Secret** (optional): A custom signing secret for verifying webhook signatures
+     *
+     * After creation, Airweave will send HTTP POST requests to your URL whenever
+     * matching events occur. Each request includes a signature header for verification.
      *
      * @param {AirweaveSDK.CreateSubscriptionRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.events.createSubscription({
-     *         url: "url",
-     *         event_types: ["sync.pending"]
+     *         url: "https://api.mycompany.com/webhooks/airweave",
+     *         event_types: ["sync.completed", "sync.failed"]
      *     })
      */
     public createSubscription(
         request: AirweaveSDK.CreateSubscriptionRequest,
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EndpointOut> {
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__createSubscription(request, requestOptions));
     }
 
     private async __createSubscription(
         request: AirweaveSDK.CreateSubscriptionRequest,
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EndpointOut>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -475,14 +398,19 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EndpointOut, rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.WebhookSubscription, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -512,41 +440,50 @@ export class Events {
     }
 
     /**
-     * Get a specific webhook subscription with its delivery attempts.
+     * Retrieve a specific webhook subscription with its recent delivery attempts.
      *
-     * Args:
-     *     subscription_id: The ID of the subscription to retrieve.
-     *     ctx: The API context containing organization info.
+     * Returns the subscription configuration along with a history of message delivery
+     * attempts. This is useful for debugging delivery issues or verifying that your
+     * endpoint is correctly receiving events.
      *
-     * Returns:
-     *     The subscription details with message delivery attempts.
+     * Use `include_secret=true` to also retrieve the signing secret for webhook
+     * signature verification. Keep this secret secure.
      *
-     * @param {string} subscriptionId
+     * @param {string} subscriptionId - The unique identifier of the subscription to retrieve (UUID).
+     * @param {AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getSubscription("subscription_id")
+     *     await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+     *         include_secret: true
+     *     })
      */
     public getSubscription(
         subscriptionId: string,
+        request: AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SubscriptionWithAttemptsOut> {
-        return core.HttpResponsePromise.fromPromise(this.__getSubscription(subscriptionId, requestOptions));
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
+        return core.HttpResponsePromise.fromPromise(this.__getSubscription(subscriptionId, request, requestOptions));
     }
 
     private async __getSubscription(
         subscriptionId: string,
+        request: AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SubscriptionWithAttemptsOut>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
+        const { include_secret: includeSecret } = request;
+        const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
+        if (includeSecret != null) {
+            _queryParams["include_secret"] = includeSecret.toString();
+        }
+
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -558,23 +495,30 @@ export class Events {
             ),
             method: "GET",
             headers: _headers,
-            queryParameters: requestOptions?.queryParams,
+            queryParameters: { ..._queryParams, ...requestOptions?.queryParams },
             timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
             maxRetries: requestOptions?.maxRetries,
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return {
-                data: _response.body as AirweaveSDK.SubscriptionWithAttemptsOut,
-                rawResponse: _response.rawResponse,
-            };
+            return { data: _response.body as AirweaveSDK.WebhookSubscription, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -606,38 +550,38 @@ export class Events {
     }
 
     /**
-     * Delete a webhook subscription.
+     * Permanently delete a webhook subscription.
      *
-     * Args:
-     *     subscription_id: The ID of the subscription to delete.
-     *     ctx: The API context containing organization info.
+     * Once deleted, Airweave will stop sending events to this endpoint immediately.
+     * This action cannot be undone. Any pending message deliveries will be cancelled.
      *
-     * @param {string} subscriptionId
+     * If you want to temporarily stop receiving events, consider disabling the
+     * subscription instead using the PATCH endpoint.
+     *
+     * @param {string} subscriptionId - The unique identifier of the subscription to delete (UUID).
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.deleteSubscription("subscription_id")
+     *     await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000")
      */
     public deleteSubscription(
         subscriptionId: string,
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<unknown> {
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__deleteSubscription(subscriptionId, requestOptions));
     }
 
     private async __deleteSubscription(
         subscriptionId: string,
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<unknown>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -655,14 +599,24 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body, rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.WebhookSubscription, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -694,30 +648,38 @@ export class Events {
     }
 
     /**
-     * Update a webhook subscription.
+     * Update an existing webhook subscription.
      *
-     * Args:
-     *     subscription_id: The ID of the subscription to update.
-     *     request: The subscription update request.
-     *     ctx: The API context containing organization info.
+     * Use this endpoint to modify a subscription's configuration. You can:
      *
-     * Returns:
-     *     The updated subscription.
+     * - **Change the URL**: Update where events are delivered
+     * - **Update event types**: Modify which events trigger notifications
+     * - **Enable/disable**: Temporarily pause delivery without deleting the subscription
+     * - **Recover messages**: When re-enabling, optionally recover missed messages
      *
-     * @param {string} subscriptionId
+     * Only include the fields you want to change. Omitted fields will retain their
+     * current values.
+     *
+     * When re-enabling a subscription (`disabled: false`), you can optionally provide
+     * `recover_since` to automatically retry all messages that were generated while
+     * the subscription was disabled.
+     *
+     * @param {string} subscriptionId - The unique identifier of the subscription to update (UUID).
      * @param {AirweaveSDK.PatchSubscriptionRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.patchSubscription("subscription_id")
+     *     await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000")
      */
     public patchSubscription(
         subscriptionId: string,
         request: AirweaveSDK.PatchSubscriptionRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EndpointOut> {
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__patchSubscription(subscriptionId, request, requestOptions));
     }
 
@@ -725,14 +687,10 @@ export class Events {
         subscriptionId: string,
         request: AirweaveSDK.PatchSubscriptionRequest = {},
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EndpointOut>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -753,14 +711,24 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EndpointOut, rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.WebhookSubscription, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -792,225 +760,36 @@ export class Events {
     }
 
     /**
-     * Enable a disabled webhook subscription, optionally recovering failed messages.
+     * Retry failed message deliveries for a webhook subscription.
      *
-     * Args:
-     *     subscription_id: The ID of the subscription to enable.
-     *     request: Optional request with recovery time range.
-     *     ctx: The API context containing organization info.
+     * Triggers a recovery process that replays all failed messages within the
+     * specified time window. This is useful when:
      *
-     * Returns:
-     *     The enabled subscription.
+     * - Your endpoint was temporarily down and you want to catch up
+     * - You've fixed a bug in your webhook handler
+     * - You want to reprocess events after re-enabling a disabled subscription
      *
-     * @param {string} subscriptionId
-     * @param {AirweaveSDK.EnableEndpointRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * Messages are retried in chronological order. Successfully delivered messages
+     * are skipped; only failed or pending messages are retried.
      *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.events.enableSubscription("subscription_id")
-     */
-    public enableSubscription(
-        subscriptionId: string,
-        request?: AirweaveSDK.EnableEndpointRequest,
-        requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EndpointOut> {
-        return core.HttpResponsePromise.fromPromise(this.__enableSubscription(subscriptionId, request, requestOptions));
-    }
-
-    private async __enableSubscription(
-        subscriptionId: string,
-        request?: AirweaveSDK.EnableEndpointRequest,
-        requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EndpointOut>> {
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}/enable`,
-            ),
-            method: "POST",
-            headers: _headers,
-            contentType: "application/json",
-            queryParameters: requestOptions?.queryParams,
-            requestType: "json",
-            body: request != null ? request : undefined,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EndpointOut, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling POST /events/subscriptions/{subscription_id}/enable.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Get the signing secret for a webhook subscription.
-     *
-     * Args:
-     *     subscription_id: The ID of the subscription.
-     *     ctx: The API context containing organization info.
-     *
-     * Returns:
-     *     The subscription's signing secret.
-     *
-     * @param {string} subscriptionId
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
-     *
-     * @throws {@link AirweaveSDK.UnprocessableEntityError}
-     *
-     * @example
-     *     await client.events.getSubscriptionSecret("subscription_id")
-     */
-    public getSubscriptionSecret(
-        subscriptionId: string,
-        requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EndpointSecretOut> {
-        return core.HttpResponsePromise.fromPromise(this.__getSubscriptionSecret(subscriptionId, requestOptions));
-    }
-
-    private async __getSubscriptionSecret(
-        subscriptionId: string,
-        requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EndpointSecretOut>> {
-        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
-            this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
-            requestOptions?.headers,
-        );
-        const _response = await core.fetcher({
-            url: core.url.join(
-                (await core.Supplier.get(this._options.baseUrl)) ??
-                    (await core.Supplier.get(this._options.environment)) ??
-                    environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}/secret`,
-            ),
-            method: "GET",
-            headers: _headers,
-            queryParameters: requestOptions?.queryParams,
-            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
-            maxRetries: requestOptions?.maxRetries,
-            abortSignal: requestOptions?.abortSignal,
-        });
-        if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EndpointSecretOut, rawResponse: _response.rawResponse };
-        }
-
-        if (_response.error.reason === "status-code") {
-            switch (_response.error.statusCode) {
-                case 422:
-                    throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
-                        _response.rawResponse,
-                    );
-                default:
-                    throw new errors.AirweaveSDKError({
-                        statusCode: _response.error.statusCode,
-                        body: _response.error.body,
-                        rawResponse: _response.rawResponse,
-                    });
-            }
-        }
-
-        switch (_response.error.reason) {
-            case "non-json":
-                throw new errors.AirweaveSDKError({
-                    statusCode: _response.error.statusCode,
-                    body: _response.error.rawBody,
-                    rawResponse: _response.rawResponse,
-                });
-            case "timeout":
-                throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /events/subscriptions/{subscription_id}/secret.",
-                );
-            case "unknown":
-                throw new errors.AirweaveSDKError({
-                    message: _response.error.errorMessage,
-                    rawResponse: _response.rawResponse,
-                });
-        }
-    }
-
-    /**
-     * Recover (retry) failed messages for a webhook subscription.
-     *
-     * This endpoint triggers a recovery of all failed messages since the specified
-     * time. Useful after re-enabling a disabled endpoint to retry messages that
-     * failed while the endpoint was down.
-     *
-     * Args:
-     *     subscription_id: The ID of the subscription to recover messages for.
-     *     request: The recovery request with time range.
-     *     ctx: The API context containing organization info.
-     *
-     * Returns:
-     *     Information about the recovery task.
-     *
-     * @param {string} subscriptionId
+     * @param {string} subscriptionId - The unique identifier of the subscription to recover messages for (UUID).
      * @param {AirweaveSDK.RecoverMessagesRequest} request
      * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.recoverFailedMessages("subscription_id", {
-     *         since: "2024-01-15T09:30:00Z"
+     *     await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+     *         since: "2024-03-14T00:00:00Z"
      *     })
      */
     public recoverFailedMessages(
         subscriptionId: string,
         request: AirweaveSDK.RecoverMessagesRequest,
         requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.RecoverOut> {
+    ): core.HttpResponsePromise<AirweaveSDK.RecoveryTask> {
         return core.HttpResponsePromise.fromPromise(
             this.__recoverFailedMessages(subscriptionId, request, requestOptions),
         );
@@ -1020,14 +799,10 @@ export class Events {
         subscriptionId: string,
         request: AirweaveSDK.RecoverMessagesRequest,
         requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.RecoverOut>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.RecoveryTask>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -1048,14 +823,24 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.RecoverOut, rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.RecoveryTask, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:

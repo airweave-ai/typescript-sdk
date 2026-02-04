@@ -14,10 +14,6 @@ export declare namespace SourceConnections {
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
         apiKey: core.Supplier<string>;
-        /** Override the X-Framework-Name header */
-        frameworkName?: core.Supplier<string | undefined>;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -29,10 +25,6 @@ export declare namespace SourceConnections {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-Framework-Name header */
-        frameworkName?: string | undefined;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: string | undefined;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -51,18 +43,25 @@ export class SourceConnections {
     }
 
     /**
-     * List source connections with minimal fields for performance.
+     * Retrieve all source connections for your organization.
+     *
+     * Returns a lightweight list of source connections with essential fields for
+     * display and navigation. Use the collection filter to see connections within
+     * a specific collection.
+     *
+     * For full connection details including sync history, use the GET /{id} endpoint.
      *
      * @param {AirweaveSDK.ListSourceConnectionsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.sourceConnections.list({
      *         collection: "collection",
-     *         skip: 1,
-     *         limit: 1
+     *         skip: 0,
+     *         limit: 100
      *     })
      */
     public list(
@@ -92,11 +91,7 @@ export class SourceConnections {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -124,7 +119,12 @@ export class SourceConnections {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -154,30 +154,27 @@ export class SourceConnections {
     }
 
     /**
-     * Create a new source connection.
+     * Create a new source connection to sync data from an external source.
      *
-     * The authentication configuration determines the flow:
-     * - DirectAuthentication: Immediate creation with provided credentials
-     * - OAuthBrowserAuthentication: Returns shell with authentication URL
-     * - OAuthTokenAuthentication: Immediate creation with provided token
-     * - AuthProviderAuthentication: Using external auth provider
+     * The authentication method determines the creation flow:
      *
-     * BYOC (Bring Your Own Client) is detected when client_id and client_secret
-     * are provided in OAuthBrowserAuthentication.
+     * - **Direct**: Provide credentials (API key, token) directly. Connection is created immediately.
+     * - **OAuth Browser**: Returns a connection with an `auth_url` to redirect users for authentication.
+     * - **OAuth Token**: Provide an existing OAuth token. Connection is created immediately.
+     * - **Auth Provider**: Use a pre-configured auth provider (e.g., Composio, Pipedream).
      *
-     * sync_immediately defaults:
-     * - True for: direct, oauth_token, auth_provider
-     * - False for: oauth_browser, oauth_byoc (these sync after authentication)
+     * After successful authentication, data sync can begin automatically or on-demand.
      *
      * @param {AirweaveSDK.SourceConnectionCreate} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.sourceConnections.create({
-     *         short_name: "short_name",
-     *         readable_collection_id: "readable_collection_id"
+     *         short_name: "github",
+     *         readable_collection_id: "customer-support-tickets-x7k9m"
      *     })
      */
     public create(
@@ -193,11 +190,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -225,7 +218,12 @@ export class SourceConnections {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -255,15 +253,23 @@ export class SourceConnections {
     }
 
     /**
-     * Get a source connection with optional depth expansion.
+     * Retrieve details of a specific source connection.
      *
-     * @param {string} sourceConnectionId
+     * Returns complete information about the connection including:
+     * - Configuration settings
+     * - Authentication status
+     * - Sync schedule and history
+     * - Entity statistics
+     *
+     * @param {string} sourceConnectionId - Unique identifier of the source connection (UUID)
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.get("source_connection_id")
+     *     await client.sourceConnections.get("550e8400-e29b-41d4-a716-446655440000")
      */
     public get(
         sourceConnectionId: string,
@@ -278,11 +284,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -305,9 +307,19 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -339,15 +351,24 @@ export class SourceConnections {
     }
 
     /**
-     * Delete a source connection and all related data.
+     * Permanently delete a source connection and all its synced data.
      *
-     * @param {string} sourceConnectionId
+     * This operation:
+     * - Removes all entities synced from this source from the vector database
+     * - Cancels any scheduled or running sync jobs
+     * - Deletes the connection configuration and credentials
+     *
+     * **Warning**: This action cannot be undone. All synced data will be permanently deleted.
+     *
+     * @param {string} sourceConnectionId - Unique identifier of the source connection to delete (UUID)
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.delete("source_connection_id")
+     *     await client.sourceConnections.delete("550e8400-e29b-41d4-a716-446655440000")
      */
     public delete(
         sourceConnectionId: string,
@@ -362,11 +383,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -389,9 +406,19 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -423,22 +450,26 @@ export class SourceConnections {
     }
 
     /**
-     * Update a source connection.
+     * Update an existing source connection's configuration.
      *
-     * Updateable fields:
-     * - name, description
-     * - config_fields
-     * - cron_schedule
-     * - auth_fields (direct auth only)
+     * You can modify:
+     * - **Name and description**: Display information
+     * - **Configuration**: Source-specific settings (e.g., repository name, filters)
+     * - **Schedule**: Cron expression for automatic syncs
+     * - **Authentication**: Update credentials (direct auth only)
      *
-     * @param {string} sourceConnectionId
+     * Only include the fields you want to change; omitted fields retain their current values.
+     *
+     * @param {string} sourceConnectionId - Unique identifier of the source connection to update (UUID)
      * @param {AirweaveSDK.SourceConnectionUpdate} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.update("source_connection_id")
+     *     await client.sourceConnections.update("550e8400-e29b-41d4-a716-446655440000")
      */
     public update(
         sourceConnectionId: string,
@@ -455,11 +486,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -485,9 +512,19 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -519,28 +556,27 @@ export class SourceConnections {
     }
 
     /**
-     * Trigger a sync run for a source connection.
+     * Trigger a data synchronization job for a source connection.
      *
-     * Runs are always executed through Temporal workflow engine.
+     * Starts an asynchronous sync job that pulls the latest data from the connected
+     * source. The job runs in the background and you can monitor its progress using
+     * the jobs endpoint.
      *
-     * Args:
-     *     db: Database session
-     *     source_connection_id: ID of the source connection to run
-     *     ctx: API context with organization and user information
-     *     guard_rail: Guard rail service for usage limits
-     *     force_full_sync: If True, forces a full sync with orphaned entity cleanup
-     *                     for continuous syncs. Raises 400 error if used on
-     *                     non-continuous syncs (which are always full syncs).
+     * For continuous sync connections, this performs an incremental sync by default.
+     * Use `force_full_sync=true` to perform a complete re-sync of all data.
      *
-     * @param {string} sourceConnectionId
+     * @param {string} sourceConnectionId - Unique identifier of the source connection to sync (UUID)
      * @param {AirweaveSDK.RunSourceConnectionsSourceConnectionIdRunPostRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
+     * @throws {@link AirweaveSDK.ConflictError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.run("source_connection_id", {
-     *         force_full_sync: true
+     *     await client.sourceConnections.run("550e8400-e29b-41d4-a716-446655440000", {
+     *         force_full_sync: false
      *     })
      */
     public run(
@@ -564,11 +600,7 @@ export class SourceConnections {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -591,9 +623,24 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new AirweaveSDK.ConflictError(
+                        _response.error.body as AirweaveSDK.ConflictErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -625,17 +672,30 @@ export class SourceConnections {
     }
 
     /**
-     * Get sync jobs for a source connection.
+     * Retrieve the sync job history for a source connection.
      *
-     * @param {string} sourceConnectionId
+     * Returns a list of sync jobs ordered by creation time (newest first). Each job
+     * includes status, timing information, and entity counts.
+     *
+     * Job statuses:
+     * - **PENDING**: Job is queued and waiting to start
+     * - **RUNNING**: Sync is actively pulling and processing data
+     * - **COMPLETED**: Sync finished successfully
+     * - **FAILED**: Sync encountered an error
+     * - **CANCELLED**: Sync was manually cancelled
+     * - **CANCELLING**: Cancellation has been requested
+     *
+     * @param {string} sourceConnectionId - Unique identifier of the source connection (UUID)
      * @param {AirweaveSDK.GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest} request
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
-     *         limit: 1
+     *     await client.sourceConnections.getSourceConnectionJobs("550e8400-e29b-41d4-a716-446655440000", {
+     *         limit: 100
      *     })
      */
     public getSourceConnectionJobs(
@@ -661,11 +721,7 @@ export class SourceConnections {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -688,9 +744,19 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -722,20 +788,25 @@ export class SourceConnections {
     }
 
     /**
-     * Cancel a running sync job for a source connection.
+     * Request cancellation of a running sync job.
      *
-     * This endpoint requests cancellation and marks the job as CANCELLING.
-     * The workflow updates the final status to CANCELLED when it processes
-     * the cancellation request.
+     * The job will be marked as CANCELLING and the sync workflow will stop at the
+     * next checkpoint. Already-processed entities are retained.
      *
-     * @param {string} sourceConnectionId
-     * @param {string} jobId
+     * **Note**: Cancellation is asynchronous. The job status will change to CANCELLED
+     * once the workflow has fully stopped.
+     *
+     * @param {string} sourceConnectionId - Unique identifier of the source connection (UUID)
+     * @param {string} jobId - Unique identifier of the sync job to cancel (UUID)
      * @param {SourceConnections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
+     * @throws {@link AirweaveSDK.ConflictError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.sourceConnections.cancelJob("source_connection_id", "job_id")
+     *     await client.sourceConnections.cancelJob("550e8400-e29b-41d4-a716-446655440000", "660e8400-e29b-41d4-a716-446655440001")
      */
     public cancelJob(
         sourceConnectionId: string,
@@ -752,11 +823,7 @@ export class SourceConnections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -779,9 +846,24 @@ export class SourceConnections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 409:
+                    throw new AirweaveSDK.ConflictError(
+                        _response.error.body as AirweaveSDK.ConflictErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:

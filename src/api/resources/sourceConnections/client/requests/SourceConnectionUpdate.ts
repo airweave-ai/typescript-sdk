@@ -9,18 +9,21 @@ import * as AirweaveSDK from "../../../../index.js";
  *     {}
  */
 export interface SourceConnectionUpdate {
+    /** Updated display name for the connection */
     name?: string;
+    /** Updated description */
     description?: string;
-    /** Source-specific configuration */
+    /** Updated source-specific configuration */
     config?: Record<string, unknown>;
+    /** Updated sync schedule configuration */
     schedule?: AirweaveSDK.ScheduleConfig;
-    /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
+    /** Updated authentication credentials (direct auth only) */
     authentication?: SourceConnectionUpdate.Authentication;
 }
 
 export namespace SourceConnectionUpdate {
     /**
-     * Authentication config (defaults to OAuth browser flow for OAuth sources)
+     * Updated authentication credentials (direct auth only)
      */
     export type Authentication =
         | AirweaveSDK.DirectAuthentication

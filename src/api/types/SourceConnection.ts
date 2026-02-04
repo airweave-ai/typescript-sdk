@@ -5,24 +5,40 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Complete source connection details.
+ * Complete source connection details including auth, config, sync status, and entities.
+ *
+ * This schema provides full information about a source connection, suitable for
+ * detail views and monitoring sync progress.
  */
 export interface SourceConnection {
+    /** Unique identifier of the source connection */
     id: string;
+    /** Display name of the connection */
     name: string;
+    /** Optional description of the connection's purpose */
     description?: string;
+    /** Source type identifier */
     short_name: string;
+    /** Collection this connection belongs to */
     readable_collection_id: string;
+    /** Current operational status of the connection */
     status: AirweaveSDK.SourceConnectionStatus;
+    /** When the connection was created (ISO 8601) */
     created_at: string;
+    /** When the connection was last modified (ISO 8601) */
     modified_at: string;
+    /** Authentication status and details */
     auth: AirweaveSDK.AuthenticationDetails;
+    /** Source-specific configuration values */
     config?: Record<string, unknown>;
+    /** Sync schedule configuration */
     schedule?: AirweaveSDK.ScheduleDetails;
+    /** Sync execution history and statistics */
     sync?: AirweaveSDK.SyncDetails;
-    /** ID of the associated sync */
+    /** ID of the associated sync (internal use) */
     sync_id?: string;
+    /** Summary of synced entities by type */
     entities?: AirweaveSDK.EntitySummary;
-    /** Whether this source uses federated search */
+    /** Whether this source uses federated (real-time) search instead of syncing */
     federated_search?: boolean;
 }

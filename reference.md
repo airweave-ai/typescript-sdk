@@ -14,15 +14,22 @@
 <dl>
 <dd>
 
-List all available data source connectors.
+Retrieve all available data source connectors.
 
-<br/><br/>
-Returns the complete catalog of source types that Airweave can connect to.
+Returns the complete catalog of source types that Airweave can connect to,
+including their authentication methods, configuration requirements, and
+supported features. Use this endpoint to discover which integrations are
+available for your organization.
 
-</dd>
-</dl>
-</dd>
-</dl>
+Each source includes:
+
+- **Authentication methods**: How to connect (OAuth, API key, etc.)
+- **Configuration schemas**: What settings are required or optional
+- **Supported auth providers**: Pre-configured OAuth providers available
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -72,7 +79,16 @@ await client.sources.list();
 <dl>
 <dd>
 
-Get detailed information about a specific data source connector.
+Retrieve detailed information about a specific data source connector.
+
+Returns the complete configuration for a source type, including:
+
+- **Authentication fields**: Schema for credentials required to connect
+- **Configuration fields**: Schema for optional settings and customization
+- **Supported auth providers**: Pre-configured OAuth providers available for this source
+
+Use this endpoint before creating a source connection to understand what
+authentication and configuration values are required.
 
 </dd>
 </dl>
@@ -88,7 +104,7 @@ Get detailed information about a specific data source connector.
 <dd>
 
 ```typescript
-await client.sources.get("short_name");
+await client.sources.get("github");
 ```
 
 </dd>
@@ -137,9 +153,13 @@ await client.sources.get("short_name");
 <dl>
 <dd>
 
-List all collections that belong to your organization with optional search filtering.
+Retrieve all collections belonging to your organization.
 
-Collections are always sorted by creation date (newest first).
+Collections are containers that group related data from one or more source
+connections, enabling unified search across multiple data sources.
+
+Results are sorted by creation date (newest first) and support pagination
+and text search filtering.
 
 </dd>
 </dl>
@@ -156,9 +176,9 @@ Collections are always sorted by creation date (newest first).
 
 ```typescript
 await client.collections.list({
-    skip: 1,
-    limit: 1,
-    search: "search",
+    skip: 0,
+    limit: 100,
+    search: "customer",
 });
 ```
 
@@ -206,15 +226,20 @@ await client.collections.list({
 <dl>
 <dd>
 
-Create a new collection.
+Create a new collection in your organization.
 
-The newly created collection is initially empty and does not contain any data
-until you explicitly add source connections to it.
+Collections are containers for organizing and searching across data from multiple
+sources. After creation, add source connections to begin syncing data.
 
-</dd>
-</dl>
-</dd>
-</dl>
+The collection will be assigned a unique `readable_id` based on the name you provide,
+which is used in URLs and API calls. You can optionally configure:
+
+- **Sync schedule**: How frequently to automatically sync data from all sources
+- **Custom readable_id**: Provide your own identifier (must be unique and URL-safe)
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -275,7 +300,11 @@ await client.collections.create({
 <dl>
 <dd>
 
-Retrieve a specific collection by its readable ID.
+Retrieve details of a specific collection by its readable ID.
+
+Returns the complete collection configuration including sync settings, status,
+and metadata. Use this to check the current state of a collection or to get
+configuration details before making updates.
 
 </dd>
 </dl>
@@ -291,7 +320,7 @@ Retrieve a specific collection by its readable ID.
 <dd>
 
 ```typescript
-await client.collections.get("readable_id");
+await client.collections.get("customer-support-tickets-x7k9m");
 ```
 
 </dd>
@@ -338,11 +367,16 @@ await client.collections.get("readable_id");
 <dl>
 <dd>
 
-Delete a collection and all associated data.
+Permanently delete a collection and all associated data.
 
-Permanently removes a collection from your organization including all synced data
-from the destination systems. All source connections within this collection
-will also be deleted as part of the cleanup process. This action cannot be undone.
+This operation:
+
+- Removes all synced data from the vector database
+- Deletes all source connections within the collection
+- Cancels any scheduled sync jobs
+- Cleans up all related resources
+
+**Warning**: This action cannot be undone. All data will be permanently deleted.
 
 </dd>
 </dl>
@@ -358,7 +392,7 @@ will also be deleted as part of the cleanup process. This action cannot be undon
 <dd>
 
 ```typescript
-await client.collections.delete("readable_id");
+await client.collections.delete("customer-support-tickets-x7k9m");
 ```
 
 </dd>
@@ -393,7 +427,7 @@ await client.collections.delete("readable_id");
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>(readableId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">update</a>(readableId, { ...params }) -> AirweaveSDK.Collection</code></summary>
 <dl>
 <dd>
 
@@ -405,12 +439,15 @@ await client.collections.delete("readable_id");
 <dl>
 <dd>
 
-Trigger data synchronization for all source connections in the collection.
+Update an existing collection's properties.
 
-The sync jobs run asynchronously in the background, so this endpoint
-returns immediately with job details that you can use to track progress. You can
-monitor the status of individual data synchronization using the source connection
-endpoints.
+You can modify:
+
+- **Name**: The display name shown in the UI
+- **Sync configuration**: Schedule settings for automatic data synchronization
+
+Note that the `readable_id` cannot be changed after creation to maintain stable
+API endpoints and preserve existing integrations.
 
 </dd>
 </dl>
@@ -426,7 +463,86 @@ endpoints.
 <dd>
 
 ```typescript
-await client.collections.refreshAllSourceConnections("readable_id");
+await client.collections.update("customer-support-tickets-x7k9m", {
+    name: "Updated Finance Data",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string` — The unique readable identifier of the collection to update
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.CollectionUpdate`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">refreshAllSourceConnections</a>(readableId) -> AirweaveSDK.SourceConnectionJob[]</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Trigger data synchronization for all source connections in a collection.
+
+Starts sync jobs for every source connection in the collection, pulling the latest
+data from each connected source. Jobs run asynchronously in the background.
+
+Returns a list of sync jobs that were created. Use the source connection endpoints
+to monitor the progress and status of individual sync jobs.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.refreshAllSourceConnections("customer-support-tickets-x7k9m");
 ```
 
 </dd>
@@ -473,15 +589,19 @@ await client.collections.refreshAllSourceConnections("readable_id");
 <dl>
 <dd>
 
-Legacy GET search endpoint for backwards compatibility.
+**DEPRECATED**: Use POST /collections/{readable_id}/search instead.
 
-DEPRECATED: This endpoint uses the old schema. Please migrate to POST with the new
-SearchRequest format for access to all features.
+This legacy GET endpoint provides basic search functionality via query parameters.
+Migrate to the POST endpoint for access to advanced features like:
 
-</dd>
-</dl>
-</dd>
-</dl>
+- Structured filters
+- Query expansion
+- Reranking
+- Streaming responses
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -492,11 +612,11 @@ SearchRequest format for access to all features.
 <dd>
 
 ```typescript
-await client.collections.searchGetLegacy("readable_id", {
-    query: "query",
+await client.collections.searchGetLegacy("customer-support-tickets-x7k9m", {
+    query: "How do I reset my password?",
     response_type: "raw",
-    limit: 1,
-    offset: 1,
+    limit: 10,
+    offset: 0,
     recency_bias: 1.1,
 });
 ```
@@ -541,7 +661,7 @@ await client.collections.searchGetLegacy("readable_id", {
 </dl>
 </details>
 
-<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>(readableId, { ...params }) -> AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse</code></summary>
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">search</a>(readableId, { ...params }) -> AirweaveSDK.SearchResponse</code></summary>
 <dl>
 <dd>
 
@@ -553,9 +673,24 @@ await client.collections.searchGetLegacy("readable_id", {
 <dl>
 <dd>
 
-Search your collection.
+Search your collection using semantic and hybrid search.
 
-Accepts both new SearchRequest and legacy LegacySearchRequest formats
+This is the primary search endpoint providing powerful AI-powered search capabilities:
+
+**Search Strategies:**
+
+- **hybrid** (default): Combines neural (semantic) and keyword (BM25) matching
+- **neural**: Pure semantic search using embeddings
+- **keyword**: Traditional keyword-based BM25 search
+
+**Features:**
+
+- **Query expansion**: Generate query variations to improve recall
+- **Filter interpretation**: Extract structured filters from natural language
+- **Reranking**: LLM-based reranking for improved relevance
+- **Answer generation**: AI-generated answers based on search results
+
+**Note**: Accepts both new SearchRequest and legacy LegacySearchRequest formats
 for backwards compatibility.
 
 </dd>
@@ -572,8 +707,8 @@ for backwards compatibility.
 <dd>
 
 ```typescript
-await client.collections.search("readable_id", {
-    query: "query",
+await client.collections.search("customer-support-tickets-x7k9m", {
+    query: "How do I reset my password?",
 });
 ```
 
@@ -590,7 +725,7 @@ await client.collections.search("readable_id", {
 <dl>
 <dd>
 
-**readableId:** `string` — The unique readable identifier of the collection
+**readableId:** `string` — The unique readable identifier of the collection to search
 
 </dd>
 </dl>
@@ -631,7 +766,13 @@ await client.collections.search("readable_id", {
 <dl>
 <dd>
 
-List source connections with minimal fields for performance.
+Retrieve all source connections for your organization.
+
+Returns a lightweight list of source connections with essential fields for
+display and navigation. Use the collection filter to see connections within
+a specific collection.
+
+For full connection details including sync history, use the GET /{id} endpoint.
 
 </dd>
 </dl>
@@ -649,8 +790,8 @@ List source connections with minimal fields for performance.
 ```typescript
 await client.sourceConnections.list({
     collection: "collection",
-    skip: 1,
-    limit: 1,
+    skip: 0,
+    limit: 100,
 });
 ```
 
@@ -698,26 +839,21 @@ await client.sourceConnections.list({
 <dl>
 <dd>
 
-Create a new source connection.
+Create a new source connection to sync data from an external source.
 
-The authentication configuration determines the flow:
+The authentication method determines the creation flow:
 
-- DirectAuthentication: Immediate creation with provided credentials
-- OAuthBrowserAuthentication: Returns shell with authentication URL
-- OAuthTokenAuthentication: Immediate creation with provided token
-- AuthProviderAuthentication: Using external auth provider
+- **Direct**: Provide credentials (API key, token) directly. Connection is created immediately.
+- **OAuth Browser**: Returns a connection with an `auth_url` to redirect users for authentication.
+- **OAuth Token**: Provide an existing OAuth token. Connection is created immediately.
+- **Auth Provider**: Use a pre-configured auth provider (e.g., Composio, Pipedream).
 
-BYOC (Bring Your Own Client) is detected when client_id and client_secret
-are provided in OAuthBrowserAuthentication.
+After successful authentication, data sync can begin automatically or on-demand.
 
-sync_immediately defaults:
-
-- True for: direct, oauth_token, auth_provider
-- False for: oauth_browser, oauth_byoc (these sync after authentication)
-  </dd>
-  </dl>
-  </dd>
-  </dl>
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -729,8 +865,8 @@ sync_immediately defaults:
 
 ```typescript
 await client.sourceConnections.create({
-    short_name: "short_name",
-    readable_collection_id: "readable_collection_id",
+    short_name: "github",
+    readable_collection_id: "customer-support-tickets-x7k9m",
 });
 ```
 
@@ -778,12 +914,18 @@ await client.sourceConnections.create({
 <dl>
 <dd>
 
-Get a source connection with optional depth expansion.
+Retrieve details of a specific source connection.
 
-</dd>
-</dl>
-</dd>
-</dl>
+Returns complete information about the connection including:
+
+- Configuration settings
+- Authentication status
+- Sync schedule and history
+- Entity statistics
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -794,7 +936,7 @@ Get a source connection with optional depth expansion.
 <dd>
 
 ```typescript
-await client.sourceConnections.get("source_connection_id");
+await client.sourceConnections.get("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -810,7 +952,7 @@ await client.sourceConnections.get("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection (UUID)
 
 </dd>
 </dl>
@@ -841,7 +983,15 @@ await client.sourceConnections.get("source_connection_id");
 <dl>
 <dd>
 
-Delete a source connection and all related data.
+Permanently delete a source connection and all its synced data.
+
+This operation:
+
+- Removes all entities synced from this source from the vector database
+- Cancels any scheduled or running sync jobs
+- Deletes the connection configuration and credentials
+
+**Warning**: This action cannot be undone. All synced data will be permanently deleted.
 
 </dd>
 </dl>
@@ -857,7 +1007,7 @@ Delete a source connection and all related data.
 <dd>
 
 ```typescript
-await client.sourceConnections.delete("source_connection_id");
+await client.sourceConnections.delete("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -873,7 +1023,7 @@ await client.sourceConnections.delete("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection to delete (UUID)
 
 </dd>
 </dl>
@@ -904,18 +1054,21 @@ await client.sourceConnections.delete("source_connection_id");
 <dl>
 <dd>
 
-Update a source connection.
+Update an existing source connection's configuration.
 
-Updateable fields:
+You can modify:
 
-- name, description
-- config_fields
-- cron_schedule
-- auth_fields (direct auth only)
-  </dd>
-  </dl>
-  </dd>
-  </dl>
+- **Name and description**: Display information
+- **Configuration**: Source-specific settings (e.g., repository name, filters)
+- **Schedule**: Cron expression for automatic syncs
+- **Authentication**: Update credentials (direct auth only)
+
+Only include the fields you want to change; omitted fields retain their current values.
+
+</dd>
+</dl>
+</dd>
+</dl>
 
 #### 🔌 Usage
 
@@ -926,7 +1079,7 @@ Updateable fields:
 <dd>
 
 ```typescript
-await client.sourceConnections.update("source_connection_id");
+await client.sourceConnections.update("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -942,7 +1095,7 @@ await client.sourceConnections.update("source_connection_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection to update (UUID)
 
 </dd>
 </dl>
@@ -981,18 +1134,14 @@ await client.sourceConnections.update("source_connection_id");
 <dl>
 <dd>
 
-Trigger a sync run for a source connection.
+Trigger a data synchronization job for a source connection.
 
-Runs are always executed through Temporal workflow engine.
+Starts an asynchronous sync job that pulls the latest data from the connected
+source. The job runs in the background and you can monitor its progress using
+the jobs endpoint.
 
-Args:
-db: Database session
-source_connection_id: ID of the source connection to run
-ctx: API context with organization and user information
-guard_rail: Guard rail service for usage limits
-force_full_sync: If True, forces a full sync with orphaned entity cleanup
-for continuous syncs. Raises 400 error if used on
-non-continuous syncs (which are always full syncs).
+For continuous sync connections, this performs an incremental sync by default.
+Use `force_full_sync=true` to perform a complete re-sync of all data.
 
 </dd>
 </dl>
@@ -1008,8 +1157,8 @@ non-continuous syncs (which are always full syncs).
 <dd>
 
 ```typescript
-await client.sourceConnections.run("source_connection_id", {
-    force_full_sync: true,
+await client.sourceConnections.run("550e8400-e29b-41d4-a716-446655440000", {
+    force_full_sync: false,
 });
 ```
 
@@ -1026,7 +1175,7 @@ await client.sourceConnections.run("source_connection_id", {
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection to sync (UUID)
 
 </dd>
 </dl>
@@ -1065,12 +1214,23 @@ await client.sourceConnections.run("source_connection_id", {
 <dl>
 <dd>
 
-Get sync jobs for a source connection.
+Retrieve the sync job history for a source connection.
 
-</dd>
-</dl>
-</dd>
-</dl>
+Returns a list of sync jobs ordered by creation time (newest first). Each job
+includes status, timing information, and entity counts.
+
+Job statuses:
+
+- **PENDING**: Job is queued and waiting to start
+- **RUNNING**: Sync is actively pulling and processing data
+- **COMPLETED**: Sync finished successfully
+- **FAILED**: Sync encountered an error
+- **CANCELLED**: Sync was manually cancelled
+- **CANCELLING**: Cancellation has been requested
+  </dd>
+  </dl>
+  </dd>
+  </dl>
 
 #### 🔌 Usage
 
@@ -1081,8 +1241,8 @@ Get sync jobs for a source connection.
 <dd>
 
 ```typescript
-await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
-    limit: 1,
+await client.sourceConnections.getSourceConnectionJobs("550e8400-e29b-41d4-a716-446655440000", {
+    limit: 100,
 });
 ```
 
@@ -1099,7 +1259,7 @@ await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection (UUID)
 
 </dd>
 </dl>
@@ -1138,11 +1298,13 @@ await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
 <dl>
 <dd>
 
-Cancel a running sync job for a source connection.
+Request cancellation of a running sync job.
 
-This endpoint requests cancellation and marks the job as CANCELLING.
-The workflow updates the final status to CANCELLED when it processes
-the cancellation request.
+The job will be marked as CANCELLING and the sync workflow will stop at the
+next checkpoint. Already-processed entities are retained.
+
+**Note**: Cancellation is asynchronous. The job status will change to CANCELLED
+once the workflow has fully stopped.
 
 </dd>
 </dl>
@@ -1158,7 +1320,10 @@ the cancellation request.
 <dd>
 
 ```typescript
-await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+await client.sourceConnections.cancelJob(
+    "550e8400-e29b-41d4-a716-446655440000",
+    "660e8400-e29b-41d4-a716-446655440001",
+);
 ```
 
 </dd>
@@ -1174,7 +1339,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-**sourceConnectionId:** `string`
+**sourceConnectionId:** `string` — Unique identifier of the source connection (UUID)
 
 </dd>
 </dl>
@@ -1182,7 +1347,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-**jobId:** `string`
+**jobId:** `string` — Unique identifier of the sync job to cancel (UUID)
 
 </dd>
 </dl>
@@ -1203,7 +1368,7 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 
 ## events
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessages</a>({ ...params }) -> AirweaveSDK.MessageOut[]</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessages</a>({ ...params }) -> AirweaveSDK.EventMessage[]</code></summary>
 <dl>
 <dd>
 
@@ -1215,14 +1380,14 @@ await client.sourceConnections.cancelJob("source_connection_id", "job_id");
 <dl>
 <dd>
 
-Get event messages for the current organization.
+Retrieve all event messages for your organization.
 
-Args:
-ctx: The API context containing organization info.
-event_types: Optional list of event types to filter by.
+Event messages represent webhook payloads that were sent (or attempted to be sent)
+to your subscribed endpoints. Each message contains the event type, payload data,
+and delivery status information.
 
-Returns:
-List of event messages.
+Use the `event_types` query parameter to filter messages by specific event types,
+such as `sync.completed` or `sync.failed`.
 
 </dd>
 </dl>
@@ -1273,7 +1438,7 @@ await client.events.getMessages();
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessage</a>(messageId) -> AirweaveSDK.MessageOut</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessage</a>(messageId, { ...params }) -> AirweaveSDK.EventMessageWithAttempts</code></summary>
 <dl>
 <dd>
 
@@ -1285,14 +1450,15 @@ await client.events.getMessages();
 <dl>
 <dd>
 
-Get a specific event message by ID.
+Retrieve a specific event message by its ID.
 
-Args:
-message_id: The ID of the message to retrieve.
-ctx: The API context containing organization info.
+Returns the full message details including the event type, payload data,
+timestamp, and delivery channel information. Use this to inspect the
+exact payload that was sent to your webhook endpoints.
 
-Returns:
-The event message with its payload.
+Use `include_attempts=true` to also retrieve delivery attempts for this message,
+which include HTTP response codes, response bodies, and timestamps for debugging
+delivery failures.
 
 </dd>
 </dl>
@@ -1308,7 +1474,9 @@ The event message with its payload.
 <dd>
 
 ```typescript
-await client.events.getMessage("message_id");
+await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+    include_attempts: true,
+});
 ```
 
 </dd>
@@ -1324,7 +1492,15 @@ await client.events.getMessage("message_id");
 <dl>
 <dd>
 
-**messageId:** `string`
+**messageId:** `string` — The unique identifier of the message to retrieve (UUID).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest`
 
 </dd>
 </dl>
@@ -1343,7 +1519,7 @@ await client.events.getMessage("message_id");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessageAttempts</a>(messageId) -> AirweaveSDK.MessageAttemptOut[]</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptions</a>() -> AirweaveSDK.WebhookSubscription[]</code></summary>
 <dl>
 <dd>
 
@@ -1355,83 +1531,11 @@ await client.events.getMessage("message_id");
 <dl>
 <dd>
 
-Get delivery attempts for a specific message.
+List all webhook subscriptions for your organization.
 
-Args:
-message_id: The ID of the message.
-ctx: The API context containing organization info.
-
-Returns:
-List of delivery attempts for this message.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.events.getMessageAttempts("message_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**messageId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Events.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptions</a>() -> AirweaveSDK.EndpointOut[]</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get all webhook subscriptions for the current organization.
-
-Args:
-ctx: The API context containing organization info.
-
-Returns:
-List of webhook subscriptions.
+Returns all configured webhook endpoints, including their URLs, subscribed
+event types, and current status (enabled/disabled). Use this to audit
+your webhook configuration or find a specific subscription.
 
 </dd>
 </dl>
@@ -1474,7 +1578,7 @@ await client.events.getSubscriptions();
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">createSubscription</a>({ ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">createSubscription</a>({ ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1488,12 +1592,15 @@ await client.events.getSubscriptions();
 
 Create a new webhook subscription.
 
-Args:
-request: The subscription creation request.
-ctx: The API context containing organization info.
+Webhook subscriptions allow you to receive real-time notifications when events
+occur in Airweave. When you create a subscription, you specify:
 
-Returns:
-The created subscription.
+- **URL**: The HTTPS endpoint where events will be delivered
+- **Event Types**: Which events you want to receive (e.g., `sync.completed`, `sync.failed`)
+- **Secret** (optional): A custom signing secret for verifying webhook signatures
+
+After creation, Airweave will send HTTP POST requests to your URL whenever
+matching events occur. Each request includes a signature header for verification.
 
 </dd>
 </dl>
@@ -1510,8 +1617,8 @@ The created subscription.
 
 ```typescript
 await client.events.createSubscription({
-    url: "url",
-    event_types: ["sync.pending"],
+    url: "https://api.mycompany.com/webhooks/airweave",
+    event_types: ["sync.completed", "sync.failed"],
 });
 ```
 
@@ -1547,7 +1654,7 @@ await client.events.createSubscription({
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscription</a>(subscriptionId) -> AirweaveSDK.SubscriptionWithAttemptsOut</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1559,14 +1666,14 @@ await client.events.createSubscription({
 <dl>
 <dd>
 
-Get a specific webhook subscription with its delivery attempts.
+Retrieve a specific webhook subscription with its recent delivery attempts.
 
-Args:
-subscription_id: The ID of the subscription to retrieve.
-ctx: The API context containing organization info.
+Returns the subscription configuration along with a history of message delivery
+attempts. This is useful for debugging delivery issues or verifying that your
+endpoint is correctly receiving events.
 
-Returns:
-The subscription details with message delivery attempts.
+Use `include_secret=true` to also retrieve the signing secret for webhook
+signature verification. Keep this secret secure.
 
 </dd>
 </dl>
@@ -1582,7 +1689,9 @@ The subscription details with message delivery attempts.
 <dd>
 
 ```typescript
-await client.events.getSubscription("subscription_id");
+await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+    include_secret: true,
+});
 ```
 
 </dd>
@@ -1598,7 +1707,15 @@ await client.events.getSubscription("subscription_id");
 <dl>
 <dd>
 
-**subscriptionId:** `string`
+**subscriptionId:** `string` — The unique identifier of the subscription to retrieve (UUID).
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest`
 
 </dd>
 </dl>
@@ -1617,7 +1734,7 @@ await client.events.getSubscription("subscription_id");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">deleteSubscription</a>(subscriptionId) -> unknown</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">deleteSubscription</a>(subscriptionId) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1629,11 +1746,13 @@ await client.events.getSubscription("subscription_id");
 <dl>
 <dd>
 
-Delete a webhook subscription.
+Permanently delete a webhook subscription.
 
-Args:
-subscription_id: The ID of the subscription to delete.
-ctx: The API context containing organization info.
+Once deleted, Airweave will stop sending events to this endpoint immediately.
+This action cannot be undone. Any pending message deliveries will be cancelled.
+
+If you want to temporarily stop receiving events, consider disabling the
+subscription instead using the PATCH endpoint.
 
 </dd>
 </dl>
@@ -1649,7 +1768,7 @@ ctx: The API context containing organization info.
 <dd>
 
 ```typescript
-await client.events.deleteSubscription("subscription_id");
+await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -1665,7 +1784,7 @@ await client.events.deleteSubscription("subscription_id");
 <dl>
 <dd>
 
-**subscriptionId:** `string`
+**subscriptionId:** `string` — The unique identifier of the subscription to delete (UUID).
 
 </dd>
 </dl>
@@ -1684,7 +1803,7 @@ await client.events.deleteSubscription("subscription_id");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">patchSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">patchSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1696,15 +1815,21 @@ await client.events.deleteSubscription("subscription_id");
 <dl>
 <dd>
 
-Update a webhook subscription.
+Update an existing webhook subscription.
 
-Args:
-subscription_id: The ID of the subscription to update.
-request: The subscription update request.
-ctx: The API context containing organization info.
+Use this endpoint to modify a subscription's configuration. You can:
 
-Returns:
-The updated subscription.
+- **Change the URL**: Update where events are delivered
+- **Update event types**: Modify which events trigger notifications
+- **Enable/disable**: Temporarily pause delivery without deleting the subscription
+- **Recover messages**: When re-enabling, optionally recover missed messages
+
+Only include the fields you want to change. Omitted fields will retain their
+current values.
+
+When re-enabling a subscription (`disabled: false`), you can optionally provide
+`recover_since` to automatically retry all messages that were generated while
+the subscription was disabled.
 
 </dd>
 </dl>
@@ -1720,7 +1845,7 @@ The updated subscription.
 <dd>
 
 ```typescript
-await client.events.patchSubscription("subscription_id");
+await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -1736,7 +1861,7 @@ await client.events.patchSubscription("subscription_id");
 <dl>
 <dd>
 
-**subscriptionId:** `string`
+**subscriptionId:** `string` — The unique identifier of the subscription to update (UUID).
 
 </dd>
 </dl>
@@ -1763,7 +1888,7 @@ await client.events.patchSubscription("subscription_id");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">enableSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.EndpointOut</code></summary>
+<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">recoverFailedMessages</a>(subscriptionId, { ...params }) -> AirweaveSDK.RecoveryTask</code></summary>
 <dl>
 <dd>
 
@@ -1775,15 +1900,17 @@ await client.events.patchSubscription("subscription_id");
 <dl>
 <dd>
 
-Enable a disabled webhook subscription, optionally recovering failed messages.
+Retry failed message deliveries for a webhook subscription.
 
-Args:
-subscription_id: The ID of the subscription to enable.
-request: Optional request with recovery time range.
-ctx: The API context containing organization info.
+Triggers a recovery process that replays all failed messages within the
+specified time window. This is useful when:
 
-Returns:
-The enabled subscription.
+- Your endpoint was temporarily down and you want to catch up
+- You've fixed a bug in your webhook handler
+- You want to reprocess events after re-enabling a disabled subscription
+
+Messages are retried in chronological order. Successfully delivered messages
+are skipped; only failed or pending messages are retried.
 
 </dd>
 </dl>
@@ -1799,161 +1926,8 @@ The enabled subscription.
 <dd>
 
 ```typescript
-await client.events.enableSubscription("subscription_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**subscriptionId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**request:** `AirweaveSDK.EnableEndpointRequest`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Events.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptionSecret</a>(subscriptionId) -> AirweaveSDK.EndpointSecretOut</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Get the signing secret for a webhook subscription.
-
-Args:
-subscription_id: The ID of the subscription.
-ctx: The API context containing organization info.
-
-Returns:
-The subscription's signing secret.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.events.getSubscriptionSecret("subscription_id");
-```
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### ⚙️ Parameters
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-**subscriptionId:** `string`
-
-</dd>
-</dl>
-
-<dl>
-<dd>
-
-**requestOptions:** `Events.RequestOptions`
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-</dd>
-</dl>
-</details>
-
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">recoverFailedMessages</a>(subscriptionId, { ...params }) -> AirweaveSDK.RecoverOut</code></summary>
-<dl>
-<dd>
-
-#### 📝 Description
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-Recover (retry) failed messages for a webhook subscription.
-
-This endpoint triggers a recovery of all failed messages since the specified
-time. Useful after re-enabling a disabled endpoint to retry messages that
-failed while the endpoint was down.
-
-Args:
-subscription_id: The ID of the subscription to recover messages for.
-request: The recovery request with time range.
-ctx: The API context containing organization info.
-
-Returns:
-Information about the recovery task.
-
-</dd>
-</dl>
-</dd>
-</dl>
-
-#### 🔌 Usage
-
-<dl>
-<dd>
-
-<dl>
-<dd>
-
-```typescript
-await client.events.recoverFailedMessages("subscription_id", {
-    since: "2024-01-15T09:30:00Z",
+await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+    since: "2024-03-14T00:00:00Z",
 });
 ```
 
@@ -1970,7 +1944,7 @@ await client.events.recoverFailedMessages("subscription_id", {
 <dl>
 <dd>
 
-**subscriptionId:** `string`
+**subscriptionId:** `string` — The unique identifier of the subscription to recover messages for (UUID).
 
 </dd>
 </dl>

@@ -9,24 +9,19 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("SourceConnections", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
-                id: "id",
-                name: "name",
-                short_name: "short_name",
-                readable_collection_id: "readable_collection_id",
-                created_at: "2024-01-15T09:30:00Z",
-                modified_at: "2024-01-15T09:30:00Z",
+                id: "550e8400-e29b-41d4-a716-446655440000",
+                name: "GitHub Docs Repo",
+                short_name: "github",
+                readable_collection_id: "documentation-ab123",
+                created_at: "2024-03-15T09:30:00Z",
+                modified_at: "2024-03-15T14:22:15Z",
                 is_authenticated: true,
-                entity_count: 1,
-                federated_search: true,
+                entity_count: 1250,
+                federated_search: false,
                 auth_method: "direct",
                 status: "active",
             },
@@ -41,20 +36,20 @@ describe("SourceConnections", () => {
 
         const response = await client.sourceConnections.list({
             collection: "collection",
-            skip: 1,
-            limit: 1,
+            skip: 0,
+            limit: 100,
         });
         expect(response).toEqual([
             {
-                id: "id",
-                name: "name",
-                short_name: "short_name",
-                readable_collection_id: "readable_collection_id",
-                created_at: "2024-01-15T09:30:00Z",
-                modified_at: "2024-01-15T09:30:00Z",
+                id: "550e8400-e29b-41d4-a716-446655440000",
+                name: "GitHub Docs Repo",
+                short_name: "github",
+                readable_collection_id: "documentation-ab123",
+                created_at: "2024-03-15T09:30:00Z",
+                modified_at: "2024-03-15T14:22:15Z",
                 is_authenticated: true,
-                entity_count: 1,
-                federated_search: true,
+                entity_count: 1250,
+                federated_search: false,
                 auth_method: "direct",
                 status: "active",
             },
@@ -63,14 +58,9 @@ describe("SourceConnections", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/source-connections")
@@ -84,28 +74,41 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/source-connections")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.list();
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = { short_name: "short_name", readable_collection_id: "readable_collection_id" };
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { short_name: "github", readable_collection_id: "customer-support-tickets-x7k9m" };
         const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -113,34 +116,34 @@ describe("SourceConnections", () => {
                 provider_readable_id: "provider_readable_id",
                 provider_id: "provider_id",
             },
-            config: { key: "value" },
+            config: { branch: "main", repo_name: "company/docs" },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: { key: "value" },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
-            federated_search: true,
+            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            federated_search: false,
         };
         server
             .mockEndpoint()
@@ -152,22 +155,22 @@ describe("SourceConnections", () => {
             .build();
 
         const response = await client.sourceConnections.create({
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            short_name: "github",
+            readable_collection_id: "customer-support-tickets-x7k9m",
         });
         expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -176,11 +179,12 @@ describe("SourceConnections", () => {
                 provider_id: "provider_id",
             },
             config: {
-                key: "value",
+                branch: "main",
+                repo_name: "company/docs",
             },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: {
@@ -188,17 +192,17 @@ describe("SourceConnections", () => {
                 },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
@@ -206,25 +210,20 @@ describe("SourceConnections", () => {
             },
             sync_id: "sync_id",
             entities: {
-                total_entities: 1,
+                total_entities: 1250,
                 by_type: {
-                    key: {
-                        count: 1,
+                    file: {
+                        count: 1250,
                     },
                 },
             },
-            federated_search: true,
+            federated_search: false,
         });
     });
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {
             name: undefined,
             short_name: "short_name",
@@ -236,7 +235,7 @@ describe("SourceConnections", () => {
             authentication: undefined,
             redirect_url: undefined,
         };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/source-connections")
@@ -261,28 +260,62 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("get (1)", async () => {
+    test("create (3)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-
-        const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
             short_name: "short_name",
             readable_collection_id: "readable_collection_id",
+            description: undefined,
+            config: undefined,
+            schedule: undefined,
+            sync_immediately: undefined,
+            authentication: undefined,
+            redirect_url: undefined,
+        };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.create({
+                name: undefined,
+                short_name: "short_name",
+                readable_collection_id: "readable_collection_id",
+                description: undefined,
+                config: undefined,
+                schedule: undefined,
+                sync_immediately: undefined,
+                authentication: undefined,
+                redirect_url: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
+    test("get (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -290,57 +323,57 @@ describe("SourceConnections", () => {
                 provider_readable_id: "provider_readable_id",
                 provider_id: "provider_id",
             },
-            config: { key: "value" },
+            config: { branch: "main", repo_name: "company/docs" },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: { key: "value" },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
-            federated_search: true,
+            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            federated_search: false,
         };
         server
             .mockEndpoint()
-            .get("/source-connections/source_connection_id")
+            .get("/source-connections/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.get("source_connection_id");
+        const response = await client.sourceConnections.get("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -349,11 +382,12 @@ describe("SourceConnections", () => {
                 provider_id: "provider_id",
             },
             config: {
-                key: "value",
+                branch: "main",
+                repo_name: "company/docs",
             },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: {
@@ -361,17 +395,17 @@ describe("SourceConnections", () => {
                 },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
@@ -379,27 +413,40 @@ describe("SourceConnections", () => {
             },
             sync_id: "sync_id",
             entities: {
-                total_entities: 1,
+                total_entities: 1250,
                 by_type: {
-                    key: {
-                        count: 1,
+                    file: {
+                        count: 1250,
                     },
                 },
             },
-            federated_search: true,
+            federated_search: false,
         });
     });
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.get("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/source-connections/source_connection_id")
@@ -413,28 +460,41 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.get("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -442,57 +502,57 @@ describe("SourceConnections", () => {
                 provider_readable_id: "provider_readable_id",
                 provider_id: "provider_id",
             },
-            config: { key: "value" },
+            config: { branch: "main", repo_name: "company/docs" },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: { key: "value" },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
-            federated_search: true,
+            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            federated_search: false,
         };
         server
             .mockEndpoint()
-            .delete("/source-connections/source_connection_id")
+            .delete("/source-connections/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.delete("source_connection_id");
+        const response = await client.sourceConnections.delete("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -501,11 +561,12 @@ describe("SourceConnections", () => {
                 provider_id: "provider_id",
             },
             config: {
-                key: "value",
+                branch: "main",
+                repo_name: "company/docs",
             },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: {
@@ -513,17 +574,17 @@ describe("SourceConnections", () => {
                 },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
@@ -531,27 +592,40 @@ describe("SourceConnections", () => {
             },
             sync_id: "sync_id",
             entities: {
-                total_entities: 1,
+                total_entities: 1250,
                 by_type: {
-                    key: {
-                        count: 1,
+                    file: {
+                        count: 1250,
                     },
                 },
             },
-            federated_search: true,
+            federated_search: false,
         });
     });
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.delete("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("delete (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .delete("/source-connections/source_connection_id")
@@ -565,28 +639,41 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/source-connections/source_connection_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.delete("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("update (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -594,58 +681,58 @@ describe("SourceConnections", () => {
                 provider_readable_id: "provider_readable_id",
                 provider_id: "provider_id",
             },
-            config: { key: "value" },
+            config: { branch: "main", repo_name: "company/docs" },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: { key: "value" },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1, by_type: { key: { count: 1 } } },
-            federated_search: true,
+            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            federated_search: false,
         };
         server
             .mockEndpoint()
-            .patch("/source-connections/source_connection_id")
+            .patch("/source-connections/550e8400-e29b-41d4-a716-446655440000")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.update("source_connection_id");
+        const response = await client.sourceConnections.update("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
-            id: "id",
-            name: "name",
-            description: "description",
-            short_name: "short_name",
-            readable_collection_id: "readable_collection_id",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            name: "GitHub Docs Repo",
+            description: "Main documentation repository",
+            short_name: "github",
+            readable_collection_id: "documentation-ab123",
             status: "active",
-            created_at: "2024-01-15T09:30:00Z",
-            modified_at: "2024-01-15T09:30:00Z",
+            created_at: "2024-03-15T09:30:00Z",
+            modified_at: "2024-03-15T14:22:15Z",
             auth: {
                 method: "direct",
                 authenticated: true,
-                authenticated_at: "2024-01-15T09:30:00Z",
+                authenticated_at: "2024-03-15T09:30:00Z",
                 expires_at: "2024-01-15T09:30:00Z",
                 auth_url: "auth_url",
                 auth_url_expires: "2024-01-15T09:30:00Z",
@@ -654,11 +741,12 @@ describe("SourceConnections", () => {
                 provider_id: "provider_id",
             },
             config: {
-                key: "value",
+                branch: "main",
+                repo_name: "company/docs",
             },
             schedule: {
-                cron: "cron",
-                next_run: "2024-01-15T09:30:00Z",
+                cron: "0 */6 * * *",
+                next_run: "2024-03-15T18:00:00Z",
                 continuous: true,
                 cursor_field: "cursor_field",
                 cursor_value: {
@@ -666,17 +754,17 @@ describe("SourceConnections", () => {
                 },
             },
             sync: {
-                total_runs: 1,
-                successful_runs: 1,
+                total_runs: 15,
+                successful_runs: 14,
                 failed_runs: 1,
                 last_job: {
-                    id: "id",
+                    id: "770e8400-e29b-41d4-a716-446655440002",
                     status: "created",
-                    started_at: "2024-01-15T09:30:00Z",
-                    completed_at: "2024-01-15T09:30:00Z",
-                    duration_seconds: 1.1,
-                    entities_inserted: 1,
-                    entities_updated: 1,
+                    started_at: "2024-03-15T12:00:00Z",
+                    completed_at: "2024-03-15T12:05:32Z",
+                    duration_seconds: 332,
+                    entities_inserted: 45,
+                    entities_updated: 12,
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
@@ -684,25 +772,20 @@ describe("SourceConnections", () => {
             },
             sync_id: "sync_id",
             entities: {
-                total_entities: 1,
+                total_entities: 1250,
                 by_type: {
-                    key: {
-                        count: 1,
+                    file: {
+                        count: 1250,
                     },
                 },
             },
-            federated_search: true,
+            federated_search: false,
         });
     });
 
     test("update (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {
             name: undefined,
             description: undefined,
@@ -710,7 +793,38 @@ describe("SourceConnections", () => {
             schedule: undefined,
             authentication: undefined,
         };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .patch("/source-connections/source_connection_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.update("source_connection_id", {
+                name: undefined,
+                description: undefined,
+                config: undefined,
+                schedule: undefined,
+                authentication: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            config: undefined,
+            schedule: undefined,
+            authentication: undefined,
+        };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .patch("/source-connections/source_connection_id")
@@ -731,51 +845,77 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            name: undefined,
+            description: undefined,
+            config: undefined,
+            schedule: undefined,
+            authentication: undefined,
+        };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .patch("/source-connections/source_connection_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.update("source_connection_id", {
+                name: undefined,
+                description: undefined,
+                config: undefined,
+                schedule: undefined,
+                authentication: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("run (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            id: "id",
-            source_connection_id: "source_connection_id",
+            id: "770e8400-e29b-41d4-a716-446655440002",
+            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             status: "created",
-            started_at: "2024-01-15T09:30:00Z",
-            completed_at: "2024-01-15T09:30:00Z",
-            duration_seconds: 1.1,
-            entities_inserted: 1,
-            entities_updated: 1,
-            entities_deleted: 1,
-            entities_failed: 1,
+            started_at: "2024-03-15T12:00:00Z",
+            completed_at: "2024-03-15T12:05:32Z",
+            duration_seconds: 332.5,
+            entities_inserted: 45,
+            entities_updated: 12,
+            entities_deleted: 3,
+            entities_failed: 0,
             error: "error",
             error_details: { key: "value" },
         };
         server
             .mockEndpoint()
-            .post("/source-connections/source_connection_id/run")
+            .post("/source-connections/550e8400-e29b-41d4-a716-446655440000/run")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.run("source_connection_id", {
-            force_full_sync: true,
+        const response = await client.sourceConnections.run("550e8400-e29b-41d4-a716-446655440000", {
+            force_full_sync: false,
         });
         expect(response).toEqual({
-            id: "id",
-            source_connection_id: "source_connection_id",
+            id: "770e8400-e29b-41d4-a716-446655440002",
+            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             status: "created",
-            started_at: "2024-01-15T09:30:00Z",
-            completed_at: "2024-01-15T09:30:00Z",
-            duration_seconds: 1.1,
-            entities_inserted: 1,
-            entities_updated: 1,
-            entities_deleted: 1,
-            entities_failed: 1,
+            started_at: "2024-03-15T12:00:00Z",
+            completed_at: "2024-03-15T12:05:32Z",
+            duration_seconds: 332.5,
+            entities_inserted: 45,
+            entities_updated: 12,
+            entities_deleted: 3,
+            entities_failed: 0,
             error: "error",
             error_details: {
                 key: "value",
@@ -785,14 +925,45 @@ describe("SourceConnections", () => {
 
     test("run (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/run")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.run("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("run (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/run")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.run("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.ConflictError);
+    });
+
+    test("run (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/source-connections/source_connection_id/run")
@@ -806,54 +977,70 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("run (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/run")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.run("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("getSourceConnectionJobs (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
-                id: "id",
-                source_connection_id: "source_connection_id",
+                id: "770e8400-e29b-41d4-a716-446655440002",
+                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 status: "created",
-                started_at: "2024-01-15T09:30:00Z",
-                completed_at: "2024-01-15T09:30:00Z",
-                duration_seconds: 1.1,
-                entities_inserted: 1,
-                entities_updated: 1,
-                entities_deleted: 1,
-                entities_failed: 1,
+                started_at: "2024-03-15T12:00:00Z",
+                completed_at: "2024-03-15T12:05:32Z",
+                duration_seconds: 332.5,
+                entities_inserted: 45,
+                entities_updated: 12,
+                entities_deleted: 3,
+                entities_failed: 0,
                 error: "error",
                 error_details: { key: "value" },
             },
         ];
         server
             .mockEndpoint()
-            .get("/source-connections/source_connection_id/jobs")
+            .get("/source-connections/550e8400-e29b-41d4-a716-446655440000/jobs")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.getSourceConnectionJobs("source_connection_id", {
-            limit: 1,
-        });
+        const response = await client.sourceConnections.getSourceConnectionJobs(
+            "550e8400-e29b-41d4-a716-446655440000",
+            {
+                limit: 100,
+            },
+        );
         expect(response).toEqual([
             {
-                id: "id",
-                source_connection_id: "source_connection_id",
+                id: "770e8400-e29b-41d4-a716-446655440002",
+                source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
                 status: "created",
-                started_at: "2024-01-15T09:30:00Z",
-                completed_at: "2024-01-15T09:30:00Z",
-                duration_seconds: 1.1,
-                entities_inserted: 1,
-                entities_updated: 1,
-                entities_deleted: 1,
-                entities_failed: 1,
+                started_at: "2024-03-15T12:00:00Z",
+                completed_at: "2024-03-15T12:05:32Z",
+                duration_seconds: 332.5,
+                entities_inserted: 45,
+                entities_updated: 12,
+                entities_deleted: 3,
+                entities_failed: 0,
                 error: "error",
                 error_details: {
                     key: "value",
@@ -864,14 +1051,27 @@ describe("SourceConnections", () => {
 
     test("getSourceConnectionJobs (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id/jobs")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("getSourceConnectionJobs (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/source-connections/source_connection_id/jobs")
@@ -885,49 +1085,67 @@ describe("SourceConnections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("getSourceConnectionJobs (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/source-connections/source_connection_id/jobs")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.getSourceConnectionJobs("source_connection_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("cancelJob (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            id: "id",
-            source_connection_id: "source_connection_id",
+            id: "770e8400-e29b-41d4-a716-446655440002",
+            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             status: "created",
-            started_at: "2024-01-15T09:30:00Z",
-            completed_at: "2024-01-15T09:30:00Z",
-            duration_seconds: 1.1,
-            entities_inserted: 1,
-            entities_updated: 1,
-            entities_deleted: 1,
-            entities_failed: 1,
+            started_at: "2024-03-15T12:00:00Z",
+            completed_at: "2024-03-15T12:05:32Z",
+            duration_seconds: 332.5,
+            entities_inserted: 45,
+            entities_updated: 12,
+            entities_deleted: 3,
+            entities_failed: 0,
             error: "error",
             error_details: { key: "value" },
         };
         server
             .mockEndpoint()
-            .post("/source-connections/source_connection_id/jobs/job_id/cancel")
+            .post(
+                "/source-connections/550e8400-e29b-41d4-a716-446655440000/jobs/660e8400-e29b-41d4-a716-446655440001/cancel",
+            )
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+        const response = await client.sourceConnections.cancelJob(
+            "550e8400-e29b-41d4-a716-446655440000",
+            "660e8400-e29b-41d4-a716-446655440001",
+        );
         expect(response).toEqual({
-            id: "id",
-            source_connection_id: "source_connection_id",
+            id: "770e8400-e29b-41d4-a716-446655440002",
+            source_connection_id: "550e8400-e29b-41d4-a716-446655440000",
             status: "created",
-            started_at: "2024-01-15T09:30:00Z",
-            completed_at: "2024-01-15T09:30:00Z",
-            duration_seconds: 1.1,
-            entities_inserted: 1,
-            entities_updated: 1,
-            entities_deleted: 1,
-            entities_failed: 1,
+            started_at: "2024-03-15T12:00:00Z",
+            completed_at: "2024-03-15T12:05:32Z",
+            duration_seconds: 332.5,
+            entities_inserted: 45,
+            entities_updated: 12,
+            entities_deleted: 3,
+            entities_failed: 0,
             error: "error",
             error_details: {
                 key: "value",
@@ -937,14 +1155,45 @@ describe("SourceConnections", () => {
 
     test("cancelJob (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/jobs/job_id/cancel")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("cancelJob (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/jobs/job_id/cancel")
+            .respondWith()
+            .statusCode(409)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+        }).rejects.toThrow(AirweaveSDK.ConflictError);
+    });
+
+    test("cancelJob (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/source-connections/source_connection_id/jobs/job_id/cancel")
@@ -956,5 +1205,23 @@ describe("SourceConnections", () => {
         await expect(async () => {
             return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("cancelJob (5)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/source-connections/source_connection_id/jobs/job_id/cancel")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.sourceConnections.cancelJob("source_connection_id", "job_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 });

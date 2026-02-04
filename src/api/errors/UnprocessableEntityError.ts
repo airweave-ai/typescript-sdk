@@ -3,11 +3,10 @@
  */
 
 import * as errors from "../../errors/index.js";
-import * as AirweaveSDK from "../index.js";
 import * as core from "../../core/index.js";
 
 export class UnprocessableEntityError extends errors.AirweaveSDKError {
-    constructor(body: AirweaveSDK.HttpValidationError, rawResponse?: core.RawResponse) {
+    constructor(body?: unknown, rawResponse?: core.RawResponse) {
         super({
             message: "UnprocessableEntityError",
             statusCode: 422,

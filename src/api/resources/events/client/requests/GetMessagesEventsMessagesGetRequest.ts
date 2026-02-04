@@ -7,5 +7,6 @@
  *     {}
  */
 export interface GetMessagesEventsMessagesGetRequest {
+    /** Filter messages by event type(s). Accepts multiple values, e.g., `?event_types=sync.completed&event_types=sync.failed`. */
     event_types?: string | string[];
 }

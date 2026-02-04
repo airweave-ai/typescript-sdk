@@ -9,7 +9,12 @@ import * as AirweaveSDK from "../../../../index.js";
  *     {}
  */
 export interface PatchSubscriptionRequest {
+    /** New URL for webhook delivery. Must be a publicly accessible HTTPS endpoint. */
     url?: string;
+    /** New list of event types to subscribe to. This replaces the existing list entirely. */
     event_types?: AirweaveSDK.EventType[];
+    /** Set to `true` to pause delivery to this subscription, or `false` to resume. Disabled subscriptions will not receive events. */
     disabled?: boolean;
+    /** When re-enabling a subscription (`disabled: false`), optionally recover failed messages from this timestamp. Only applies when enabling. */
+    recover_since?: string;
 }

@@ -14,10 +14,6 @@ export declare namespace Collections {
         /** Specify a custom URL to connect the client to. */
         baseUrl?: core.Supplier<string>;
         apiKey: core.Supplier<string>;
-        /** Override the X-Framework-Name header */
-        frameworkName?: core.Supplier<string | undefined>;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: core.Supplier<string | undefined>;
         /** Additional headers to include in requests. */
         headers?: Record<string, string | core.Supplier<string | null | undefined> | null | undefined>;
     }
@@ -29,10 +25,6 @@ export declare namespace Collections {
         maxRetries?: number;
         /** A hook to abort the request. */
         abortSignal?: AbortSignal;
-        /** Override the X-Framework-Name header */
-        frameworkName?: string | undefined;
-        /** Override the X-Framework-Version header */
-        frameworkVersion?: string | undefined;
         /** Additional query string parameters to include in the request. */
         queryParams?: Record<string, unknown>;
         /** Additional headers to include in the request. */
@@ -51,20 +43,25 @@ export class Collections {
     }
 
     /**
-     * List all collections that belong to your organization with optional search filtering.
+     * Retrieve all collections belonging to your organization.
      *
-     * Collections are always sorted by creation date (newest first).
+     * Collections are containers that group related data from one or more source
+     * connections, enabling unified search across multiple data sources.
+     *
+     * Results are sorted by creation date (newest first) and support pagination
+     * and text search filtering.
      *
      * @param {AirweaveSDK.ListCollectionsGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.collections.list({
-     *         skip: 1,
-     *         limit: 1,
-     *         search: "search"
+     *         skip: 0,
+     *         limit: 100,
+     *         search: "customer"
      *     })
      */
     public list(
@@ -94,11 +91,7 @@ export class Collections {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -123,7 +116,12 @@ export class Collections {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -153,15 +151,22 @@ export class Collections {
     }
 
     /**
-     * Create a new collection.
+     * Create a new collection in your organization.
      *
-     * The newly created collection is initially empty and does not contain any data
-     * until you explicitly add source connections to it.
+     * Collections are containers for organizing and searching across data from multiple
+     * sources. After creation, add source connections to begin syncing data.
+     *
+     * The collection will be assigned a unique `readable_id` based on the name you provide,
+     * which is used in URLs and API calls. You can optionally configure:
+     *
+     * - **Sync schedule**: How frequently to automatically sync data from all sources
+     * - **Custom readable_id**: Provide your own identifier (must be unique and URL-safe)
      *
      * @param {AirweaveSDK.CollectionCreate} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
      *     await client.collections.create({
@@ -182,11 +187,7 @@ export class Collections {
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -214,7 +215,12 @@ export class Collections {
             switch (_response.error.statusCode) {
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -244,15 +250,21 @@ export class Collections {
     }
 
     /**
-     * Retrieve a specific collection by its readable ID.
+     * Retrieve details of a specific collection by its readable ID.
+     *
+     * Returns the complete collection configuration including sync settings, status,
+     * and metadata. Use this to check the current state of a collection or to get
+     * configuration details before making updates.
      *
      * @param {string} readableId - The unique readable identifier of the collection (e.g., 'finance-data-ab123')
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.collections.get("readable_id")
+     *     await client.collections.get("customer-support-tickets-x7k9m")
      */
     public get(
         readableId: string,
@@ -267,11 +279,7 @@ export class Collections {
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -294,9 +302,19 @@ export class Collections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -328,19 +346,25 @@ export class Collections {
     }
 
     /**
-     * Delete a collection and all associated data.
+     * Permanently delete a collection and all associated data.
      *
-     * Permanently removes a collection from your organization including all synced data
-     * from the destination systems. All source connections within this collection
-     * will also be deleted as part of the cleanup process. This action cannot be undone.
+     * This operation:
+     * - Removes all synced data from the vector database
+     * - Deletes all source connections within the collection
+     * - Cancels any scheduled sync jobs
+     * - Cleans up all related resources
+     *
+     * **Warning**: This action cannot be undone. All data will be permanently deleted.
      *
      * @param {string} readableId - The unique readable identifier of the collection to delete
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.collections.delete("readable_id")
+     *     await client.collections.delete("customer-support-tickets-x7k9m")
      */
     public delete(
         readableId: string,
@@ -355,11 +379,7 @@ export class Collections {
     ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -382,9 +402,19 @@ export class Collections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -416,20 +446,130 @@ export class Collections {
     }
 
     /**
-     * Trigger data synchronization for all source connections in the collection.
+     * Update an existing collection's properties.
      *
-     * The sync jobs run asynchronously in the background, so this endpoint
-     * returns immediately with job details that you can use to track progress. You can
-     * monitor the status of individual data synchronization using the source connection
-     * endpoints.
+     * You can modify:
+     * - **Name**: The display name shown in the UI
+     * - **Sync configuration**: Schedule settings for automatic data synchronization
+     *
+     * Note that the `readable_id` cannot be changed after creation to maintain stable
+     * API endpoints and preserve existing integrations.
+     *
+     * @param {string} readableId - The unique readable identifier of the collection to update
+     * @param {AirweaveSDK.CollectionUpdate} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.NotFoundError}
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
+     *
+     * @example
+     *     await client.collections.update("customer-support-tickets-x7k9m", {
+     *         name: "Updated Finance Data"
+     *     })
+     */
+    public update(
+        readableId: string,
+        request: AirweaveSDK.CollectionUpdate = {},
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.Collection> {
+        return core.HttpResponsePromise.fromPromise(this.__update(readableId, request, requestOptions));
+    }
+
+    private async __update(
+        readableId: string,
+        request: AirweaveSDK.CollectionUpdate = {},
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.Collection>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}`,
+            ),
+            method: "PATCH",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.Collection, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling PATCH /collections/{readable_id}.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Trigger data synchronization for all source connections in a collection.
+     *
+     * Starts sync jobs for every source connection in the collection, pulling the latest
+     * data from each connected source. Jobs run asynchronously in the background.
+     *
+     * Returns a list of sync jobs that were created. Use the source connection endpoints
+     * to monitor the progress and status of individual sync jobs.
      *
      * @param {string} readableId - The unique readable identifier of the collection to refresh
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.collections.refreshAllSourceConnections("readable_id")
+     *     await client.collections.refreshAllSourceConnections("customer-support-tickets-x7k9m")
      */
     public refreshAllSourceConnections(
         readableId: string,
@@ -444,11 +584,7 @@ export class Collections {
     ): Promise<core.WithRawResponse<AirweaveSDK.SourceConnectionJob[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -471,9 +607,19 @@ export class Collections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -505,23 +651,29 @@ export class Collections {
     }
 
     /**
-     * Legacy GET search endpoint for backwards compatibility.
+     * **DEPRECATED**: Use POST /collections/{readable_id}/search instead.
      *
-     * DEPRECATED: This endpoint uses the old schema. Please migrate to POST with the new
-     * SearchRequest format for access to all features.
+     * This legacy GET endpoint provides basic search functionality via query parameters.
+     * Migrate to the POST endpoint for access to advanced features like:
+     * - Structured filters
+     * - Query expansion
+     * - Reranking
+     * - Streaming responses
      *
      * @param {string} readableId - The unique readable identifier of the collection to search
      * @param {AirweaveSDK.SearchGetLegacyCollectionsReadableIdSearchGetRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.collections.searchGetLegacy("readable_id", {
-     *         query: "query",
+     *     await client.collections.searchGetLegacy("customer-support-tickets-x7k9m", {
+     *         query: "How do I reset my password?",
      *         response_type: "raw",
-     *         limit: 1,
-     *         offset: 1,
+     *         limit: 10,
+     *         offset: 0,
      *         recency_bias: 1.1
      *     })
      */
@@ -559,11 +711,7 @@ export class Collections {
 
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -586,9 +734,19 @@ export class Collections {
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:
@@ -620,27 +778,42 @@ export class Collections {
     }
 
     /**
-     * Search your collection.
+     * Search your collection using semantic and hybrid search.
      *
-     * Accepts both new SearchRequest and legacy LegacySearchRequest formats
+     * This is the primary search endpoint providing powerful AI-powered search capabilities:
+     *
+     * **Search Strategies:**
+     * - **hybrid** (default): Combines neural (semantic) and keyword (BM25) matching
+     * - **neural**: Pure semantic search using embeddings
+     * - **keyword**: Traditional keyword-based BM25 search
+     *
+     * **Features:**
+     * - **Query expansion**: Generate query variations to improve recall
+     * - **Filter interpretation**: Extract structured filters from natural language
+     * - **Reranking**: LLM-based reranking for improved relevance
+     * - **Answer generation**: AI-generated answers based on search results
+     *
+     * **Note**: Accepts both new SearchRequest and legacy LegacySearchRequest formats
      * for backwards compatibility.
      *
-     * @param {string} readableId - The unique readable identifier of the collection
+     * @param {string} readableId - The unique readable identifier of the collection to search
      * @param {AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest} request
      * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
      *
+     * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.collections.search("readable_id", {
-     *         query: "query"
+     *     await client.collections.search("customer-support-tickets-x7k9m", {
+     *         query: "How do I reset my password?"
      *     })
      */
     public search(
         readableId: string,
         request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
         requestOptions?: Collections.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse> {
+    ): core.HttpResponsePromise<AirweaveSDK.SearchResponse> {
         return core.HttpResponsePromise.fromPromise(this.__search(readableId, request, requestOptions));
     }
 
@@ -648,14 +821,10 @@ export class Collections {
         readableId: string,
         request: AirweaveSDK.SearchCollectionsReadableIdSearchPostRequest,
         requestOptions?: Collections.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchResponse>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
-            mergeOnlyDefinedHeaders({
-                "X-Framework-Name": requestOptions?.frameworkName ?? this._options?.frameworkName,
-                "X-Framework-Version": requestOptions?.frameworkVersion ?? this._options?.frameworkVersion,
-                ...(await this._getCustomAuthorizationHeaders()),
-            }),
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
             requestOptions?.headers,
         );
         const _response = await core.fetcher({
@@ -676,17 +845,24 @@ export class Collections {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return {
-                data: _response.body as AirweaveSDK.SearchCollectionsReadableIdSearchPostResponse,
-                rawResponse: _response.rawResponse,
-            };
+            return { data: _response.body as AirweaveSDK.SearchResponse, rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
             switch (_response.error.statusCode) {
+                case 404:
+                    throw new AirweaveSDK.NotFoundError(
+                        _response.error.body as AirweaveSDK.NotFoundErrorResponse,
+                        _response.rawResponse,
+                    );
                 case 422:
                     throw new AirweaveSDK.UnprocessableEntityError(
-                        _response.error.body as AirweaveSDK.HttpValidationError,
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                case 429:
+                    throw new AirweaveSDK.TooManyRequestsError(
+                        _response.error.body as AirweaveSDK.RateLimitErrorResponse,
                         _response.rawResponse,
                     );
                 default:

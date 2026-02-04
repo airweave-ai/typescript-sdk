@@ -5,19 +5,34 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Individual sync job for a source connection.
+ * A sync job representing a single synchronization run.
+ *
+ * Sync jobs track the execution of data synchronization from a source connection.
+ * Each job includes timing information, entity counts, and error details if applicable.
  */
 export interface SourceConnectionJob {
+    /** Unique identifier of the sync job */
     id: string;
+    /** ID of the source connection this job belongs to */
     source_connection_id: string;
+    /** Current status: PENDING, RUNNING, COMPLETED, FAILED, CANCELLED, or CANCELLING */
     status: AirweaveSDK.SyncJobStatus;
+    /** When the job started execution (ISO 8601) */
     started_at?: string;
+    /** When the job finished (ISO 8601). Null if still running. */
     completed_at?: string;
+    /** Total execution time in seconds. Null if still running. */
     duration_seconds?: number;
+    /** Number of new entities created during this sync */
     entities_inserted?: number;
+    /** Number of existing entities updated during this sync */
     entities_updated?: number;
+    /** Number of entities removed during this sync */
     entities_deleted?: number;
+    /** Number of entities that failed to process */
     entities_failed?: number;
+    /** Error message if the job failed */
     error?: string;
+    /** Additional error context for debugging */
     error_details?: Record<string, unknown>;
 }

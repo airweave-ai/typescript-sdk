@@ -7,25 +7,26 @@ import * as AirweaveSDK from "../../../../index.js";
 /**
  * @example
  *     {
- *         short_name: "short_name",
- *         readable_collection_id: "readable_collection_id"
+ *         short_name: "github",
+ *         readable_collection_id: "customer-support-tickets-x7k9m"
  *     }
  */
 export interface SourceConnectionCreate {
-    /** Connection name (defaults to '{Source Name} Connection') */
+    /** Display name for the connection. If not provided, defaults to '{Source Name} Connection'. */
     name?: string;
-    /** Source identifier (e.g., 'slack', 'github') */
+    /** Source type identifier (e.g., 'slack', 'github', 'notion') */
     short_name: string;
-    /** Collection readable ID */
+    /** The readable ID of the collection to add this connection to */
     readable_collection_id: string;
-    /** Connection description */
+    /** Optional description of what this connection is used for */
     description?: string;
-    /** Source-specific configuration */
+    /** Source-specific configuration (e.g., repository name, filters) */
     config?: Record<string, unknown>;
+    /** Optional sync schedule configuration */
     schedule?: AirweaveSDK.ScheduleConfig;
     /** Run initial sync after creation. Defaults to True for direct/token/auth_provider, False for OAuth browser/BYOC flows (which sync after authentication) */
     sync_immediately?: boolean;
-    /** Authentication config (defaults to OAuth browser flow for OAuth sources) */
+    /** Authentication configuration. Type is auto-detected from provided fields. */
     authentication?: SourceConnectionCreate.Authentication;
     /** URL to redirect to after OAuth flow completes (only used for OAuth flows) */
     redirect_url?: string;
@@ -33,7 +34,7 @@ export interface SourceConnectionCreate {
 
 export namespace SourceConnectionCreate {
     /**
-     * Authentication config (defaults to OAuth browser flow for OAuth sources)
+     * Updated authentication credentials (direct auth only)
      */
     export type Authentication =
         | AirweaveSDK.DirectAuthentication

@@ -5,10 +5,10 @@
 /**
  * @example
  *     {
- *         force_full_sync: true
+ *         force_full_sync: false
  *     }
  */
 export interface RunSourceConnectionsSourceConnectionIdRunPostRequest {
-    /** Force a full sync ignoring cursor data instead of waiting for the daily cleanup schedule. Only allowed for continuous syncs. */
+    /** Force a full sync ignoring cursor data. Only applies to continuous sync connections. Non-continuous connections always perform full syncs. */
     force_full_sync?: boolean;
 }

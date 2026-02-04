@@ -6,13 +6,15 @@
  * @example
  *     {
  *         collection: "collection",
- *         skip: 1,
- *         limit: 1
+ *         skip: 0,
+ *         limit: 100
  *     }
  */
 export interface ListSourceConnectionsGetRequest {
     /** Filter by collection readable ID */
     collection?: string;
+    /** Number of connections to skip for pagination */
     skip?: number;
+    /** Maximum number of connections to return (1-1000) */
     limit?: number;
 }

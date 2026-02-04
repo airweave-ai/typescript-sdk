@@ -9,12 +9,7 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("Collections", () => {
     test("list (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -34,9 +29,9 @@ describe("Collections", () => {
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
         const response = await client.collections.list({
-            skip: 1,
-            limit: 1,
-            search: "search",
+            skip: 0,
+            limit: 100,
+            search: "customer",
         });
         expect(response).toEqual([
             {
@@ -57,14 +52,9 @@ describe("Collections", () => {
 
     test("list (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/collections").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -72,21 +62,28 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("list (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server.mockEndpoint().get("/collections").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.collections.list();
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("create (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "Finance Data", readable_id: "finance-data-reports" };
         const rawResponseBody = {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -126,8 +123,8 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -161,14 +158,9 @@ describe("Collections", () => {
 
     test("create (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { name: "buzz", readable_id: undefined, sync_config: undefined };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/collections")
@@ -187,21 +179,39 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("create (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "buzz", readable_id: undefined, sync_config: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/collections")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.create({
+                name: "buzz",
+                readable_id: undefined,
+                sync_config: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("get (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -226,19 +236,19 @@ describe("Collections", () => {
         };
         server
             .mockEndpoint()
-            .get("/collections/readable_id")
+            .get("/collections/customer-support-tickets-x7k9m")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.get("readable_id");
+        const response = await client.collections.get("customer-support-tickets-x7k9m");
         expect(response).toEqual({
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -272,14 +282,27 @@ describe("Collections", () => {
 
     test("get (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.get("readable_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("get (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/collections/readable_id")
@@ -293,21 +316,34 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("get (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.get("readable_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("delete (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -332,19 +368,19 @@ describe("Collections", () => {
         };
         server
             .mockEndpoint()
-            .delete("/collections/readable_id")
+            .delete("/collections/customer-support-tickets-x7k9m")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.delete("readable_id");
+        const response = await client.collections.delete("customer-support-tickets-x7k9m");
         expect(response).toEqual({
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 1,
-            embedding_model_name: "embedding_model_name",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_qdrant: true,
@@ -378,14 +414,27 @@ describe("Collections", () => {
 
     test("delete (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/collections/readable_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.delete("readable_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("delete (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .delete("/collections/readable_id")
@@ -399,14 +448,174 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("delete (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/collections/readable_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.delete("readable_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
+    test("update (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: "Updated Finance Data" };
+        const rawResponseBody = {
+            name: "Finance Data",
+            readable_id: "finance-data-ab123",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: { skip_load: true, skip_updates: true },
+                behavior: { skip_hash_comparison: true, replay_from_arf: true, skip_guardrails: true },
+            },
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T14:22:15Z",
+            organization_id: "org12345-6789-abcd-ef01-234567890abc",
+            created_by_email: "admin@company.com",
+            modified_by_email: "finance@company.com",
+            status: "ACTIVE",
+        };
+        server
+            .mockEndpoint()
+            .patch("/collections/customer-support-tickets-x7k9m")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(200)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        const response = await client.collections.update("customer-support-tickets-x7k9m", {
+            name: "Updated Finance Data",
+        });
+        expect(response).toEqual({
+            name: "Finance Data",
+            readable_id: "finance-data-ab123",
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
+            sync_config: {
+                destinations: {
+                    skip_qdrant: true,
+                    skip_vespa: true,
+                    target_destinations: ["target_destinations"],
+                    exclude_destinations: ["exclude_destinations"],
+                },
+                handlers: {
+                    enable_vector_handlers: true,
+                    enable_raw_data_handler: true,
+                    enable_postgres_handler: true,
+                },
+                cursor: {
+                    skip_load: true,
+                    skip_updates: true,
+                },
+                behavior: {
+                    skip_hash_comparison: true,
+                    replay_from_arf: true,
+                    skip_guardrails: true,
+                },
+            },
+            created_at: "2024-01-15T09:30:00Z",
+            modified_at: "2024-01-15T14:22:15Z",
+            organization_id: "org12345-6789-abcd-ef01-234567890abc",
+            created_by_email: "admin@company.com",
+            modified_by_email: "finance@company.com",
+            status: "ACTIVE",
+        });
+    });
+
+    test("update (2)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, sync_config: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .patch("/collections/readable_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.update("readable_id", {
+                name: undefined,
+                sync_config: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("update (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, sync_config: undefined };
+        const rawResponseBody = { key: "value" };
+        server
+            .mockEndpoint()
+            .patch("/collections/readable_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(422)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.update("readable_id", {
+                name: undefined,
+                sync_config: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("update (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { name: undefined, sync_config: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .patch("/collections/readable_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.update("readable_id", {
+                name: undefined,
+                sync_config: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("refreshAllSourceConnections (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
@@ -419,20 +628,20 @@ describe("Collections", () => {
                 entities_inserted: 45,
                 entities_updated: 12,
                 entities_deleted: 3,
-                entities_failed: 1,
+                entities_failed: 0,
                 error: "error",
                 error_details: { key: "value" },
             },
         ];
         server
             .mockEndpoint()
-            .post("/collections/readable_id/refresh_all")
+            .post("/collections/customer-support-tickets-x7k9m/refresh_all")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.refreshAllSourceConnections("readable_id");
+        const response = await client.collections.refreshAllSourceConnections("customer-support-tickets-x7k9m");
         expect(response).toEqual([
             {
                 id: "987fcdeb-51a2-43d7-8f3e-1234567890ab",
@@ -444,7 +653,7 @@ describe("Collections", () => {
                 entities_inserted: 45,
                 entities_updated: 12,
                 entities_deleted: 3,
-                entities_failed: 1,
+                entities_failed: 0,
                 error: "error",
                 error_details: {
                     key: "value",
@@ -455,14 +664,27 @@ describe("Collections", () => {
 
     test("refreshAllSourceConnections (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/refresh_all")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.refreshAllSourceConnections("readable_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("refreshAllSourceConnections (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/collections/readable_id/refresh_all")
@@ -476,14 +698,27 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("refreshAllSourceConnections (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/refresh_all")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.refreshAllSourceConnections("readable_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("searchGetLegacy (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
             results: [{ key: "value" }],
@@ -493,17 +728,17 @@ describe("Collections", () => {
         };
         server
             .mockEndpoint()
-            .get("/collections/readable_id/search")
+            .get("/collections/customer-support-tickets-x7k9m/search")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.searchGetLegacy("readable_id", {
-            query: "query",
+        const response = await client.collections.searchGetLegacy("customer-support-tickets-x7k9m", {
+            query: "How do I reset my password?",
             response_type: "raw",
-            limit: 1,
-            offset: 1,
+            limit: 10,
+            offset: 0,
             recency_bias: 1.1,
         });
         expect(response).toEqual({
@@ -520,14 +755,29 @@ describe("Collections", () => {
 
     test("searchGetLegacy (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/collections/readable_id/search")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.searchGetLegacy("readable_id", {
+                query: "query",
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("searchGetLegacy (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/collections/readable_id/search")
@@ -543,46 +793,101 @@ describe("Collections", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("search (1)", async () => {
+    test("searchGetLegacy (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = { query: "query" };
-        const rawResponseBody = { results: [{ key: "value" }], completion: "completion" };
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .post("/collections/readable_id/search")
+            .get("/collections/readable_id/search")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.searchGetLegacy("readable_id", {
+                query: "query",
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
+    test("search (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { query: "How do I reset my password?" };
+        const rawResponseBody = {
+            results: [
+                {
+                    breadcrumbs: ["docs", "auth", "password-reset.md"],
+                    entity_id: "abc123-def456-789012",
+                    md_content: "# Password Reset Guide\n\nTo reset your password...",
+                    metadata: { file_path: "docs/auth/password-reset.md", last_modified: "2024-03-15T09:30:00Z" },
+                    score: 0.92,
+                    source_name: "GitHub",
+                    url: "https://github.com/company/docs/blob/main/docs/auth/password-reset.md",
+                },
+                {
+                    breadcrumbs: ["Engineering", "User Authentication"],
+                    entity_id: "xyz789-abc123-456789",
+                    md_content: "## User Authentication\n\nPassword reset is available...",
+                    metadata: { page_id: "page-123", workspace: "Engineering" },
+                    score: 0.85,
+                    source_name: "Notion",
+                    url: "https://notion.so/page-123",
+                },
+            ],
+            completion:
+                "To reset your password, navigate to the login page and click 'Forgot Password'. You'll receive an email with a reset link that expires in 24 hours. For security, ensure you're using a strong password with at least 12 characters.",
+        };
+        server
+            .mockEndpoint()
+            .post("/collections/customer-support-tickets-x7k9m/search")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.collections.search("readable_id", {
-            query: "query",
+        const response = await client.collections.search("customer-support-tickets-x7k9m", {
+            query: "How do I reset my password?",
         });
         expect(response).toEqual({
             results: [
                 {
-                    key: "value",
+                    breadcrumbs: ["docs", "auth", "password-reset.md"],
+                    entity_id: "abc123-def456-789012",
+                    md_content: "# Password Reset Guide\n\nTo reset your password...",
+                    metadata: {
+                        file_path: "docs/auth/password-reset.md",
+                        last_modified: "2024-03-15T09:30:00Z",
+                    },
+                    score: 0.92,
+                    source_name: "GitHub",
+                    url: "https://github.com/company/docs/blob/main/docs/auth/password-reset.md",
+                },
+                {
+                    breadcrumbs: ["Engineering", "User Authentication"],
+                    entity_id: "xyz789-abc123-456789",
+                    md_content: "## User Authentication\n\nPassword reset is available...",
+                    metadata: {
+                        page_id: "page-123",
+                        workspace: "Engineering",
+                    },
+                    score: 0.85,
+                    source_name: "Notion",
+                    url: "https://notion.so/page-123",
                 },
             ],
-            completion: "completion",
+            completion:
+                "To reset your password, navigate to the login page and click 'Forgot Password'. You'll receive an email with a reset link that expires in 24 hours. For security, ensure you're using a strong password with at least 12 characters.",
         });
     });
 
     test("search (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {
             query: "query",
             retrieval_strategy: undefined,
@@ -595,7 +900,48 @@ describe("Collections", () => {
             rerank: undefined,
             generate_answer: undefined,
         };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.search("readable_id", {
+                query: "query",
+                retrieval_strategy: undefined,
+                filter: undefined,
+                offset: undefined,
+                limit: undefined,
+                temporal_relevance: undefined,
+                expand_query: undefined,
+                interpret_filters: undefined,
+                rerank: undefined,
+                generate_answer: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("search (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            query: "query",
+            retrieval_strategy: undefined,
+            filter: undefined,
+            offset: undefined,
+            limit: undefined,
+            temporal_relevance: undefined,
+            expand_query: undefined,
+            interpret_filters: undefined,
+            rerank: undefined,
+            generate_answer: undefined,
+        };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/collections/readable_id/search")
@@ -619,5 +965,46 @@ describe("Collections", () => {
                 generate_answer: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("search (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            query: "query",
+            retrieval_strategy: undefined,
+            filter: undefined,
+            offset: undefined,
+            limit: undefined,
+            temporal_relevance: undefined,
+            expand_query: undefined,
+            interpret_filters: undefined,
+            rerank: undefined,
+            generate_answer: undefined,
+        };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/collections/readable_id/search")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.collections.search("readable_id", {
+                query: "query",
+                retrieval_strategy: undefined,
+                filter: undefined,
+                offset: undefined,
+                limit: undefined,
+                temporal_relevance: undefined,
+                expand_query: undefined,
+                interpret_filters: undefined,
+                rerank: undefined,
+                generate_answer: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 });

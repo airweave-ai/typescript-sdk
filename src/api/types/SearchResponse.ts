@@ -3,11 +3,14 @@
  */
 
 /**
- * Comprehensive search response containing results and metadata.
+ * Search response containing results and optional AI-generated completion.
+ *
+ * Each result includes the matched entity's content, metadata, relevance score,
+ * and source information.
  */
 export interface SearchResponse {
-    /** Array of search result objects containing the found documents, records, or data entities. */
+    /** Array of search result objects containing the found documents, records, or data entities. Each result includes entity_id, source_name, md_content, metadata, score, breadcrumbs, and url. */
     results: Record<string, unknown>[];
-    /** This provides natural language answers to your query based on the content found across your connected data sources when generate_answer is true. */
+    /** AI-generated natural language answer to your query based on the search results. Only included when generate_answer is true in the request. */
     completion?: string;
 }

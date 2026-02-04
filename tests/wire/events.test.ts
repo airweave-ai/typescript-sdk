@@ -9,23 +9,26 @@ import * as AirweaveSDK from "../../src/api/index";
 describe("Events", () => {
     test("getMessages (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
-                channels: ["channels"],
-                deliverAt: "2024-01-15T09:30:00Z",
-                eventId: "eventId",
-                eventType: "eventType",
-                id: "id",
-                payload: { key: "value" },
+                id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                event_type: "sync.completed",
+                payload: {
+                    event_type: "sync.completed",
+                    job_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    collection_readable_id: "customer-support-tickets-x7k9m",
+                    collection_name: "Customer Support Tickets",
+                    source_connection_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+                    source_type: "zendesk",
+                    status: "completed",
+                    timestamp: "2024-03-15T09:45:32Z",
+                    error: "error",
+                },
+                timestamp: "2024-03-15T09:45:32Z",
+                channels: ["sync.completed"],
                 tags: ["tags"],
-                timestamp: "2024-01-15T09:30:00Z",
             },
         ];
         server.mockEndpoint().get("/events/messages").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -33,30 +36,31 @@ describe("Events", () => {
         const response = await client.events.getMessages();
         expect(response).toEqual([
             {
-                channels: ["channels"],
-                deliverAt: "2024-01-15T09:30:00Z",
-                eventId: "eventId",
-                eventType: "eventType",
-                id: "id",
+                id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                event_type: "sync.completed",
                 payload: {
-                    key: "value",
+                    event_type: "sync.completed",
+                    job_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    collection_readable_id: "customer-support-tickets-x7k9m",
+                    collection_name: "Customer Support Tickets",
+                    source_connection_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+                    source_type: "zendesk",
+                    status: "completed",
+                    timestamp: "2024-03-15T09:45:32Z",
+                    error: "error",
                 },
+                timestamp: "2024-03-15T09:45:32Z",
+                channels: ["sync.completed"],
                 tags: ["tags"],
-                timestamp: "2024-01-15T09:30:00Z",
             },
         ]);
     });
 
     test("getMessages (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server.mockEndpoint().get("/events/messages").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
@@ -64,58 +68,116 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("getMessages (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server.mockEndpoint().get("/events/messages").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+
+        await expect(async () => {
+            return await client.events.getMessages();
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("getMessage (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            channels: ["channels"],
-            deliverAt: "2024-01-15T09:30:00Z",
-            eventId: "eventId",
-            eventType: "eventType",
-            id: "id",
-            payload: { key: "value" },
+            id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            event_type: "sync.completed",
+            payload: {
+                event_type: "sync.completed",
+                job_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                collection_readable_id: "customer-support-tickets-x7k9m",
+                collection_name: "Customer Support Tickets",
+                source_connection_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+                source_type: "zendesk",
+                status: "completed",
+                timestamp: "2024-03-15T09:45:32Z",
+                error: "error",
+            },
+            timestamp: "2024-03-15T09:45:32Z",
+            channels: ["sync.completed"],
             tags: ["tags"],
-            timestamp: "2024-01-15T09:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
         };
         server
             .mockEndpoint()
-            .get("/events/messages/message_id")
+            .get("/events/messages/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.getMessage("message_id");
+        const response = await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+            include_attempts: true,
+        });
         expect(response).toEqual({
-            channels: ["channels"],
-            deliverAt: "2024-01-15T09:30:00Z",
-            eventId: "eventId",
-            eventType: "eventType",
-            id: "id",
+            id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            event_type: "sync.completed",
             payload: {
-                key: "value",
+                event_type: "sync.completed",
+                job_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                collection_readable_id: "customer-support-tickets-x7k9m",
+                collection_name: "Customer Support Tickets",
+                source_connection_id: "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+                source_type: "zendesk",
+                status: "completed",
+                timestamp: "2024-03-15T09:45:32Z",
+                error: "error",
             },
+            timestamp: "2024-03-15T09:45:32Z",
+            channels: ["sync.completed"],
             tags: ["tags"],
-            timestamp: "2024-01-15T09:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
         });
     });
 
     test("getMessage (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/events/messages/message_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.getMessage("message_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("getMessage (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/events/messages/message_id")
@@ -129,124 +191,48 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("getMessageAttempts (1)", async () => {
+    test("getMessage (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = [
-            {
-                endpointId: "endpointId",
-                id: "id",
-                msg: {
-                    channels: ["channels"],
-                    deliverAt: "2024-01-15T09:30:00Z",
-                    eventId: "eventId",
-                    eventType: "eventType",
-                    id: "id",
-                    payload: { key: "value" },
-                    tags: ["tags"],
-                    timestamp: "2024-01-15T09:30:00Z",
-                },
-                msgId: "msgId",
-                response: "response",
-                responseDurationMs: 1,
-                responseStatusCode: 1,
-                status: 1,
-                statusText: "success",
-                timestamp: "2024-01-15T09:30:00Z",
-                triggerType: 1,
-                url: "url",
-            },
-        ];
+        const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/messages/message_id/attempts")
+            .get("/events/messages/message_id")
             .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.events.getMessageAttempts("message_id");
-        expect(response).toEqual([
-            {
-                endpointId: "endpointId",
-                id: "id",
-                msg: {
-                    channels: ["channels"],
-                    deliverAt: "2024-01-15T09:30:00Z",
-                    eventId: "eventId",
-                    eventType: "eventType",
-                    id: "id",
-                    payload: {
-                        key: "value",
-                    },
-                    tags: ["tags"],
-                    timestamp: "2024-01-15T09:30:00Z",
-                },
-                msgId: "msgId",
-                response: "response",
-                responseDurationMs: 1,
-                responseStatusCode: 1,
-                status: 1,
-                statusText: "success",
-                timestamp: "2024-01-15T09:30:00Z",
-                triggerType: 1,
-                url: "url",
-            },
-        ]);
-    });
-
-    test("getMessageAttempts (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-
-        const rawResponseBody = { detail: undefined };
-        server
-            .mockEndpoint()
-            .get("/events/messages/message_id/attempts")
-            .respondWith()
-            .statusCode(422)
+            .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getMessageAttempts("message_id");
-        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+            return await client.events.getMessage("message_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
     test("getSubscriptions (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = [
             {
-                channels: ["channels"],
-                createdAt: "2024-01-15T09:30:00Z",
-                description: "description",
-                disabled: true,
-                filterTypes: ["filterTypes"],
-                id: "id",
-                metadata: { key: "value" },
-                rateLimit: 1,
-                uid: "uid",
-                updatedAt: "2024-01-15T09:30:00Z",
-                url: "url",
-                version: 1,
+                id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                url: "https://api.mycompany.com/webhooks/airweave",
+                filter_types: ["sync.completed", "sync.failed"],
+                disabled: false,
+                description: "Production notifications for data team",
+                created_at: "2024-03-01T08:00:00Z",
+                updated_at: "2024-03-15T14:30:00Z",
+                delivery_attempts: [
+                    {
+                        id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                        message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                        response_status_code: 200,
+                        status: "success",
+                        timestamp: "2024-03-15T09:45:33Z",
+                    },
+                ],
+                secret: "secret",
             },
         ];
         server
@@ -260,34 +246,33 @@ describe("Events", () => {
         const response = await client.events.getSubscriptions();
         expect(response).toEqual([
             {
-                channels: ["channels"],
-                createdAt: "2024-01-15T09:30:00Z",
-                description: "description",
-                disabled: true,
-                filterTypes: ["filterTypes"],
-                id: "id",
-                metadata: {
-                    key: "value",
-                },
-                rateLimit: 1,
-                uid: "uid",
-                updatedAt: "2024-01-15T09:30:00Z",
-                url: "url",
-                version: 1,
+                id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                url: "https://api.mycompany.com/webhooks/airweave",
+                filter_types: ["sync.completed", "sync.failed"],
+                disabled: false,
+                description: "Production notifications for data team",
+                created_at: "2024-03-01T08:00:00Z",
+                updated_at: "2024-03-15T14:30:00Z",
+                delivery_attempts: [
+                    {
+                        id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                        message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                        endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                        response_status_code: 200,
+                        status: "success",
+                        timestamp: "2024-03-15T09:45:33Z",
+                    },
+                ],
+                secret: "secret",
             },
         ]);
     });
 
     test("getSubscriptions (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/events/subscriptions")
@@ -301,28 +286,51 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("getSubscriptions (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/events/subscriptions")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.getSubscriptions();
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("createSubscription (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = { url: "url", event_types: ["sync.pending"] };
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            url: "https://api.mycompany.com/webhooks/airweave",
+            event_types: ["sync.completed", "sync.failed"],
+        };
         const rawResponseBody = {
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: { key: "value" },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
         };
         server
             .mockEndpoint()
@@ -334,37 +342,37 @@ describe("Events", () => {
             .build();
 
         const response = await client.events.createSubscription({
-            url: "url",
-            event_types: ["sync.pending"],
+            url: "https://api.mycompany.com/webhooks/airweave",
+            event_types: ["sync.completed", "sync.failed"],
         });
         expect(response).toEqual({
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: {
-                key: "value",
-            },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
         });
     });
 
     test("createSubscription (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { url: "x", event_types: ["sync.pending", "sync.pending"], secret: undefined };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/events/subscriptions")
@@ -383,114 +391,111 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("createSubscription (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { url: "x", event_types: ["sync.pending", "sync.pending"], secret: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/events/subscriptions")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.createSubscription({
+                url: "x",
+                event_types: ["sync.pending", "sync.pending"],
+                secret: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("getSubscription (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = {
-            endpoint: {
-                channels: ["channels"],
-                createdAt: "2024-01-15T09:30:00Z",
-                description: "description",
-                disabled: true,
-                filterTypes: ["filterTypes"],
-                id: "id",
-                metadata: { key: "value" },
-                rateLimit: 1,
-                uid: "uid",
-                updatedAt: "2024-01-15T09:30:00Z",
-                url: "url",
-                version: 1,
-            },
-            message_attempts: [
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
                 {
-                    endpointId: "endpointId",
-                    id: "id",
-                    msg: {
-                        eventType: "eventType",
-                        id: "id",
-                        payload: { key: "value" },
-                        timestamp: "2024-01-15T09:30:00Z",
-                    },
-                    msgId: "msgId",
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
                     response: "response",
-                    responseDurationMs: 1,
-                    responseStatusCode: 1,
-                    status: 1,
-                    statusText: "success",
-                    timestamp: "2024-01-15T09:30:00Z",
-                    triggerType: 1,
-                    url: "url",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
                 },
             ],
+            secret: "secret",
         };
         server
             .mockEndpoint()
-            .get("/events/subscriptions/subscription_id")
+            .get("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.getSubscription("subscription_id");
+        const response = await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+            include_secret: true,
+        });
         expect(response).toEqual({
-            endpoint: {
-                channels: ["channels"],
-                createdAt: "2024-01-15T09:30:00Z",
-                description: "description",
-                disabled: true,
-                filterTypes: ["filterTypes"],
-                id: "id",
-                metadata: {
-                    key: "value",
-                },
-                rateLimit: 1,
-                uid: "uid",
-                updatedAt: "2024-01-15T09:30:00Z",
-                url: "url",
-                version: 1,
-            },
-            message_attempts: [
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
                 {
-                    endpointId: "endpointId",
-                    id: "id",
-                    msg: {
-                        eventType: "eventType",
-                        id: "id",
-                        payload: {
-                            key: "value",
-                        },
-                        timestamp: "2024-01-15T09:30:00Z",
-                    },
-                    msgId: "msgId",
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
                     response: "response",
-                    responseDurationMs: 1,
-                    responseStatusCode: 1,
-                    status: 1,
-                    statusText: "success",
-                    timestamp: "2024-01-15T09:30:00Z",
-                    triggerType: 1,
-                    url: "url",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
                 },
             ],
+            secret: "secret",
         });
     });
 
     test("getSubscription (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .get("/events/subscriptions/subscription_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.getSubscription("subscription_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("getSubscription (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .get("/events/subscriptions/subscription_id")
@@ -504,40 +509,104 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("deleteSubscription (1)", async () => {
+    test("getSubscription (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { key: "value" };
+        const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .delete("/events/subscriptions/subscription_id")
+            .get("/events/subscriptions/subscription_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.getSubscription("subscription_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
+    test("deleteSubscription (1)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = {
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
+        };
+        server
+            .mockEndpoint()
+            .delete("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.deleteSubscription("subscription_id");
+        const response = await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
-            key: "value",
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
         });
     });
 
     test("deleteSubscription (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/events/subscriptions/subscription_id")
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.deleteSubscription("subscription_id");
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("deleteSubscription (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .delete("/events/subscriptions/subscription_id")
@@ -551,67 +620,121 @@ describe("Events", () => {
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
+    test("deleteSubscription (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .delete("/events/subscriptions/subscription_id")
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.deleteSubscription("subscription_id");
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
+    });
+
     test("patchSubscription (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = {};
         const rawResponseBody = {
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: { key: "value" },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
         };
         server
             .mockEndpoint()
-            .patch("/events/subscriptions/subscription_id")
+            .patch("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.patchSubscription("subscription_id");
+        const response = await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: {
-                key: "value",
-            },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
+            id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+            url: "https://api.mycompany.com/webhooks/airweave",
+            filter_types: ["sync.completed", "sync.failed"],
+            disabled: false,
+            description: "Production notifications for data team",
+            created_at: "2024-03-01T08:00:00Z",
+            updated_at: "2024-03-15T14:30:00Z",
+            delivery_attempts: [
+                {
+                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
+                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
+                    response: "response",
+                    response_status_code: 200,
+                    status: "success",
+                    timestamp: "2024-03-15T09:45:33Z",
+                },
+            ],
+            secret: "secret",
         });
     });
 
     test("patchSubscription (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = { url: undefined, event_types: undefined, disabled: undefined };
-        const rawResponseBody = { detail: undefined };
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            url: undefined,
+            event_types: undefined,
+            disabled: undefined,
+            recover_since: undefined,
+        };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .patch("/events/subscriptions/subscription_id")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.patchSubscription("subscription_id", {
+                url: undefined,
+                event_types: undefined,
+                disabled: undefined,
+                recover_since: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("patchSubscription (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            url: undefined,
+            event_types: undefined,
+            disabled: undefined,
+            recover_since: undefined,
+        };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .patch("/events/subscriptions/subscription_id")
@@ -626,170 +749,90 @@ describe("Events", () => {
                 url: undefined,
                 event_types: undefined,
                 disabled: undefined,
+                recover_since: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
-    test("enableSubscription (1)", async () => {
+    test("patchSubscription (4)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = {};
-        const rawResponseBody = {
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: { key: "value" },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = {
+            url: undefined,
+            event_types: undefined,
+            disabled: undefined,
+            recover_since: undefined,
         };
+        const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/enable")
+            .patch("/events/subscriptions/subscription_id")
             .jsonBody(rawRequestBody)
             .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.events.enableSubscription("subscription_id");
-        expect(response).toEqual({
-            channels: ["channels"],
-            createdAt: "2024-01-15T09:30:00Z",
-            description: "description",
-            disabled: true,
-            filterTypes: ["filterTypes"],
-            id: "id",
-            metadata: {
-                key: "value",
-            },
-            rateLimit: 1,
-            uid: "uid",
-            updatedAt: "2024-01-15T09:30:00Z",
-            url: "url",
-            version: 1,
-        });
-    });
-
-    test("enableSubscription (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-
-        const rawResponseBody = { detail: undefined };
-        server
-            .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/enable")
-            .respondWith()
-            .statusCode(422)
+            .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.enableSubscription("subscription_id", undefined);
-        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
-    });
-
-    test("getSubscriptionSecret (1)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-
-        const rawResponseBody = { key: "key" };
-        server
-            .mockEndpoint()
-            .get("/events/subscriptions/subscription_id/secret")
-            .respondWith()
-            .statusCode(200)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        const response = await client.events.getSubscriptionSecret("subscription_id");
-        expect(response).toEqual({
-            key: "key",
-        });
-    });
-
-    test("getSubscriptionSecret (2)", async () => {
-        const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-
-        const rawResponseBody = { detail: undefined };
-        server
-            .mockEndpoint()
-            .get("/events/subscriptions/subscription_id/secret")
-            .respondWith()
-            .statusCode(422)
-            .jsonBody(rawResponseBody)
-            .build();
-
-        await expect(async () => {
-            return await client.events.getSubscriptionSecret("subscription_id");
-        }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+            return await client.events.patchSubscription("subscription_id", {
+                url: undefined,
+                event_types: undefined,
+                disabled: undefined,
+                recover_since: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
     test("recoverFailedMessages (1)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
-        const rawRequestBody = { since: "2024-01-15T09:30:00Z" };
-        const rawResponseBody = { id: "id", status: "running", task: "endpoint.replay" };
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { since: "2024-03-14T00:00:00Z" };
+        const rawResponseBody = { id: "rcvr_2bVxUn3RFnLYHa8z6ZKHMT9PqPX", status: "running" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/recover")
+            .post("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000/recover")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.recoverFailedMessages("subscription_id", {
-            since: "2024-01-15T09:30:00Z",
+        const response = await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+            since: "2024-03-14T00:00:00Z",
         });
         expect(response).toEqual({
-            id: "id",
+            id: "rcvr_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
             status: "running",
-            task: "endpoint.replay",
         });
     });
 
     test("recoverFailedMessages (2)", async () => {
         const server = mockServerPool.createServer();
-        const client = new AirweaveSDKClient({
-            apiKey: "test",
-            frameworkName: "test",
-            frameworkVersion: "test",
-            environment: server.baseUrl,
-        });
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
         const rawRequestBody = { since: "2024-01-15T09:30:00Z", until: undefined };
-        const rawResponseBody = { detail: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/events/subscriptions/subscription_id/recover")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(404)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.recoverFailedMessages("subscription_id", {
+                since: "2024-01-15T09:30:00Z",
+                until: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.NotFoundError);
+    });
+
+    test("recoverFailedMessages (3)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { since: "2024-01-15T09:30:00Z", until: undefined };
+        const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
             .post("/events/subscriptions/subscription_id/recover")
@@ -805,5 +848,27 @@ describe("Events", () => {
                 until: undefined,
             });
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
+    });
+
+    test("recoverFailedMessages (4)", async () => {
+        const server = mockServerPool.createServer();
+        const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
+        const rawRequestBody = { since: "2024-01-15T09:30:00Z", until: undefined };
+        const rawResponseBody = { detail: "detail" };
+        server
+            .mockEndpoint()
+            .post("/events/subscriptions/subscription_id/recover")
+            .jsonBody(rawRequestBody)
+            .respondWith()
+            .statusCode(429)
+            .jsonBody(rawResponseBody)
+            .build();
+
+        await expect(async () => {
+            return await client.events.recoverFailedMessages("subscription_id", {
+                since: "2024-01-15T09:30:00Z",
+                until: undefined,
+            });
+        }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 });

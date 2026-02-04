@@ -5,9 +5,10 @@
 /**
  * @example
  *     {
- *         limit: 1
+ *         limit: 100
  *     }
  */
 export interface GetSourceConnectionJobsSourceConnectionsSourceConnectionIdJobsGetRequest {
+    /** Maximum number of jobs to return (1-1000) */
     limit?: number;
 }

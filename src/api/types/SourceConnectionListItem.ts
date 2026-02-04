@@ -5,18 +5,29 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Clean source connection for list views.
+ * Lightweight source connection representation for list views.
+ *
+ * Contains essential fields for display and navigation. For full details
+ * including sync history and configuration, use the GET /{id} endpoint.
  */
 export interface SourceConnectionListItem {
+    /** Unique identifier of the source connection */
     id: string;
+    /** Display name of the connection */
     name: string;
+    /** Source type identifier */
     short_name: string;
+    /** Collection this connection belongs to */
     readable_collection_id: string;
+    /** When the connection was created (ISO 8601) */
     created_at: string;
+    /** When the connection was last modified (ISO 8601) */
     modified_at: string;
+    /** Whether the connection has valid credentials */
     is_authenticated: boolean;
+    /** Total number of entities synced from this connection */
     entity_count?: number;
-    /** Whether this source uses federated search */
+    /** Whether this source uses federated (real-time) search instead of syncing */
     federated_search?: boolean;
     /** Get authentication method from database value. */
     auth_method: AirweaveSDK.AuthenticationMethod;
