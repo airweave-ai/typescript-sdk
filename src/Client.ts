@@ -8,7 +8,7 @@ import { mergeHeaders } from "./core/headers.js";
 import { Sources } from "./api/resources/sources/client/Client.js";
 import { Collections } from "./api/resources/collections/client/Client.js";
 import { SourceConnections } from "./api/resources/sourceConnections/client/Client.js";
-import { Events } from "./api/resources/events/client/Client.js";
+import { Webhooks } from "./api/resources/webhooks/client/Client.js";
 
 export declare namespace AirweaveSDKClient {
     export interface Options {
@@ -39,7 +39,7 @@ export class AirweaveSDKClient {
     protected _sources: Sources | undefined;
     protected _collections: Collections | undefined;
     protected _sourceConnections: SourceConnections | undefined;
-    protected _events: Events | undefined;
+    protected _webhooks: Webhooks | undefined;
 
     constructor(_options: AirweaveSDKClient.Options) {
         this._options = {
@@ -48,8 +48,8 @@ export class AirweaveSDKClient {
                 {
                     "X-Fern-Language": "JavaScript",
                     "X-Fern-SDK-Name": "@airweave/sdk",
-                    "X-Fern-SDK-Version": "v0.8.68",
-                    "User-Agent": "@airweave/sdk/v0.8.68",
+                    "X-Fern-SDK-Version": "v0.8.69",
+                    "User-Agent": "@airweave/sdk/v0.8.69",
                     "X-Fern-Runtime": core.RUNTIME.type,
                     "X-Fern-Runtime-Version": core.RUNTIME.version,
                 },
@@ -70,7 +70,7 @@ export class AirweaveSDKClient {
         return (this._sourceConnections ??= new SourceConnections(this._options));
     }
 
-    public get events(): Events {
-        return (this._events ??= new Events(this._options));
+    public get webhooks(): Webhooks {
+        return (this._webhooks ??= new Webhooks(this._options));
     }
 }

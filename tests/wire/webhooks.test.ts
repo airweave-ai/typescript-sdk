@@ -6,7 +6,7 @@ import { mockServerPool } from "../mock-server/MockServerPool";
 import { AirweaveSDKClient } from "../../src/Client";
 import * as AirweaveSDK from "../../src/api/index";
 
-describe("Events", () => {
+describe("Webhooks", () => {
     test("getMessages (1)", async () => {
         const server = mockServerPool.createServer();
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
@@ -31,9 +31,9 @@ describe("Events", () => {
                 tags: ["tags"],
             },
         ];
-        server.mockEndpoint().get("/events/messages").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/webhooks/messages").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
 
-        const response = await client.events.getMessages();
+        const response = await client.webhooks.getMessages();
         expect(response).toEqual([
             {
                 id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
@@ -61,10 +61,10 @@ describe("Events", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { key: "value" };
-        server.mockEndpoint().get("/events/messages").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/webhooks/messages").respondWith().statusCode(422).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.events.getMessages();
+            return await client.webhooks.getMessages();
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -73,10 +73,10 @@ describe("Events", () => {
         const client = new AirweaveSDKClient({ apiKey: "test", environment: server.baseUrl });
 
         const rawResponseBody = { detail: "detail" };
-        server.mockEndpoint().get("/events/messages").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
+        server.mockEndpoint().get("/webhooks/messages").respondWith().statusCode(429).jsonBody(rawResponseBody).build();
 
         await expect(async () => {
-            return await client.events.getMessages();
+            return await client.webhooks.getMessages();
         }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
@@ -115,13 +115,13 @@ describe("Events", () => {
         };
         server
             .mockEndpoint()
-            .get("/events/messages/550e8400-e29b-41d4-a716-446655440000")
+            .get("/webhooks/messages/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+        const response = await client.webhooks.getMessage("550e8400-e29b-41d4-a716-446655440000", {
             include_attempts: true,
         });
         expect(response).toEqual({
@@ -162,14 +162,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/messages/message_id")
+            .get("/webhooks/messages/message_id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getMessage("message_id");
+            return await client.webhooks.getMessage("message_id");
         }).rejects.toThrow(AirweaveSDK.NotFoundError);
     });
 
@@ -180,14 +180,14 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .get("/events/messages/message_id")
+            .get("/webhooks/messages/message_id")
             .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getMessage("message_id");
+            return await client.webhooks.getMessage("message_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -198,14 +198,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/messages/message_id")
+            .get("/webhooks/messages/message_id")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getMessage("message_id");
+            return await client.webhooks.getMessage("message_id");
         }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
@@ -237,13 +237,13 @@ describe("Events", () => {
         ];
         server
             .mockEndpoint()
-            .get("/events/subscriptions")
+            .get("/webhooks/subscriptions")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.getSubscriptions();
+        const response = await client.webhooks.getSubscriptions();
         expect(response).toEqual([
             {
                 id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
@@ -275,14 +275,14 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .get("/events/subscriptions")
+            .get("/webhooks/subscriptions")
             .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getSubscriptions();
+            return await client.webhooks.getSubscriptions();
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -293,14 +293,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/subscriptions")
+            .get("/webhooks/subscriptions")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getSubscriptions();
+            return await client.webhooks.getSubscriptions();
         }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
@@ -334,14 +334,14 @@ describe("Events", () => {
         };
         server
             .mockEndpoint()
-            .post("/events/subscriptions")
+            .post("/webhooks/subscriptions")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.createSubscription({
+        const response = await client.webhooks.createSubscription({
             url: "https://api.mycompany.com/webhooks/airweave",
             event_types: ["sync.completed", "sync.failed"],
         });
@@ -375,7 +375,7 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions")
+            .post("/webhooks/subscriptions")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -383,7 +383,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.createSubscription({
+            return await client.webhooks.createSubscription({
                 url: "x",
                 event_types: ["sync.pending", "sync.pending"],
                 secret: undefined,
@@ -398,7 +398,7 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions")
+            .post("/webhooks/subscriptions")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -406,7 +406,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.createSubscription({
+            return await client.webhooks.createSubscription({
                 url: "x",
                 event_types: ["sync.pending", "sync.pending"],
                 secret: undefined,
@@ -441,13 +441,13 @@ describe("Events", () => {
         };
         server
             .mockEndpoint()
-            .get("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
+            .get("/webhooks/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+        const response = await client.webhooks.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
             include_secret: true,
         });
         expect(response).toEqual({
@@ -480,14 +480,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/subscriptions/subscription_id")
+            .get("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getSubscription("subscription_id");
+            return await client.webhooks.getSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.NotFoundError);
     });
 
@@ -498,14 +498,14 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .get("/events/subscriptions/subscription_id")
+            .get("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getSubscription("subscription_id");
+            return await client.webhooks.getSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -516,14 +516,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .get("/events/subscriptions/subscription_id")
+            .get("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.getSubscription("subscription_id");
+            return await client.webhooks.getSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
@@ -554,13 +554,13 @@ describe("Events", () => {
         };
         server
             .mockEndpoint()
-            .delete("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
+            .delete("/webhooks/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
+        const response = await client.webhooks.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
             id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
             url: "https://api.mycompany.com/webhooks/airweave",
@@ -591,14 +591,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .delete("/events/subscriptions/subscription_id")
+            .delete("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(404)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.deleteSubscription("subscription_id");
+            return await client.webhooks.deleteSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.NotFoundError);
     });
 
@@ -609,14 +609,14 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .delete("/events/subscriptions/subscription_id")
+            .delete("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(422)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.deleteSubscription("subscription_id");
+            return await client.webhooks.deleteSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.UnprocessableEntityError);
     });
 
@@ -627,14 +627,14 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .delete("/events/subscriptions/subscription_id")
+            .delete("/webhooks/subscriptions/subscription_id")
             .respondWith()
             .statusCode(429)
             .jsonBody(rawResponseBody)
             .build();
 
         await expect(async () => {
-            return await client.events.deleteSubscription("subscription_id");
+            return await client.webhooks.deleteSubscription("subscription_id");
         }).rejects.toThrow(AirweaveSDK.TooManyRequestsError);
     });
 
@@ -665,14 +665,14 @@ describe("Events", () => {
         };
         server
             .mockEndpoint()
-            .patch("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000")
+            .patch("/webhooks/subscriptions/550e8400-e29b-41d4-a716-446655440000")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
+        const response = await client.webhooks.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
             id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
             url: "https://api.mycompany.com/webhooks/airweave",
@@ -708,7 +708,7 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .patch("/events/subscriptions/subscription_id")
+            .patch("/webhooks/subscriptions/subscription_id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(404)
@@ -716,7 +716,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.patchSubscription("subscription_id", {
+            return await client.webhooks.patchSubscription("subscription_id", {
                 url: undefined,
                 event_types: undefined,
                 disabled: undefined,
@@ -737,7 +737,7 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .patch("/events/subscriptions/subscription_id")
+            .patch("/webhooks/subscriptions/subscription_id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -745,7 +745,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.patchSubscription("subscription_id", {
+            return await client.webhooks.patchSubscription("subscription_id", {
                 url: undefined,
                 event_types: undefined,
                 disabled: undefined,
@@ -766,7 +766,7 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .patch("/events/subscriptions/subscription_id")
+            .patch("/webhooks/subscriptions/subscription_id")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -774,7 +774,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.patchSubscription("subscription_id", {
+            return await client.webhooks.patchSubscription("subscription_id", {
                 url: undefined,
                 event_types: undefined,
                 disabled: undefined,
@@ -790,14 +790,14 @@ describe("Events", () => {
         const rawResponseBody = { id: "rcvr_2bVxUn3RFnLYHa8z6ZKHMT9PqPX", status: "running" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/550e8400-e29b-41d4-a716-446655440000/recover")
+            .post("/webhooks/subscriptions/550e8400-e29b-41d4-a716-446655440000/recover")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(200)
             .jsonBody(rawResponseBody)
             .build();
 
-        const response = await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+        const response = await client.webhooks.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
             since: "2024-03-14T00:00:00Z",
         });
         expect(response).toEqual({
@@ -813,7 +813,7 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/recover")
+            .post("/webhooks/subscriptions/subscription_id/recover")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(404)
@@ -821,7 +821,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.recoverFailedMessages("subscription_id", {
+            return await client.webhooks.recoverFailedMessages("subscription_id", {
                 since: "2024-01-15T09:30:00Z",
                 until: undefined,
             });
@@ -835,7 +835,7 @@ describe("Events", () => {
         const rawResponseBody = { key: "value" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/recover")
+            .post("/webhooks/subscriptions/subscription_id/recover")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(422)
@@ -843,7 +843,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.recoverFailedMessages("subscription_id", {
+            return await client.webhooks.recoverFailedMessages("subscription_id", {
                 since: "2024-01-15T09:30:00Z",
                 until: undefined,
             });
@@ -857,7 +857,7 @@ describe("Events", () => {
         const rawResponseBody = { detail: "detail" };
         server
             .mockEndpoint()
-            .post("/events/subscriptions/subscription_id/recover")
+            .post("/webhooks/subscriptions/subscription_id/recover")
             .jsonBody(rawRequestBody)
             .respondWith()
             .statusCode(429)
@@ -865,7 +865,7 @@ describe("Events", () => {
             .build();
 
         await expect(async () => {
-            return await client.events.recoverFailedMessages("subscription_id", {
+            return await client.webhooks.recoverFailedMessages("subscription_id", {
                 since: "2024-01-15T09:30:00Z",
                 until: undefined,
             });

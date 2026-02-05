@@ -8,7 +8,7 @@ import * as AirweaveSDK from "../../../index.js";
 import { mergeHeaders, mergeOnlyDefinedHeaders } from "../../../../core/headers.js";
 import * as errors from "../../../../errors/index.js";
 
-export declare namespace Events {
+export declare namespace Webhooks {
     export interface Options {
         environment?: core.Supplier<environments.AirweaveSDKEnvironment | string>;
         /** Specify a custom URL to connect the client to. */
@@ -33,45 +33,45 @@ export declare namespace Events {
 }
 
 /**
- * API endpoints for managing webhook subscriptions and event messages. Subscribe to events like sync completions to receive real-time notifications at your webhook URL
+ * API endpoints for managing webhook subscriptions and messages. Subscribe to events like sync completions to receive real-time notifications at your webhook URL
  */
-export class Events {
-    protected readonly _options: Events.Options;
+export class Webhooks {
+    protected readonly _options: Webhooks.Options;
 
-    constructor(_options: Events.Options) {
+    constructor(_options: Webhooks.Options) {
         this._options = _options;
     }
 
     /**
-     * Retrieve all event messages for your organization.
+     * Retrieve all webhook messages for your organization.
      *
-     * Event messages represent webhook payloads that were sent (or attempted to be sent)
+     * Webhook messages represent payloads that were sent (or attempted to be sent)
      * to your subscribed endpoints. Each message contains the event type, payload data,
      * and delivery status information.
      *
      * Use the `event_types` query parameter to filter messages by specific event types,
      * such as `sync.completed` or `sync.failed`.
      *
-     * @param {AirweaveSDK.GetMessagesEventsMessagesGetRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.GetMessagesWebhooksMessagesGetRequest} request
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getMessages()
+     *     await client.webhooks.getMessages()
      */
     public getMessages(
-        request: AirweaveSDK.GetMessagesEventsMessagesGetRequest = {},
-        requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EventMessage[]> {
+        request: AirweaveSDK.GetMessagesWebhooksMessagesGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookMessage[]> {
         return core.HttpResponsePromise.fromPromise(this.__getMessages(request, requestOptions));
     }
 
     private async __getMessages(
-        request: AirweaveSDK.GetMessagesEventsMessagesGetRequest = {},
-        requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EventMessage[]>> {
+        request: AirweaveSDK.GetMessagesWebhooksMessagesGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookMessage[]>> {
         const { event_types: eventTypes } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (eventTypes != null) {
@@ -92,7 +92,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "events/messages",
+                "webhooks/messages",
             ),
             method: "GET",
             headers: _headers,
@@ -102,7 +102,7 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EventMessage[], rawResponse: _response.rawResponse };
+            return { data: _response.body as AirweaveSDK.WebhookMessage[], rawResponse: _response.rawResponse };
         }
 
         if (_response.error.reason === "status-code") {
@@ -134,7 +134,7 @@ export class Events {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /events/messages.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /webhooks/messages.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -144,7 +144,7 @@ export class Events {
     }
 
     /**
-     * Retrieve a specific event message by its ID.
+     * Retrieve a specific webhook message by its ID.
      *
      * Returns the full message details including the event type, payload data,
      * timestamp, and delivery channel information. Use this to inspect the
@@ -155,31 +155,31 @@ export class Events {
      * delivery failures.
      *
      * @param {string} messageId - The unique identifier of the message to retrieve (UUID).
-     * @param {AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.GetMessageWebhooksMessagesMessageIdGetRequest} request
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+     *     await client.webhooks.getMessage("550e8400-e29b-41d4-a716-446655440000", {
      *         include_attempts: true
      *     })
      */
     public getMessage(
         messageId: string,
-        request: AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest = {},
-        requestOptions?: Events.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.EventMessageWithAttempts> {
+        request: AirweaveSDK.GetMessageWebhooksMessagesMessageIdGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookMessageWithAttempts> {
         return core.HttpResponsePromise.fromPromise(this.__getMessage(messageId, request, requestOptions));
     }
 
     private async __getMessage(
         messageId: string,
-        request: AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest = {},
-        requestOptions?: Events.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.EventMessageWithAttempts>> {
+        request: AirweaveSDK.GetMessageWebhooksMessagesMessageIdGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookMessageWithAttempts>> {
         const { include_attempts: includeAttempts } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (includeAttempts != null) {
@@ -196,7 +196,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                `events/messages/${encodeURIComponent(messageId)}`,
+                `webhooks/messages/${encodeURIComponent(messageId)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -206,7 +206,10 @@ export class Events {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.EventMessageWithAttempts, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as AirweaveSDK.WebhookMessageWithAttempts,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {
@@ -244,7 +247,7 @@ export class Events {
                 });
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /events/messages/{message_id}.",
+                    "Timeout exceeded when calling GET /webhooks/messages/{message_id}.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({
@@ -261,22 +264,22 @@ export class Events {
      * event types, and current status (enabled/disabled). Use this to audit
      * your webhook configuration or find a specific subscription.
      *
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getSubscriptions()
+     *     await client.webhooks.getSubscriptions()
      */
     public getSubscriptions(
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription[]> {
         return core.HttpResponsePromise.fromPromise(this.__getSubscriptions(requestOptions));
     }
 
     private async __getSubscriptions(
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription[]>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
@@ -288,7 +291,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "events/subscriptions",
+                "webhooks/subscriptions",
             ),
             method: "GET",
             headers: _headers,
@@ -330,7 +333,7 @@ export class Events {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /events/subscriptions.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling GET /webhooks/subscriptions.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -353,27 +356,27 @@ export class Events {
      * matching events occur. Each request includes a signature header for verification.
      *
      * @param {AirweaveSDK.CreateSubscriptionRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.createSubscription({
+     *     await client.webhooks.createSubscription({
      *         url: "https://api.mycompany.com/webhooks/airweave",
      *         event_types: ["sync.completed", "sync.failed"]
      *     })
      */
     public createSubscription(
         request: AirweaveSDK.CreateSubscriptionRequest,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__createSubscription(request, requestOptions));
     }
 
     private async __createSubscription(
         request: AirweaveSDK.CreateSubscriptionRequest,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
@@ -385,7 +388,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                "events/subscriptions",
+                "webhooks/subscriptions",
             ),
             method: "POST",
             headers: _headers,
@@ -430,7 +433,7 @@ export class Events {
                     rawResponse: _response.rawResponse,
                 });
             case "timeout":
-                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /events/subscriptions.");
+                throw new errors.AirweaveSDKTimeoutError("Timeout exceeded when calling POST /webhooks/subscriptions.");
             case "unknown":
                 throw new errors.AirweaveSDKError({
                     message: _response.error.errorMessage,
@@ -450,30 +453,30 @@ export class Events {
      * signature verification. Keep this secret secure.
      *
      * @param {string} subscriptionId - The unique identifier of the subscription to retrieve (UUID).
-     * @param {AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest} request
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+     *     await client.webhooks.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
      *         include_secret: true
      *     })
      */
     public getSubscription(
         subscriptionId: string,
-        request: AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest = {},
-        requestOptions?: Events.RequestOptions,
+        request: AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__getSubscription(subscriptionId, request, requestOptions));
     }
 
     private async __getSubscription(
         subscriptionId: string,
-        request: AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest = {},
-        requestOptions?: Events.RequestOptions,
+        request: AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest = {},
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         const { include_secret: includeSecret } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
@@ -491,7 +494,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}`,
+                `webhooks/subscriptions/${encodeURIComponent(subscriptionId)}`,
             ),
             method: "GET",
             headers: _headers,
@@ -539,7 +542,7 @@ export class Events {
                 });
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling GET /events/subscriptions/{subscription_id}.",
+                    "Timeout exceeded when calling GET /webhooks/subscriptions/{subscription_id}.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({
@@ -559,25 +562,25 @@ export class Events {
      * subscription instead using the PATCH endpoint.
      *
      * @param {string} subscriptionId - The unique identifier of the subscription to delete (UUID).
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000")
+     *     await client.webhooks.deleteSubscription("550e8400-e29b-41d4-a716-446655440000")
      */
     public deleteSubscription(
         subscriptionId: string,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__deleteSubscription(subscriptionId, requestOptions));
     }
 
     private async __deleteSubscription(
         subscriptionId: string,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
@@ -589,7 +592,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}`,
+                `webhooks/subscriptions/${encodeURIComponent(subscriptionId)}`,
             ),
             method: "DELETE",
             headers: _headers,
@@ -637,7 +640,7 @@ export class Events {
                 });
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling DELETE /events/subscriptions/{subscription_id}.",
+                    "Timeout exceeded when calling DELETE /webhooks/subscriptions/{subscription_id}.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({
@@ -666,19 +669,19 @@ export class Events {
      *
      * @param {string} subscriptionId - The unique identifier of the subscription to update (UUID).
      * @param {AirweaveSDK.PatchSubscriptionRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000")
+     *     await client.webhooks.patchSubscription("550e8400-e29b-41d4-a716-446655440000")
      */
     public patchSubscription(
         subscriptionId: string,
         request: AirweaveSDK.PatchSubscriptionRequest = {},
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
         return core.HttpResponsePromise.fromPromise(this.__patchSubscription(subscriptionId, request, requestOptions));
     }
@@ -686,7 +689,7 @@ export class Events {
     private async __patchSubscription(
         subscriptionId: string,
         request: AirweaveSDK.PatchSubscriptionRequest = {},
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
@@ -698,7 +701,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}`,
+                `webhooks/subscriptions/${encodeURIComponent(subscriptionId)}`,
             ),
             method: "PATCH",
             headers: _headers,
@@ -749,7 +752,7 @@ export class Events {
                 });
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling PATCH /events/subscriptions/{subscription_id}.",
+                    "Timeout exceeded when calling PATCH /webhooks/subscriptions/{subscription_id}.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({
@@ -774,21 +777,21 @@ export class Events {
      *
      * @param {string} subscriptionId - The unique identifier of the subscription to recover messages for (UUID).
      * @param {AirweaveSDK.RecoverMessagesRequest} request
-     * @param {Events.RequestOptions} requestOptions - Request-specific configuration.
+     * @param {Webhooks.RequestOptions} requestOptions - Request-specific configuration.
      *
      * @throws {@link AirweaveSDK.NotFoundError}
      * @throws {@link AirweaveSDK.UnprocessableEntityError}
      * @throws {@link AirweaveSDK.TooManyRequestsError}
      *
      * @example
-     *     await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+     *     await client.webhooks.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
      *         since: "2024-03-14T00:00:00Z"
      *     })
      */
     public recoverFailedMessages(
         subscriptionId: string,
         request: AirweaveSDK.RecoverMessagesRequest,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): core.HttpResponsePromise<AirweaveSDK.RecoveryTask> {
         return core.HttpResponsePromise.fromPromise(
             this.__recoverFailedMessages(subscriptionId, request, requestOptions),
@@ -798,7 +801,7 @@ export class Events {
     private async __recoverFailedMessages(
         subscriptionId: string,
         request: AirweaveSDK.RecoverMessagesRequest,
-        requestOptions?: Events.RequestOptions,
+        requestOptions?: Webhooks.RequestOptions,
     ): Promise<core.WithRawResponse<AirweaveSDK.RecoveryTask>> {
         let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
             this._options?.headers,
@@ -810,7 +813,7 @@ export class Events {
                 (await core.Supplier.get(this._options.baseUrl)) ??
                     (await core.Supplier.get(this._options.environment)) ??
                     environments.AirweaveSDKEnvironment.Production,
-                `events/subscriptions/${encodeURIComponent(subscriptionId)}/recover`,
+                `webhooks/subscriptions/${encodeURIComponent(subscriptionId)}/recover`,
             ),
             method: "POST",
             headers: _headers,
@@ -861,7 +864,7 @@ export class Events {
                 });
             case "timeout":
                 throw new errors.AirweaveSDKTimeoutError(
-                    "Timeout exceeded when calling POST /events/subscriptions/{subscription_id}/recover.",
+                    "Timeout exceeded when calling POST /webhooks/subscriptions/{subscription_id}/recover.",
                 );
             case "unknown":
                 throw new errors.AirweaveSDKError({

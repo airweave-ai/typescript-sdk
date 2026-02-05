@@ -1366,9 +1366,9 @@ await client.sourceConnections.cancelJob(
 </dl>
 </details>
 
-## events
+## webhooks
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessages</a>({ ...params }) -> AirweaveSDK.EventMessage[]</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getMessages</a>({ ...params }) -> AirweaveSDK.WebhookMessage[]</code></summary>
 <dl>
 <dd>
 
@@ -1380,9 +1380,9 @@ await client.sourceConnections.cancelJob(
 <dl>
 <dd>
 
-Retrieve all event messages for your organization.
+Retrieve all webhook messages for your organization.
 
-Event messages represent webhook payloads that were sent (or attempted to be sent)
+Webhook messages represent payloads that were sent (or attempted to be sent)
 to your subscribed endpoints. Each message contains the event type, payload data,
 and delivery status information.
 
@@ -1403,7 +1403,7 @@ such as `sync.completed` or `sync.failed`.
 <dd>
 
 ```typescript
-await client.events.getMessages();
+await client.webhooks.getMessages();
 ```
 
 </dd>
@@ -1419,7 +1419,7 @@ await client.events.getMessages();
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.GetMessagesEventsMessagesGetRequest`
+**request:** `AirweaveSDK.GetMessagesWebhooksMessagesGetRequest`
 
 </dd>
 </dl>
@@ -1427,7 +1427,7 @@ await client.events.getMessages();
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1438,7 +1438,7 @@ await client.events.getMessages();
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getMessage</a>(messageId, { ...params }) -> AirweaveSDK.EventMessageWithAttempts</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getMessage</a>(messageId, { ...params }) -> AirweaveSDK.WebhookMessageWithAttempts</code></summary>
 <dl>
 <dd>
 
@@ -1450,7 +1450,7 @@ await client.events.getMessages();
 <dl>
 <dd>
 
-Retrieve a specific event message by its ID.
+Retrieve a specific webhook message by its ID.
 
 Returns the full message details including the event type, payload data,
 timestamp, and delivery channel information. Use this to inspect the
@@ -1474,7 +1474,7 @@ delivery failures.
 <dd>
 
 ```typescript
-await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
+await client.webhooks.getMessage("550e8400-e29b-41d4-a716-446655440000", {
     include_attempts: true,
 });
 ```
@@ -1500,7 +1500,7 @@ await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.GetMessageEventsMessagesMessageIdGetRequest`
+**request:** `AirweaveSDK.GetMessageWebhooksMessagesMessageIdGetRequest`
 
 </dd>
 </dl>
@@ -1508,7 +1508,7 @@ await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1519,7 +1519,7 @@ await client.events.getMessage("550e8400-e29b-41d4-a716-446655440000", {
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscriptions</a>() -> AirweaveSDK.WebhookSubscription[]</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getSubscriptions</a>() -> AirweaveSDK.WebhookSubscription[]</code></summary>
 <dl>
 <dd>
 
@@ -1551,7 +1551,7 @@ your webhook configuration or find a specific subscription.
 <dd>
 
 ```typescript
-await client.events.getSubscriptions();
+await client.webhooks.getSubscriptions();
 ```
 
 </dd>
@@ -1567,7 +1567,7 @@ await client.events.getSubscriptions();
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1578,7 +1578,7 @@ await client.events.getSubscriptions();
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">createSubscription</a>({ ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">createSubscription</a>({ ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1616,7 +1616,7 @@ matching events occur. Each request includes a signature header for verification
 <dd>
 
 ```typescript
-await client.events.createSubscription({
+await client.webhooks.createSubscription({
     url: "https://api.mycompany.com/webhooks/airweave",
     event_types: ["sync.completed", "sync.failed"],
 });
@@ -1643,7 +1643,7 @@ await client.events.createSubscription({
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1654,7 +1654,7 @@ await client.events.createSubscription({
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">getSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1689,7 +1689,7 @@ signature verification. Keep this secret secure.
 <dd>
 
 ```typescript
-await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
+await client.webhooks.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
     include_secret: true,
 });
 ```
@@ -1715,7 +1715,7 @@ await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
 <dl>
 <dd>
 
-**request:** `AirweaveSDK.GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest`
+**request:** `AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest`
 
 </dd>
 </dl>
@@ -1723,7 +1723,7 @@ await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1734,7 +1734,7 @@ await client.events.getSubscription("550e8400-e29b-41d4-a716-446655440000", {
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">deleteSubscription</a>(subscriptionId) -> AirweaveSDK.WebhookSubscription</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">deleteSubscription</a>(subscriptionId) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1768,7 +1768,7 @@ subscription instead using the PATCH endpoint.
 <dd>
 
 ```typescript
-await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
+await client.webhooks.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -1792,7 +1792,7 @@ await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1803,7 +1803,7 @@ await client.events.deleteSubscription("550e8400-e29b-41d4-a716-446655440000");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">patchSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">patchSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
 <dl>
 <dd>
 
@@ -1845,7 +1845,7 @@ the subscription was disabled.
 <dd>
 
 ```typescript
-await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
+await client.webhooks.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
 ```
 
 </dd>
@@ -1877,7 +1877,7 @@ await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>
@@ -1888,7 +1888,7 @@ await client.events.patchSubscription("550e8400-e29b-41d4-a716-446655440000");
 </dl>
 </details>
 
-<details><summary><code>client.events.<a href="/src/api/resources/events/client/Client.ts">recoverFailedMessages</a>(subscriptionId, { ...params }) -> AirweaveSDK.RecoveryTask</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">recoverFailedMessages</a>(subscriptionId, { ...params }) -> AirweaveSDK.RecoveryTask</code></summary>
 <dl>
 <dd>
 
@@ -1926,7 +1926,7 @@ are skipped; only failed or pending messages are retried.
 <dd>
 
 ```typescript
-await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
+await client.webhooks.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000", {
     since: "2024-03-14T00:00:00Z",
 });
 ```
@@ -1960,7 +1960,7 @@ await client.events.recoverFailedMessages("550e8400-e29b-41d4-a716-446655440000"
 <dl>
 <dd>
 
-**requestOptions:** `Events.RequestOptions`
+**requestOptions:** `Webhooks.RequestOptions`
 
 </dd>
 </dl>

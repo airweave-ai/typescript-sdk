@@ -8,7 +8,7 @@
  *         include_attempts: true
  *     }
  */
-export interface GetMessageEventsMessagesMessageIdGetRequest {
+export interface GetMessageWebhooksMessagesMessageIdGetRequest {
     /** Include delivery attempts for this message. Each attempt includes the HTTP response code, response body, and timestamp. */
     include_attempts?: boolean;
 }

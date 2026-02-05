@@ -8,7 +8,7 @@
  *         include_secret: true
  *     }
  */
-export interface GetSubscriptionEventsSubscriptionsSubscriptionIdGetRequest {
+export interface GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest {
     /** Include the signing secret for webhook signature verification. Keep this secret secure and use it to verify the 'svix-signature' header. */
     include_secret?: boolean;
 }

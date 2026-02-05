@@ -5,9 +5,9 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * An event message with delivery attempts.
+ * A webhook message with delivery attempts.
  */
-export interface EventMessageWithAttempts {
+export interface WebhookMessageWithAttempts {
     /** Unique identifier for this message (UUID format) */
     id: string;
     /** The type of event (e.g., 'sync.completed', 'sync.failed') */

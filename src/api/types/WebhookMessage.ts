@@ -5,11 +5,11 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * An event message that was sent (or attempted) to webhook subscribers.
+ * A webhook message that was sent (or attempted) to webhook subscribers.
  *
  * The payload contains the actual event data matching the webhook delivery format.
  */
-export interface EventMessage {
+export interface WebhookMessage {
     /** Unique identifier for this message (UUID format) */
     id: string;
     /** The type of event (e.g., 'sync.completed', 'sync.failed') */
