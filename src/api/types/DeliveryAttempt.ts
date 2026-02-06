@@ -24,4 +24,6 @@ export interface DeliveryAttempt {
     status: string;
     /** When this delivery attempt occurred (ISO 8601 format, UTC) */
     timestamp: string;
+    /** The URL that was called */
+    url?: string;
 }

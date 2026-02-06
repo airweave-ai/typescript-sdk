@@ -3,7 +3,7 @@
  */
 
 /**
- * Enumeration of webhook event types.
+ * Webhook event types.
  */
 export type EventType = "sync.pending" | "sync.running" | "sync.completed" | "sync.failed" | "sync.cancelled";
 export const EventType = {

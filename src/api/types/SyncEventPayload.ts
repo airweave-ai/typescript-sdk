@@ -4,29 +4,14 @@
 
 import * as AirweaveSDK from "../index.js";
 
-/**
- * Payload for sync-related webhook events.
- *
- * This schema defines the data sent to webhook subscribers when sync events occur
- * (e.g., sync.pending, sync.running, sync.completed, sync.failed, sync.cancelled).
- */
 export interface SyncEventPayload {
-    /** The type of sync event */
     event_type: AirweaveSDK.EventType;
-    /** Unique identifier for this sync job */
     job_id: string;
-    /** Human-readable identifier for the collection (e.g., 'finance-data-ab123') */
     collection_readable_id: string;
-    /** Display name of the collection */
     collection_name: string;
-    /** Unique identifier for the source connection */
-    source_connection_id?: string;
-    /** Short name of the source type (e.g., 'hubspot', 'notion', 'salesforce') */
     source_type: string;
-    /** Current status of the sync job */
-    status: AirweaveSDK.SyncJobStatus;
-    /** When this event occurred (ISO 8601 format, UTC) */
+    status: string;
     timestamp: string;
-    /** Error message if the sync failed (only present for failed events) */
+    source_connection_id?: string;
     error?: string;
 }
