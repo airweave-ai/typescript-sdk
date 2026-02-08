@@ -13,6 +13,8 @@ import * as AirweaveSDK from "../index.js";
 export interface SourceConnection {
     /** Unique identifier of the source connection */
     id: string;
+    /** Organization this connection belongs to */
+    organization_id: string;
     /** Display name of the connection */
     name: string;
     /** Optional description of the connection's purpose */

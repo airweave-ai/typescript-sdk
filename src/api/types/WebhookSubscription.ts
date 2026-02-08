@@ -12,7 +12,7 @@ export interface WebhookSubscription {
     id: string;
     /** The URL where webhook events are delivered */
     url: string;
-    /** Event types this subscription is filtered to receive. Available types: `sync.pending`, `sync.running`, `sync.completed`, `sync.failed`, `sync.cancelled`. */
+    /** Event types this subscription is filtered to receive. See EventType enum for all available types. */
     filter_types?: string[];
     /** Whether this subscription is currently disabled. Disabled subscriptions do not receive event deliveries. */
     disabled?: boolean;

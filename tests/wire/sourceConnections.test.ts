@@ -98,6 +98,7 @@ describe("SourceConnections", () => {
         const rawRequestBody = { short_name: "github", readable_collection_id: "customer-support-tickets-x7k9m" };
         const rawResponseBody = {
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -160,6 +161,7 @@ describe("SourceConnections", () => {
         });
         expect(response).toEqual({
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -305,6 +307,7 @@ describe("SourceConnections", () => {
 
         const rawResponseBody = {
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -363,6 +366,7 @@ describe("SourceConnections", () => {
         const response = await client.sourceConnections.get("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -484,6 +488,7 @@ describe("SourceConnections", () => {
 
         const rawResponseBody = {
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -542,6 +547,7 @@ describe("SourceConnections", () => {
         const response = await client.sourceConnections.delete("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -663,6 +669,7 @@ describe("SourceConnections", () => {
         const rawRequestBody = {};
         const rawResponseBody = {
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",
@@ -722,6 +729,7 @@ describe("SourceConnections", () => {
         const response = await client.sourceConnections.update("550e8400-e29b-41d4-a716-446655440000");
         expect(response).toEqual({
             id: "550e8400-e29b-41d4-a716-446655440000",
+            organization_id: "123e4567-e89b-12d3-a456-426614174000",
             name: "GitHub Docs Repo",
             description: "Main documentation repository",
             short_name: "github",

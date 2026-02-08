@@ -4,12 +4,33 @@
 
 /**
  * Webhook event types.
+ *
+ * All available event types that webhook subscribers can filter on.
+ * Convention: {domain}.{action} — matches the event_type string
+ * on the corresponding domain event class.
  */
-export type EventType = "sync.pending" | "sync.running" | "sync.completed" | "sync.failed" | "sync.cancelled";
+export type EventType =
+    | "sync.pending"
+    | "sync.running"
+    | "sync.completed"
+    | "sync.failed"
+    | "sync.cancelled"
+    | "source_connection.created"
+    | "source_connection.auth_completed"
+    | "source_connection.deleted"
+    | "collection.created"
+    | "collection.updated"
+    | "collection.deleted";
 export const EventType = {
     SyncPending: "sync.pending",
     SyncRunning: "sync.running",
     SyncCompleted: "sync.completed",
     SyncFailed: "sync.failed",
     SyncCancelled: "sync.cancelled",
+    SourceConnectionCreated: "source_connection.created",
+    SourceConnectionAuthCompleted: "source_connection.auth_completed",
+    SourceConnectionDeleted: "source_connection.deleted",
+    CollectionCreated: "collection.created",
+    CollectionUpdated: "collection.updated",
+    CollectionDeleted: "collection.deleted",
 } as const;

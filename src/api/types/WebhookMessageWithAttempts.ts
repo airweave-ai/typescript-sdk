@@ -12,8 +12,8 @@ export interface WebhookMessageWithAttempts {
     id: string;
     /** The type of event (e.g., 'sync.completed', 'sync.failed') */
     event_type: string;
-    /** The event payload data, matching what is delivered to webhooks */
-    payload: AirweaveSDK.SyncEventPayload;
+    /** The event payload data, matching what is delivered to webhooks. Structure varies by event_type. */
+    payload: Record<string, unknown>;
     /** When this message was created (ISO 8601 format, UTC) */
     timestamp: string;
     /** Channels this message was sent to (typically matches the event type) */

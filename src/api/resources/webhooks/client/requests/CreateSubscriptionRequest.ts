@@ -14,7 +14,7 @@ import * as AirweaveSDK from "../../../../index.js";
 export interface CreateSubscriptionRequest {
     /** The HTTPS URL where webhook events will be delivered. Must be a publicly accessible endpoint that returns a 2xx status code. */
     url: string;
-    /** List of event types to subscribe to. Events not in this list will not be delivered to this subscription. Available types: `sync.pending`, `sync.running`, `sync.completed`, `sync.failed`, `sync.cancelled`. */
+    /** List of event types to subscribe to. Events not in this list will not be delivered to this subscription. Available types: `sync.pending`, `sync.running`, `sync.completed`, `sync.failed`, `sync.cancelled`, `source_connection.created`, `source_connection.auth_completed`, `source_connection.deleted`, `collection.created`, `collection.updated`, `collection.deleted`. */
     event_types: AirweaveSDK.EventType[];
     /** Optional custom signing secret for webhook signature verification. If not provided, a secure secret will be auto-generated. Must be at least 24 characters if specified. */
     secret?: string;
