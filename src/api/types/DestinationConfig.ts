@@ -6,7 +6,7 @@
  * Controls where entities are written.
  */
 export interface DestinationConfig {
-    /** Skip writing to native Qdrant */
+    /** Skip writing to native Qdrant (deprecated) */
     skip_qdrant?: boolean;
     /** Skip writing to native Vespa */
     skip_vespa?: boolean;
