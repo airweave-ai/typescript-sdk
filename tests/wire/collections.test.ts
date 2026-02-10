@@ -86,7 +86,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -127,7 +126,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -214,7 +212,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -251,7 +248,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -346,7 +342,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -383,7 +378,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -478,7 +472,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
@@ -518,7 +511,6 @@ describe("Collections", () => {
             embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
-                    skip_qdrant: true,
                     skip_vespa: true,
                     target_destinations: ["target_destinations"],
                     exclude_destinations: ["exclude_destinations"],
