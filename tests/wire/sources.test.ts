@@ -22,10 +22,7 @@ describe("Sources", () => {
                 config_class: "GitHubConfig",
                 short_name: "github",
                 class_name: "GitHubSource",
-                output_entity_definition_ids: [
-                    "def12345-6789-abcd-ef01-234567890abc",
-                    "def67890-abcd-ef01-2345-67890abcdef1",
-                ],
+                output_entity_definitions: ["output_entity_definitions"],
                 labels: ["code"],
                 supports_continuous: true,
                 federated_search: true,
@@ -33,9 +30,6 @@ describe("Sources", () => {
                 supports_access_control: true,
                 rate_limit_level: "rate_limit_level",
                 feature_flag: "feature_flag",
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                created_at: "2024-01-01T00:00:00Z",
-                modified_at: "2024-01-01T00:00:00Z",
                 auth_fields: {
                     fields: [
                         {
@@ -70,10 +64,7 @@ describe("Sources", () => {
                 config_class: "GitHubConfig",
                 short_name: "github",
                 class_name: "GitHubSource",
-                output_entity_definition_ids: [
-                    "def12345-6789-abcd-ef01-234567890abc",
-                    "def67890-abcd-ef01-2345-67890abcdef1",
-                ],
+                output_entity_definitions: ["output_entity_definitions"],
                 labels: ["code"],
                 supports_continuous: true,
                 federated_search: true,
@@ -81,9 +72,6 @@ describe("Sources", () => {
                 supports_access_control: true,
                 rate_limit_level: "rate_limit_level",
                 feature_flag: "feature_flag",
-                id: "550e8400-e29b-41d4-a716-446655440000",
-                created_at: "2024-01-01T00:00:00Z",
-                modified_at: "2024-01-01T00:00:00Z",
                 auth_fields: {
                     fields: [
                         {
@@ -152,10 +140,7 @@ describe("Sources", () => {
             config_class: "GitHubConfig",
             short_name: "github",
             class_name: "GitHubSource",
-            output_entity_definition_ids: [
-                "def12345-6789-abcd-ef01-234567890abc",
-                "def67890-abcd-ef01-2345-67890abcdef1",
-            ],
+            output_entity_definitions: ["output_entity_definitions"],
             labels: ["code"],
             supports_continuous: true,
             federated_search: true,
@@ -163,9 +148,6 @@ describe("Sources", () => {
             supports_access_control: true,
             rate_limit_level: "rate_limit_level",
             feature_flag: "feature_flag",
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            created_at: "2024-01-01T00:00:00Z",
-            modified_at: "2024-01-01T00:00:00Z",
             auth_fields: {
                 fields: [
                     {
@@ -198,10 +180,7 @@ describe("Sources", () => {
             config_class: "GitHubConfig",
             short_name: "github",
             class_name: "GitHubSource",
-            output_entity_definition_ids: [
-                "def12345-6789-abcd-ef01-234567890abc",
-                "def67890-abcd-ef01-2345-67890abcdef1",
-            ],
+            output_entity_definitions: ["output_entity_definitions"],
             labels: ["code"],
             supports_continuous: true,
             federated_search: true,
@@ -209,9 +188,6 @@ describe("Sources", () => {
             supports_access_control: true,
             rate_limit_level: "rate_limit_level",
             feature_flag: "feature_flag",
-            id: "550e8400-e29b-41d4-a716-446655440000",
-            created_at: "2024-01-01T00:00:00Z",
-            modified_at: "2024-01-01T00:00:00Z",
             auth_fields: {
                 fields: [
                     {

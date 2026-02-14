@@ -6,6 +6,8 @@ import * as AirweaveSDK from "../index.js";
 
 /**
  * Complete source representation with authentication and configuration schemas.
+ *
+ * Served from the in-memory SourceRegistry — no database row needed.
  */
 export interface Source {
     /** Human-readable name of the data source connector (e.g., 'GitHub', 'Stripe', 'PostgreSQL'). */
@@ -26,8 +28,8 @@ export interface Source {
     short_name: string;
     /** Python class name of the source implementation that handles data extraction logic. */
     class_name: string;
-    /** List of entity definition IDs that this source can produce. Defines the data schema and structure that this connector outputs. */
-    output_entity_definition_ids?: string[];
+    /** List of entity definition short names that this source can produce (e.g., ['asana_task_entity', 'asana_project_entity']). */
+    output_entity_definitions?: string[];
     /** Categorization tags to help users discover and filter sources by domain or use case. */
     labels?: string[];
     /** Whether this source supports cursor-based continuous syncing for incremental data extraction. Sources with this capability can track their sync position and resume from where they left off. */
@@ -42,12 +44,6 @@ export interface Source {
     rate_limit_level?: string;
     /** Feature flag required to access this source. If set, only organizations with this feature enabled can see/use this source. */
     feature_flag?: string;
-    /** Unique system identifier for this source type. Generated automatically when the source is registered. */
-    id: string;
-    /** Timestamp when this source type was registered in the system (ISO 8601 format). */
-    created_at: string;
-    /** Timestamp when this source type was last updated (ISO 8601 format). */
-    modified_at: string;
     /** Schema definition for authentication fields required to connect to this source. Only present for sources using DIRECT authentication. OAuth sources handle authentication through browser flows. */
     auth_fields?: AirweaveSDK.Fields;
     /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */
