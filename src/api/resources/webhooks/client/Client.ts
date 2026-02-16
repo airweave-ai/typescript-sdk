@@ -469,7 +469,7 @@ export class Webhooks {
         subscriptionId: string,
         request: AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest = {},
         requestOptions?: Webhooks.RequestOptions,
-    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscription> {
+    ): core.HttpResponsePromise<AirweaveSDK.WebhookSubscriptionDetail> {
         return core.HttpResponsePromise.fromPromise(this.__getSubscription(subscriptionId, request, requestOptions));
     }
 
@@ -477,7 +477,7 @@ export class Webhooks {
         subscriptionId: string,
         request: AirweaveSDK.GetSubscriptionWebhooksSubscriptionsSubscriptionIdGetRequest = {},
         requestOptions?: Webhooks.RequestOptions,
-    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscription>> {
+    ): Promise<core.WithRawResponse<AirweaveSDK.WebhookSubscriptionDetail>> {
         const { include_secret: includeSecret } = request;
         const _queryParams: Record<string, string | string[] | object | object[] | null> = {};
         if (includeSecret != null) {
@@ -504,7 +504,10 @@ export class Webhooks {
             abortSignal: requestOptions?.abortSignal,
         });
         if (_response.ok) {
-            return { data: _response.body as AirweaveSDK.WebhookSubscription, rawResponse: _response.rawResponse };
+            return {
+                data: _response.body as AirweaveSDK.WebhookSubscriptionDetail,
+                rawResponse: _response.rawResponse,
+            };
         }
 
         if (_response.error.reason === "status-code") {

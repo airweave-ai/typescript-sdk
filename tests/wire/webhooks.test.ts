@@ -220,17 +220,7 @@ describe("Webhooks", () => {
                 description: "Production notifications for data team",
                 created_at: "2024-03-01T08:00:00Z",
                 updated_at: "2024-03-15T14:30:00Z",
-                delivery_attempts: [
-                    {
-                        id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                        message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                        endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                        response_status_code: 200,
-                        status: "success",
-                        timestamp: "2024-03-15T09:45:33Z",
-                    },
-                ],
-                secret: "secret",
+                health_status: "healthy",
             },
         ];
         server
@@ -251,17 +241,7 @@ describe("Webhooks", () => {
                 description: "Production notifications for data team",
                 created_at: "2024-03-01T08:00:00Z",
                 updated_at: "2024-03-15T14:30:00Z",
-                delivery_attempts: [
-                    {
-                        id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                        message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                        endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                        response_status_code: 200,
-                        status: "success",
-                        timestamp: "2024-03-15T09:45:33Z",
-                    },
-                ],
-                secret: "secret",
+                health_status: "healthy",
             },
         ]);
     });
@@ -317,19 +297,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         };
         server
             .mockEndpoint()
@@ -352,19 +320,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         });
     });
 
@@ -426,6 +382,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
+            health_status: "healthy",
             delivery_attempts: [
                 {
                     id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
@@ -459,6 +416,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
+            health_status: "healthy",
             delivery_attempts: [
                 {
                     id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
@@ -541,19 +499,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         };
         server
             .mockEndpoint()
@@ -572,19 +518,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         });
     });
 
@@ -654,19 +588,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         };
         server
             .mockEndpoint()
@@ -686,19 +608,7 @@ describe("Webhooks", () => {
             description: "Production notifications for data team",
             created_at: "2024-03-01T08:00:00Z",
             updated_at: "2024-03-15T14:30:00Z",
-            delivery_attempts: [
-                {
-                    id: "atmpt_2bVxUn3RFnLYHa8z6ZKHMT9PqPX",
-                    message_id: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-                    endpoint_id: "c3d4e5f6-a7b8-9012-cdef-345678901234",
-                    response: "response",
-                    response_status_code: 200,
-                    status: "success",
-                    timestamp: "2024-03-15T09:45:33Z",
-                    url: "url",
-                },
-            ],
-            secret: "secret",
+            health_status: "healthy",
         });
     });
 

@@ -5,13 +5,11 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * A webhook subscription (endpoint) configuration.
+ * Full subscription detail, including delivery attempts and signing secret.
  *
- * This is the lightweight representation returned by list, create, update,
- * and delete endpoints.  For the full detail view (delivery attempts,
- * signing secret) see ``WebhookSubscriptionDetail``.
+ * Returned by ``GET /subscriptions/{id}`` only.
  */
-export interface WebhookSubscription {
+export interface WebhookSubscriptionDetail {
     /** Unique identifier for this subscription (UUID format) */
     id: string;
     /** The URL where webhook events are delivered */
@@ -28,4 +26,8 @@ export interface WebhookSubscription {
     updated_at: string;
     /** Health status of this subscription based on recent delivery attempts. Values: 'healthy' (all recent deliveries succeeded), 'degraded' (mix of successes and failures), 'failing' (consecutive failures beyond threshold), 'unknown' (no delivery data yet). */
     health_status?: AirweaveSDK.HealthStatus;
+    /** Recent delivery attempts for this subscription. */
+    delivery_attempts?: AirweaveSDK.DeliveryAttempt[];
+    /** The signing secret for webhook signature verification. Only included when include_secret=true is passed to the API. Keep this secret secure. */
+    secret?: string;
 }

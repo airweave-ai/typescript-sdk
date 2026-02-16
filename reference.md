@@ -1672,7 +1672,7 @@ await client.webhooks.createSubscription({
 </dl>
 </details>
 
-<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscription</code></summary>
+<details><summary><code>client.webhooks.<a href="/src/api/resources/webhooks/client/Client.ts">getSubscription</a>(subscriptionId, { ...params }) -> AirweaveSDK.WebhookSubscriptionDetail</code></summary>
 <dl>
 <dd>
 
