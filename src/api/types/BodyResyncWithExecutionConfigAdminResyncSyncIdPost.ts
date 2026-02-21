@@ -5,8 +5,8 @@
 import * as AirweaveSDK from "../index.js";
 
 export interface BodyResyncWithExecutionConfigAdminResyncSyncIdPost {
-    /** Optional nested SyncConfig for sync behavior (destinations, handlers, cursor, behavior) */
+    /** Optional nested SyncConfig for sync behavior */
     execution_config?: AirweaveSDK.SyncConfig;
-    /** Optional tags for filtering and organizing sync jobs (e.g., ['vespa-backfill-01-22-2026', 'manual']) */
+    /** Optional tags for filtering and organizing sync jobs */
     tags?: string[];
 }
