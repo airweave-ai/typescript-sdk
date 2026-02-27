@@ -5,10 +5,13 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Complete collection representation returned by the API.
+ * API-facing collection schema with embedding metadata.
  *
- * This schema includes all collection metadata plus computed status information
- * based on the health and state of associated source connections.
+ * Extends CollectionRecord with vector_size and embedding_model_name, which
+ * are resolved by the CollectionService from the deployment metadata and the
+ * dense embedder registry.
+ *
+ * Excludes vector_db_deployment_metadata_id (internal FK).
  */
 export interface Collection {
     /** Human-readable display name for the collection. */
@@ -17,10 +20,6 @@ export interface Collection {
     readable_id: string;
     /** Unique system identifier for the collection. This UUID is generated automatically and used for internal references. */
     id: string;
-    /** Vector dimensions used by this collection. Determines which embedding model is used: 3072 (text-embedding-3-large), 1536 (text-embedding-3-small), 1024 (mistral-embed), or 384 (MiniLM-L6-v2). */
-    vector_size: number;
-    /** Name of the embedding model used for this collection (e.g., 'text-embedding-3-large', 'text-embedding-3-small', 'mistral-embed'). This ensures queries use the same model as the indexed data. */
-    embedding_model_name: string;
     /** Default sync configuration for all syncs in this collection. Overridable at sync and job level. */
     sync_config?: AirweaveSDK.SyncConfig;
     /** Timestamp when the collection was created (ISO 8601 format). */
@@ -35,4 +34,8 @@ export interface Collection {
     modified_by_email?: string;
     /** Current operational status of the collection:<br/>• **NEEDS_SOURCE**: Collection has no authenticated connections, or connections exist but haven't synced yet<br/>• **ACTIVE**: At least one connection has completed a sync or is currently syncing<br/>• **ERROR**: All connections have failed their last sync */
     status?: AirweaveSDK.CollectionStatus;
+    /** Vector dimensions used by this collection (derived from deployment metadata). */
+    vector_size: number;
+    /** Name of the embedding model used for this collection (derived from deployment metadata). */
+    embedding_model_name: string;
 }

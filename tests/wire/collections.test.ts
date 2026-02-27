@@ -16,14 +16,14 @@ describe("Collections", () => {
                 name: "Finance Data",
                 readable_id: "finance-data-ab123",
                 id: "550e8400-e29b-41d4-a716-446655440000",
-                vector_size: 1,
-                embedding_model_name: "embedding_model_name",
                 created_at: "2024-01-15T09:30:00Z",
                 modified_at: "2024-01-15T14:22:15Z",
                 organization_id: "org12345-6789-abcd-ef01-234567890abc",
                 created_by_email: "admin@company.com",
                 modified_by_email: "finance@company.com",
                 status: "ACTIVE",
+                vector_size: 1,
+                embedding_model_name: "embedding_model_name",
             },
         ];
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -38,14 +38,14 @@ describe("Collections", () => {
                 name: "Finance Data",
                 readable_id: "finance-data-ab123",
                 id: "550e8400-e29b-41d4-a716-446655440000",
-                vector_size: 1,
-                embedding_model_name: "embedding_model_name",
                 created_at: "2024-01-15T09:30:00Z",
                 modified_at: "2024-01-15T14:22:15Z",
                 organization_id: "org12345-6789-abcd-ef01-234567890abc",
                 created_by_email: "admin@company.com",
                 modified_by_email: "finance@company.com",
                 status: "ACTIVE",
+                vector_size: 1,
+                embedding_model_name: "embedding_model_name",
             },
         ]);
     });
@@ -82,8 +82,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -104,6 +102,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         };
         server
             .mockEndpoint()
@@ -122,8 +122,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -151,6 +149,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         });
     });
 
@@ -208,8 +208,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -230,6 +228,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         };
         server
             .mockEndpoint()
@@ -244,8 +244,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -273,6 +271,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         });
     });
 
@@ -338,8 +338,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -360,6 +358,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         };
         server
             .mockEndpoint()
@@ -374,8 +374,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -403,6 +401,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         });
     });
 
@@ -468,8 +468,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -490,6 +488,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         };
         server
             .mockEndpoint()
@@ -507,8 +507,6 @@ describe("Collections", () => {
             name: "Finance Data",
             readable_id: "finance-data-ab123",
             id: "550e8400-e29b-41d4-a716-446655440000",
-            vector_size: 3072,
-            embedding_model_name: "text-embedding-3-large",
             sync_config: {
                 destinations: {
                     skip_vespa: true,
@@ -536,6 +534,8 @@ describe("Collections", () => {
             created_by_email: "admin@company.com",
             modified_by_email: "finance@company.com",
             status: "ACTIVE",
+            vector_size: 3072,
+            embedding_model_name: "text-embedding-3-large",
         });
     });
 
