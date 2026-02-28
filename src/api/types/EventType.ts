@@ -8,6 +8,9 @@ export type EventType =
     | "sync.completed"
     | "sync.failed"
     | "sync.cancelled"
+    | "entity.batch_processed"
+    | "query.processed"
+    | "access_control.batch_processed"
     | "collection.created"
     | "collection.updated"
     | "collection.deleted"
@@ -20,6 +23,9 @@ export const EventType = {
     SyncCompleted: "sync.completed",
     SyncFailed: "sync.failed",
     SyncCancelled: "sync.cancelled",
+    EntityBatchProcessed: "entity.batch_processed",
+    QueryProcessed: "query.processed",
+    AccessControlBatchProcessed: "access_control.batch_processed",
     CollectionCreated: "collection.created",
     CollectionUpdated: "collection.updated",
     CollectionDeleted: "collection.deleted",
