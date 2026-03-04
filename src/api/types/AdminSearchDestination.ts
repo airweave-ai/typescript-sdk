@@ -5,8 +5,4 @@
 /**
  * Destination options for admin search.
  */
-export type AdminSearchDestination = "qdrant" | "vespa";
-export const AdminSearchDestination = {
-    Qdrant: "qdrant",
-    Vespa: "vespa",
-} as const;
+export type AdminSearchDestination = "vespa";

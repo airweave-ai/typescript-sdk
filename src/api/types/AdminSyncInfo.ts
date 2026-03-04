@@ -27,7 +27,6 @@ export interface AdminSyncInfo {
     modified_by_email?: string;
     total_entity_count?: number;
     total_arf_entity_count?: number;
-    total_qdrant_entity_count?: number;
     total_vespa_entity_count?: number;
     last_job_status?: string;
     last_job_at?: string;
