@@ -16,7 +16,11 @@ export type EventType =
     | "collection.deleted"
     | "source_connection.created"
     | "source_connection.auth_completed"
-    | "source_connection.deleted";
+    | "source_connection.deleted"
+    | "organization.created"
+    | "organization.deleted"
+    | "organization.member_added"
+    | "organization.member_removed";
 export const EventType = {
     SyncPending: "sync.pending",
     SyncRunning: "sync.running",
@@ -32,4 +36,8 @@ export const EventType = {
     SourceConnectionCreated: "source_connection.created",
     SourceConnectionAuthCompleted: "source_connection.auth_completed",
     SourceConnectionDeleted: "source_connection.deleted",
+    OrganizationCreated: "organization.created",
+    OrganizationDeleted: "organization.deleted",
+    OrganizationMemberAdded: "organization.member_added",
+    OrganizationMemberRemoved: "organization.member_removed",
 } as const;
