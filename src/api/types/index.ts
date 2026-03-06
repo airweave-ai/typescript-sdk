@@ -31,6 +31,7 @@ export * from "./BillingPeriodUsage.js";
 export * from "./BillingPlan.js";
 export * from "./BillingStatus.js";
 export * from "./BillingTransition.js";
+export * from "./BodyChangeMemberRoleOrganizationsOrganizationIdMembersUserIdPatch.js";
 export * from "./BodyResyncWithExecutionConfigAdminResyncSyncIdPost.js";
 export * from "./CheckStatus.js";
 export * from "./CheckoutSessionRequest.js";
