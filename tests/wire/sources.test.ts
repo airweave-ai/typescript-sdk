@@ -30,6 +30,7 @@ describe("Sources", () => {
                 supports_access_control: true,
                 rate_limit_level: "rate_limit_level",
                 feature_flag: "feature_flag",
+                supports_browse_tree: true,
                 auth_fields: {
                     fields: [
                         {
@@ -72,6 +73,7 @@ describe("Sources", () => {
                 supports_access_control: true,
                 rate_limit_level: "rate_limit_level",
                 feature_flag: "feature_flag",
+                supports_browse_tree: true,
                 auth_fields: {
                     fields: [
                         {
@@ -148,6 +150,7 @@ describe("Sources", () => {
             supports_access_control: true,
             rate_limit_level: "rate_limit_level",
             feature_flag: "feature_flag",
+            supports_browse_tree: true,
             auth_fields: {
                 fields: [
                     {
@@ -188,6 +191,7 @@ describe("Sources", () => {
             supports_access_control: true,
             rate_limit_level: "rate_limit_level",
             feature_flag: "feature_flag",
+            supports_browse_tree: true,
             auth_fields: {
                 fields: [
                     {

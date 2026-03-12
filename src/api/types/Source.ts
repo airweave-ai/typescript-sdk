@@ -44,6 +44,8 @@ export interface Source {
     rate_limit_level?: string;
     /** Feature flag required to access this source. If set, only organizations with this feature enabled can see/use this source. */
     feature_flag?: string;
+    /** Whether this source supports lazy-loaded browse tree for selective node syncing. */
+    supports_browse_tree?: boolean;
     /** Schema definition for authentication fields required to connect to this source. Only present for sources using DIRECT authentication. OAuth sources handle authentication through browser flows. */
     auth_fields?: AirweaveSDK.Fields;
     /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */

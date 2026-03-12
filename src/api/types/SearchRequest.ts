@@ -21,6 +21,8 @@ export interface SearchRequest {
     offset?: number;
     /** Maximum number of results to return (default: 1000) */
     limit?: number;
+    /** Limit search to specific source connections within the collection. */
+    source_connection_ids?: string[];
     /** DEPRECATED: This field is accepted for backwards compatibility but ignored. Temporal relevance has been removed. */
     temporal_relevance?: number;
     /** Generate query variations to improve recall (default: true) */
