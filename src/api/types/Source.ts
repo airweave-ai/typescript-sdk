@@ -32,13 +32,13 @@ export interface Source {
     output_entity_definitions?: string[];
     /** Categorization tags to help users discover and filter sources by domain or use case. */
     labels?: string[];
-    /** Whether this source supports cursor-based continuous syncing for incremental data extraction. Sources with this capability can track their sync position and resume from where they left off. */
+    /** Whether this source supports cursor-based continuous syncing for incremental data extraction. */
     supports_continuous?: boolean;
-    /** Whether this source uses federated search instead of traditional syncing. Federated search sources query data in real-time during searches rather than syncing and indexing all data beforehand. */
+    /** Whether this source uses federated search instead of traditional syncing. */
     federated_search?: boolean;
-    /** Whether this source's entities have timestamps that enable recency-based ranking. Sources without file-level timestamps (e.g., code repositories) cannot use temporal relevance for search result weighting. */
+    /** Whether this source's entities have timestamps that enable recency-based ranking. */
     supports_temporal_relevance?: boolean;
-    /** Whether this source supports document-level access control. Sources with this capability extract ACL information from the source and apply it during search to filter results based on user permissions. */
+    /** Whether this source supports document-level access control. */
     supports_access_control?: boolean;
     /** Rate limiting level for this source: 'org' (organization-wide), 'connection' (per-connection/per-user), or None (no rate limiting). */
     rate_limit_level?: string;
@@ -46,10 +46,10 @@ export interface Source {
     feature_flag?: string;
     /** Whether this source supports lazy-loaded browse tree for selective node syncing. */
     supports_browse_tree?: boolean;
-    /** Schema definition for authentication fields required to connect to this source. Only present for sources using DIRECT authentication. OAuth sources handle authentication through browser flows. */
+    /** Schema definition for authentication fields required to connect to this source. */
     auth_fields?: AirweaveSDK.Fields;
-    /** Schema definition for configuration fields required to customize this source. Describes field types, validation rules, and user interface hints. */
+    /** Schema definition for configuration fields required to customize this source. */
     config_fields: AirweaveSDK.Fields;
-    /** List of auth provider short names that support this source (e.g., ['composio', 'pipedream']). Computed dynamically for API responses. This field is not stored in the database. */
+    /** List of auth provider short names that support this source. */
     supported_auth_providers?: string[];
 }
