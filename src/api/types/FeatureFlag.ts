@@ -13,7 +13,8 @@ export type FeatureFlag =
     | "zephyr_scale"
     | "sharepoint_2019_v2"
     | "agentic_search"
-    | "api_key_admin_sync";
+    | "api_key_admin_sync"
+    | "connect";
 export const FeatureFlag = {
     PrioritySupport: "priority_support",
     SourceRateLimiting: "source_rate_limiting",
@@ -21,4 +22,5 @@ export const FeatureFlag = {
     Sharepoint2019V2: "sharepoint_2019_v2",
     AgenticSearch: "agentic_search",
     ApiKeyAdminSync: "api_key_admin_sync",
+    Connect: "connect",
 } as const;
