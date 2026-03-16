@@ -38,4 +38,6 @@ export interface Collection {
     vector_size: number;
     /** Name of the embedding model used for this collection (derived from deployment metadata). */
     embedding_model_name: string;
+    /** Lightweight list of source connections attached to this collection. Contains only short_name and name, suitable for rendering icons in list views. */
+    source_connection_summaries?: AirweaveSDK.SourceConnectionSummary[];
 }

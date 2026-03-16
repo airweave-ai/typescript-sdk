@@ -24,6 +24,7 @@ describe("Collections", () => {
                 status: "ACTIVE",
                 vector_size: 1,
                 embedding_model_name: "embedding_model_name",
+                source_connection_summaries: [{ short_name: "short_name", name: "name" }],
             },
         ];
         server.mockEndpoint().get("/collections").respondWith().statusCode(200).jsonBody(rawResponseBody).build();
@@ -46,6 +47,12 @@ describe("Collections", () => {
                 status: "ACTIVE",
                 vector_size: 1,
                 embedding_model_name: "embedding_model_name",
+                source_connection_summaries: [
+                    {
+                        short_name: "short_name",
+                        name: "name",
+                    },
+                ],
             },
         ]);
     });
@@ -104,6 +111,10 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                { short_name: "slack", name: "Slack" },
+                { short_name: "github", name: "GitHub" },
+            ],
         };
         server
             .mockEndpoint()
@@ -151,6 +162,16 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                {
+                    short_name: "slack",
+                    name: "Slack",
+                },
+                {
+                    short_name: "github",
+                    name: "GitHub",
+                },
+            ],
         });
     });
 
@@ -230,6 +251,10 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                { short_name: "slack", name: "Slack" },
+                { short_name: "github", name: "GitHub" },
+            ],
         };
         server
             .mockEndpoint()
@@ -273,6 +298,16 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                {
+                    short_name: "slack",
+                    name: "Slack",
+                },
+                {
+                    short_name: "github",
+                    name: "GitHub",
+                },
+            ],
         });
     });
 
@@ -360,6 +395,10 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                { short_name: "slack", name: "Slack" },
+                { short_name: "github", name: "GitHub" },
+            ],
         };
         server
             .mockEndpoint()
@@ -403,6 +442,16 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                {
+                    short_name: "slack",
+                    name: "Slack",
+                },
+                {
+                    short_name: "github",
+                    name: "GitHub",
+                },
+            ],
         });
     });
 
@@ -490,6 +539,10 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                { short_name: "slack", name: "Slack" },
+                { short_name: "github", name: "GitHub" },
+            ],
         };
         server
             .mockEndpoint()
@@ -536,6 +589,16 @@ describe("Collections", () => {
             status: "ACTIVE",
             vector_size: 3072,
             embedding_model_name: "text-embedding-3-large",
+            source_connection_summaries: [
+                {
+                    short_name: "slack",
+                    name: "Slack",
+                },
+                {
+                    short_name: "github",
+                    name: "GitHub",
+                },
+            ],
         });
     });
 

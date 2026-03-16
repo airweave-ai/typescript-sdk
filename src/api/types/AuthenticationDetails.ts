@@ -16,6 +16,8 @@ export interface AuthenticationDetails {
     auth_url?: string;
     auth_url_expires?: string;
     redirect_url?: string;
+    /** One-time token to verify OAuth flow ownership. Only returned when creating an OAuth browser connection. */
+    claim_token?: string;
     provider_readable_id?: string;
     provider_id?: string;
 }
