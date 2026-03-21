@@ -3,17 +3,17 @@
  */
 
 /**
- * System metadata in agentic search result.
+ * System metadata in search result.
  */
-export interface AgenticSearchSystemMetadata {
+export interface SearchSystemMetadata {
     /** Name of the source this entity belongs to. */
     source_name: string;
     /** Type of the entity this entity represents in the source. */
     entity_type: string;
-    /** ID of the sync this entity belongs to. */
-    sync_id: string;
-    /** ID of the sync job this entity belongs to. */
-    sync_job_id: string;
+    /** ID of the sync this entity belongs to (None for federated). */
+    sync_id?: string;
+    /** ID of the sync job this entity belongs to (None for federated). */
+    sync_job_id?: string;
     /** Index of the chunk in the file. */
     chunk_index: number;
     /** Original entity ID */

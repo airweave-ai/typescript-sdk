@@ -8,8 +8,8 @@ import * as AirweaveSDK from "../index.js";
  * A single filter condition.
  *
  * Pydantic validates that:
- * - ``field`` is a valid AgenticSearchFilterableField enum value
- * - ``operator`` is a valid AgenticSearchFilterOperator enum value
+ * - ``field`` is a valid FilterableField enum value
+ * - ``operator`` is a valid FilterOperator enum value
  * - ``value`` matches the expected types
  * - The combination of field + operator + value is semantically valid
  *
@@ -22,18 +22,18 @@ import * as AirweaveSDK from "../index.js";
  *      "value": "2024-01-01T00:00:00Z"}
  *     {"field": "breadcrumbs.name", "operator": "contains", "value": "Engineering"}
  */
-export interface AgenticSearchFilterCondition {
+export interface FilterCondition {
     /** Field to filter on (use dot notation for nested fields). */
-    field: AirweaveSDK.AgenticSearchFilterableField;
+    field: AirweaveSDK.FilterableField;
     /** The comparison operator to use. */
-    operator: AirweaveSDK.AgenticSearchFilterOperator;
+    operator: AirweaveSDK.FilterOperator;
     /** Value to compare against. Use a list for 'in' and 'not_in' operators. */
-    value: AgenticSearchFilterCondition.Value;
+    value: FilterCondition.Value;
 }
 
-export namespace AgenticSearchFilterCondition {
+export namespace FilterCondition {
     /**
      * Value to compare against. Use a list for 'in' and 'not_in' operators.
      */
-    export type Value = string | number | number | boolean | string[] | number[];
+    export type Value = string | number | boolean | string[] | number[];
 }

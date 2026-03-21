@@ -20,7 +20,13 @@ export type EventType =
     | "organization.created"
     | "organization.deleted"
     | "organization.member_added"
-    | "organization.member_removed";
+    | "organization.member_removed"
+    | "search.started"
+    | "search.completed"
+    | "search.failed"
+    | "search.reranking"
+    | "search.thinking"
+    | "search.tool_called";
 export const EventType = {
     SyncPending: "sync.pending",
     SyncRunning: "sync.running",
@@ -40,4 +46,10 @@ export const EventType = {
     OrganizationDeleted: "organization.deleted",
     OrganizationMemberAdded: "organization.member_added",
     OrganizationMemberRemoved: "organization.member_removed",
+    SearchStarted: "search.started",
+    SearchCompleted: "search.completed",
+    SearchFailed: "search.failed",
+    SearchReranking: "search.reranking",
+    SearchThinking: "search.thinking",
+    SearchToolCalled: "search.tool_called",
 } as const;

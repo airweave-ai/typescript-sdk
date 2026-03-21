@@ -10,6 +10,8 @@ export interface UsageSnapshot {
     entities: number;
     /** Search queries executed */
     queries: number;
+    /** Normalized token usage from agentic search */
+    tokens?: number;
     /** Source connections configured */
     source_connections: number;
     /** Team members in the organization */
@@ -18,6 +20,8 @@ export interface UsageSnapshot {
     max_entities?: number;
     /** Maximum queries allowed */
     max_queries?: number;
+    /** Maximum normalized tokens allowed */
+    max_tokens?: number;
     /** Maximum source connections allowed */
     max_source_connections?: number;
     /** Maximum team members allowed */

@@ -5,15 +5,15 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Agentic search request — full agent loop with tool calling.
+ * Classic search request — LLM generates a search plan, execute against Vespa.
  */
-export interface AgenticSearchRequest {
+export interface ClassicSearchRequest {
     /** Search query text. */
     query: string;
-    /** Enable extended thinking / chain-of-thought. */
-    thinking?: boolean;
     /** Filter groups (combined with OR). */
     filter?: AirweaveSDK.FilterGroup[];
-    /** Max results. None means agent decides. */
+    /** Max results to return. */
     limit?: number;
+    /** Number of results to skip. */
+    offset?: number;
 }

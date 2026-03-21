@@ -3,9 +3,9 @@
  */
 
 /**
- * Access control in agentic search result.
+ * Access control in search result.
  */
-export interface AgenticSearchAccessControl {
+export interface SearchAccessControl {
     /** Principal IDs who can view this entity. None if unknown. */
     viewers?: string[];
     /** Whether this entity is publicly accessible. None if unknown. */

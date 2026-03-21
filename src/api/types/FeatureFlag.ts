@@ -12,7 +12,6 @@ export type FeatureFlag =
     | "source_rate_limiting"
     | "zephyr_scale"
     | "sharepoint_2019_v2"
-    | "agentic_search"
     | "api_key_admin_sync"
     | "connect";
 export const FeatureFlag = {
@@ -20,7 +19,6 @@ export const FeatureFlag = {
     SourceRateLimiting: "source_rate_limiting",
     ZephyrScale: "zephyr_scale",
     Sharepoint2019V2: "sharepoint_2019_v2",
-    AgenticSearch: "agentic_search",
     ApiKeyAdminSync: "api_key_admin_sync",
     Connect: "connect",
 } as const;

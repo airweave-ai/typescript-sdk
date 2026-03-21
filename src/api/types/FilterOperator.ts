@@ -5,7 +5,7 @@
 /**
  * Supported filter operators.
  */
-export type AgenticSearchFilterOperator =
+export type FilterOperator =
     | "equals"
     | "not_equals"
     | "contains"
@@ -15,7 +15,7 @@ export type AgenticSearchFilterOperator =
     | "less_than_or_equal"
     | "in"
     | "not_in";
-export const AgenticSearchFilterOperator = {
+export const FilterOperator = {
     Equals: "equals",
     NotEquals: "not_equals",
     Contains: "contains",

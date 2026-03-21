@@ -5,9 +5,9 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Agentic search result.
+ * Search result.
  */
-export interface AgenticSearchResult {
+export interface SearchResult {
     /** Original entity ID. */
     entity_id: string;
     /** Entity display name. */
@@ -15,7 +15,7 @@ export interface AgenticSearchResult {
     /** Relevance score from the search engine. */
     relevance_score: number;
     /** Breadcrumbs showing entity hierarchy. */
-    breadcrumbs: AirweaveSDK.AgenticSearchBreadcrumb[];
+    breadcrumbs: AirweaveSDK.SearchBreadcrumb[];
     /** When the entity was created. */
     created_at?: string;
     /** When the entity was last updated. */
@@ -23,9 +23,9 @@ export interface AgenticSearchResult {
     /** Semantically searchable text content */
     textual_representation: string;
     /** System metadata */
-    airweave_system_metadata: AirweaveSDK.AgenticSearchSystemMetadata;
+    airweave_system_metadata: AirweaveSDK.SearchSystemMetadata;
     /** Access control */
-    access: AirweaveSDK.AgenticSearchAccessControl;
+    access: AirweaveSDK.SearchAccessControl;
     /** URL to view the entity in its source application (e.g., Notion, Asana). */
     web_url: string;
     /** Download URL for file entities. Only present for FileEntity types. */

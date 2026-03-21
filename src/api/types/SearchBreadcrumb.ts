@@ -3,9 +3,9 @@
  */
 
 /**
- * Breadcrumb in agentic search result.
+ * Breadcrumb in search result.
  */
-export interface AgenticSearchBreadcrumb {
+export interface SearchBreadcrumb {
     /** ID of the entity in the source. */
     entity_id: string;
     /** Display name of the entity. */

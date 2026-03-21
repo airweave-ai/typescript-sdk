@@ -33,7 +33,7 @@ import * as AirweaveSDK from "../index.js";
  *              "value": "Engineering"}
  *         ]}
  */
-export interface AgenticSearchFilterGroup {
+export interface FilterGroup {
     /** Filter conditions within this group, combined with AND */
-    conditions: AirweaveSDK.AgenticSearchFilterCondition[];
+    conditions: AirweaveSDK.FilterCondition[];
 }

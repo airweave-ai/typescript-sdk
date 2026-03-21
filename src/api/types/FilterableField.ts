@@ -3,12 +3,12 @@
  */
 
 /**
- * Filterable fields in agentic search.
+ * Filterable fields in search.
  *
  * Uses dot notation for nested fields (e.g., breadcrumbs.name,
  * airweave_system_metadata.source_name).
  */
-export type AgenticSearchFilterableField =
+export type FilterableField =
     | "entity_id"
     | "name"
     | "created_at"
@@ -22,7 +22,7 @@ export type AgenticSearchFilterableField =
     | "airweave_system_metadata.chunk_index"
     | "airweave_system_metadata.sync_id"
     | "airweave_system_metadata.sync_job_id";
-export const AgenticSearchFilterableField = {
+export const FilterableField = {
     EntityId: "entity_id",
     Name: "name",
     CreatedAt: "created_at",

@@ -5,9 +5,9 @@
 import * as AirweaveSDK from "../index.js";
 
 /**
- * Agentic search request — full agent loop with tool calling.
+ * Admin-only agentic search request with model override for evals.
  */
-export interface AgenticSearchRequest {
+export interface InternalAgenticSearchRequest {
     /** Search query text. */
     query: string;
     /** Enable extended thinking / chain-of-thought. */
@@ -16,4 +16,6 @@ export interface AgenticSearchRequest {
     filter?: AirweaveSDK.FilterGroup[];
     /** Max results. None means agent decides. */
     limit?: number;
+    /** LLM model override. Format: 'provider/model' e.g. 'together/zai-glm-5-thinking'. When not set, uses the default model from config. */
+    model?: string;
 }
