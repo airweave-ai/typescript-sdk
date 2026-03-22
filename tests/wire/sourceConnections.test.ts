@@ -144,7 +144,15 @@ describe("SourceConnections", () => {
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            entities: {
+                total_entities: 1250,
+                by_type: { file: { count: 1250 } },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
+            },
             federated_search: false,
         };
         server
@@ -220,6 +228,11 @@ describe("SourceConnections", () => {
                         count: 1250,
                     },
                 },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
             },
             federated_search: false,
         });
@@ -355,7 +368,15 @@ describe("SourceConnections", () => {
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            entities: {
+                total_entities: 1250,
+                by_type: { file: { count: 1250 } },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
+            },
             federated_search: false,
         };
         server
@@ -427,6 +448,11 @@ describe("SourceConnections", () => {
                         count: 1250,
                     },
                 },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
             },
             federated_search: false,
         });
@@ -538,7 +564,15 @@ describe("SourceConnections", () => {
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            entities: {
+                total_entities: 1250,
+                by_type: { file: { count: 1250 } },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
+            },
             federated_search: false,
         };
         server
@@ -610,6 +644,11 @@ describe("SourceConnections", () => {
                         count: 1250,
                     },
                 },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
             },
             federated_search: false,
         });
@@ -721,7 +760,15 @@ describe("SourceConnections", () => {
                 },
             },
             sync_id: "sync_id",
-            entities: { total_entities: 1250, by_type: { file: { count: 1250 } } },
+            entities: {
+                total_entities: 1250,
+                by_type: { file: { count: 1250 } },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
+            },
             federated_search: false,
         };
         server
@@ -794,6 +841,11 @@ describe("SourceConnections", () => {
                         count: 1250,
                     },
                 },
+                entity_id: "entity_id",
+                name: "name",
+                entity_type: "entity_type",
+                source_name: "source_name",
+                relevance_score: 1.1,
             },
             federated_search: false,
         });

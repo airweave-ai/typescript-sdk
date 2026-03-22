@@ -508,6 +508,301 @@ await client.collections.update("customer-support-tickets-x7k9m", {
 </dl>
 </details>
 
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">instantSearch</a>(readableId, { ...params }) -> AirweaveSDK.SearchV2Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Direct vector search.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.instantSearch("readable_id", {
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.InstantSearchRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">classicSearch</a>(readableId, { ...params }) -> AirweaveSDK.SearchV2Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+AI-optimized search.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.classicSearch("readable_id", {
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.ClassicSearchRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">agenticSearch</a>(readableId, { ...params }) -> AirweaveSDK.SearchV2Response</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Agent that iteratively searches, reads, navigates hierarchies, and collects results.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+await client.collections.agenticSearch("readable_id", {
+    query: "query",
+});
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.AgenticSearchRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
+<details><summary><code>client.collections.<a href="/src/api/resources/collections/client/Client.ts">streamAgenticSearch</a>(readableId, { ...params }) -> core.Stream&lt;AirweaveSDK.AgenticSearchEvent&gt;</code></summary>
+<dl>
+<dd>
+
+#### 📝 Description
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+Streaming agentic search via Server-Sent Events. Returns real-time events as the agent searches.
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### 🔌 Usage
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+```typescript
+const response = await client.collections.streamAgenticSearch("readable_id", {
+    query: "query",
+});
+for await (const item of response) {
+    console.log(item);
+}
+```
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+#### ⚙️ Parameters
+
+<dl>
+<dd>
+
+<dl>
+<dd>
+
+**readableId:** `string`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**request:** `AirweaveSDK.AgenticSearchRequest`
+
+</dd>
+</dl>
+
+<dl>
+<dd>
+
+**requestOptions:** `Collections.RequestOptions`
+
+</dd>
+</dl>
+</dd>
+</dl>
+
+</dd>
+</dl>
+</details>
+
 ## source-connections
 
 <details><summary><code>client.sourceConnections.<a href="/src/api/resources/sourceConnections/client/Client.ts">list</a>({ ...params }) -> AirweaveSDK.SourceConnectionListItem[]</code></summary>

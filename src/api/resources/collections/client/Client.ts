@@ -552,6 +552,359 @@ export class Collections {
         }
     }
 
+    /**
+     * Direct vector search.
+     *
+     * @param {string} readableId
+     * @param {AirweaveSDK.InstantSearchRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.instantSearch("readable_id", {
+     *         query: "query"
+     *     })
+     */
+    public instantSearch(
+        readableId: string,
+        request: AirweaveSDK.InstantSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SearchV2Response> {
+        return core.HttpResponsePromise.fromPromise(this.__instantSearch(readableId, request, requestOptions));
+    }
+
+    private async __instantSearch(
+        readableId: string,
+        request: AirweaveSDK.InstantSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchV2Response>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search/instant`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SearchV2Response, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search/instant.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * AI-optimized search.
+     *
+     * @param {string} readableId
+     * @param {AirweaveSDK.ClassicSearchRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.classicSearch("readable_id", {
+     *         query: "query"
+     *     })
+     */
+    public classicSearch(
+        readableId: string,
+        request: AirweaveSDK.ClassicSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SearchV2Response> {
+        return core.HttpResponsePromise.fromPromise(this.__classicSearch(readableId, request, requestOptions));
+    }
+
+    private async __classicSearch(
+        readableId: string,
+        request: AirweaveSDK.ClassicSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchV2Response>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search/classic`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SearchV2Response, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search/classic.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Agent that iteratively searches, reads, navigates hierarchies, and collects results.
+     *
+     * @param {string} readableId
+     * @param {AirweaveSDK.AgenticSearchRequest} request
+     * @param {Collections.RequestOptions} requestOptions - Request-specific configuration.
+     *
+     * @throws {@link AirweaveSDK.UnprocessableEntityError}
+     *
+     * @example
+     *     await client.collections.agenticSearch("readable_id", {
+     *         query: "query"
+     *     })
+     */
+    public agenticSearch(
+        readableId: string,
+        request: AirweaveSDK.AgenticSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<AirweaveSDK.SearchV2Response> {
+        return core.HttpResponsePromise.fromPromise(this.__agenticSearch(readableId, request, requestOptions));
+    }
+
+    private async __agenticSearch(
+        readableId: string,
+        request: AirweaveSDK.AgenticSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<AirweaveSDK.SearchV2Response>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search/agentic`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return { data: _response.body as AirweaveSDK.SearchV2Response, rawResponse: _response.rawResponse };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search/agentic.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
+    /**
+     * Streaming agentic search via Server-Sent Events. Returns real-time events as the agent searches.
+     */
+    public streamAgenticSearch(
+        readableId: string,
+        request: AirweaveSDK.AgenticSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): core.HttpResponsePromise<core.Stream<AirweaveSDK.AgenticSearchEvent>> {
+        return core.HttpResponsePromise.fromPromise(this.__streamAgenticSearch(readableId, request, requestOptions));
+    }
+
+    private async __streamAgenticSearch(
+        readableId: string,
+        request: AirweaveSDK.AgenticSearchRequest,
+        requestOptions?: Collections.RequestOptions,
+    ): Promise<core.WithRawResponse<core.Stream<AirweaveSDK.AgenticSearchEvent>>> {
+        let _headers: core.Fetcher.Args["headers"] = mergeHeaders(
+            this._options?.headers,
+            mergeOnlyDefinedHeaders({ ...(await this._getCustomAuthorizationHeaders()) }),
+            requestOptions?.headers,
+        );
+        const _response = await core.fetcher<ReadableStream>({
+            url: core.url.join(
+                (await core.Supplier.get(this._options.baseUrl)) ??
+                    (await core.Supplier.get(this._options.environment)) ??
+                    environments.AirweaveSDKEnvironment.Production,
+                `collections/${encodeURIComponent(readableId)}/search/agentic/stream`,
+            ),
+            method: "POST",
+            headers: _headers,
+            contentType: "application/json",
+            queryParameters: requestOptions?.queryParams,
+            requestType: "json",
+            body: request,
+            responseType: "sse",
+            timeoutMs: requestOptions?.timeoutInSeconds != null ? requestOptions.timeoutInSeconds * 1000 : 60000,
+            maxRetries: requestOptions?.maxRetries,
+            abortSignal: requestOptions?.abortSignal,
+        });
+        if (_response.ok) {
+            return {
+                data: new core.Stream({
+                    stream: _response.body,
+                    parse: (data) => data as any,
+                    signal: requestOptions?.abortSignal,
+                    eventShape: {
+                        type: "sse",
+                        streamTerminator: "[DONE]",
+                    },
+                }),
+                rawResponse: _response.rawResponse,
+            };
+        }
+
+        if (_response.error.reason === "status-code") {
+            switch (_response.error.statusCode) {
+                case 422:
+                    throw new AirweaveSDK.UnprocessableEntityError(
+                        _response.error.body as unknown,
+                        _response.rawResponse,
+                    );
+                default:
+                    throw new errors.AirweaveSDKError({
+                        statusCode: _response.error.statusCode,
+                        body: _response.error.body,
+                        rawResponse: _response.rawResponse,
+                    });
+            }
+        }
+
+        switch (_response.error.reason) {
+            case "non-json":
+                throw new errors.AirweaveSDKError({
+                    statusCode: _response.error.statusCode,
+                    body: _response.error.rawBody,
+                    rawResponse: _response.rawResponse,
+                });
+            case "timeout":
+                throw new errors.AirweaveSDKTimeoutError(
+                    "Timeout exceeded when calling POST /collections/{readable_id}/search/agentic/stream.",
+                );
+            case "unknown":
+                throw new errors.AirweaveSDKError({
+                    message: _response.error.errorMessage,
+                    rawResponse: _response.rawResponse,
+                });
+        }
+    }
+
     protected async _getCustomAuthorizationHeaders(): Promise<Record<string, string | undefined>> {
         const apiKeyValue = await core.Supplier.get(this._options.apiKey);
         return { "x-api-key": apiKeyValue };

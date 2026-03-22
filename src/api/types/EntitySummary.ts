@@ -10,4 +10,9 @@ import * as AirweaveSDK from "../index.js";
 export interface EntitySummary {
     total_entities?: number;
     by_type?: Record<string, AirweaveSDK.EntityTypeStats>;
+    entity_id?: string;
+    name?: string;
+    entity_type?: string;
+    source_name?: string;
+    relevance_score?: number;
 }
