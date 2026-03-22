@@ -3,11 +3,11 @@
  */
 
 /**
- * Retrieval strategies for search.
+ * Supported retrieval strategies.
  */
-export type RetrievalStrategy = "hybrid" | "neural" | "keyword";
+export type RetrievalStrategy = "semantic" | "keyword" | "hybrid";
 export const RetrievalStrategy = {
-    Hybrid: "hybrid",
-    Neural: "neural",
+    Semantic: "semantic",
     Keyword: "keyword",
+    Hybrid: "hybrid",
 } as const;
