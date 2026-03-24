@@ -14,4 +14,5 @@ export interface ConfigField {
     items_type?: string;
     feature_flag?: string;
     is_secret?: boolean;
+    enum_values?: string[];
 }

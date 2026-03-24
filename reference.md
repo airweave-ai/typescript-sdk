@@ -1999,7 +1999,8 @@ Streaming agentic search via Server-Sent Events. Returns real-time events as the
 
 ```typescript
 const response = await client.collections.search.streamAgentic("readable_id", {
-    query: "query",
+    query: "find all deployment-related docs from last month",
+    thinking: true,
 });
 for await (const item of response) {
     console.log(item);
