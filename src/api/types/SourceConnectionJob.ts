@@ -33,6 +33,8 @@ export interface SourceConnectionJob {
     entities_failed?: number;
     /** Error message if the job failed */
     error?: string;
+    /** Error category for credential errors (e.g. oauth_credentials_expired) */
+    error_category?: AirweaveSDK.SourceConnectionErrorCategory;
     /** Additional error context for debugging */
     error_details?: Record<string, unknown>;
 }

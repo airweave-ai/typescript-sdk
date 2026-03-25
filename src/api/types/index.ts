@@ -36,6 +36,7 @@ export * from "./SearchSystemMetadata.js";
 export * from "./SearchV2Response.js";
 export * from "./Source.js";
 export * from "./SourceConnection.js";
+export * from "./SourceConnectionErrorCategory.js";
 export * from "./SourceConnectionJob.js";
 export * from "./SourceConnectionListItem.js";
 export * from "./SourceConnectionStatus.js";

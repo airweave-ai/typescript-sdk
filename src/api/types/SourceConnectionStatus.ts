@@ -5,12 +5,20 @@
 /**
  * Source connection status enum - represents overall connection state.
  */
-export type SourceConnectionStatus = "active" | "pending_auth" | "syncing" | "error" | "inactive" | "pending_sync";
+export type SourceConnectionStatus =
+    | "active"
+    | "pending_auth"
+    | "syncing"
+    | "error"
+    | "needs_reauth"
+    | "inactive"
+    | "pending_sync";
 export const SourceConnectionStatus = {
     Active: "active",
     PendingAuth: "pending_auth",
     Syncing: "syncing",
     Error: "error",
+    NeedsReauth: "needs_reauth",
     Inactive: "inactive",
     PendingSync: "pending_sync",
 } as const;

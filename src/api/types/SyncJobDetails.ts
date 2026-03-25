@@ -18,4 +18,5 @@ export interface SyncJobDetails {
     entities_deleted?: number;
     entities_failed?: number;
     error?: string;
+    error_category?: AirweaveSDK.SourceConnectionErrorCategory;
 }

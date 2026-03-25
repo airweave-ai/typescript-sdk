@@ -141,6 +141,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -153,6 +154,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         };
         server
@@ -218,6 +223,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -234,6 +240,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         });
     });
@@ -365,6 +375,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -377,6 +388,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         };
         server
@@ -438,6 +453,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -454,6 +470,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         });
     });
@@ -561,6 +581,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -573,6 +594,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         };
         server
@@ -634,6 +659,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -650,6 +676,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         });
     });
@@ -757,6 +787,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -769,6 +800,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         };
         server
@@ -831,6 +866,7 @@ describe("SourceConnections", () => {
                     entities_deleted: 1,
                     entities_failed: 1,
                     error: "error",
+                    error_category: "oauth_credentials_expired",
                 },
             },
             sync_id: "sync_id",
@@ -847,6 +883,10 @@ describe("SourceConnections", () => {
                 source_name: "source_name",
                 relevance_score: 1.1,
             },
+            error_category: "oauth_credentials_expired",
+            error_message: "error_message",
+            provider_settings_url: "provider_settings_url",
+            provider_short_name: "provider_short_name",
             federated_search: false,
         });
     });
@@ -960,6 +1000,7 @@ describe("SourceConnections", () => {
             entities_deleted: 3,
             entities_failed: 0,
             error: "error",
+            error_category: "oauth_credentials_expired",
             error_details: { key: "value" },
         };
         server
@@ -985,6 +1026,7 @@ describe("SourceConnections", () => {
             entities_deleted: 3,
             entities_failed: 0,
             error: "error",
+            error_category: "oauth_credentials_expired",
             error_details: {
                 key: "value",
             },
@@ -1080,6 +1122,7 @@ describe("SourceConnections", () => {
                 entities_deleted: 3,
                 entities_failed: 0,
                 error: "error",
+                error_category: "oauth_credentials_expired",
                 error_details: { key: "value" },
             },
         ];
@@ -1110,6 +1153,7 @@ describe("SourceConnections", () => {
                 entities_deleted: 3,
                 entities_failed: 0,
                 error: "error",
+                error_category: "oauth_credentials_expired",
                 error_details: {
                     key: "value",
                 },
@@ -1187,6 +1231,7 @@ describe("SourceConnections", () => {
             entities_deleted: 3,
             entities_failed: 0,
             error: "error",
+            error_category: "oauth_credentials_expired",
             error_details: { key: "value" },
         };
         server
@@ -1215,6 +1260,7 @@ describe("SourceConnections", () => {
             entities_deleted: 3,
             entities_failed: 0,
             error: "error",
+            error_category: "oauth_credentials_expired",
             error_details: {
                 key: "value",
             },

@@ -41,6 +41,14 @@ export interface SourceConnection {
     sync_id?: string;
     /** Summary of synced entities by type */
     entities?: AirweaveSDK.EntitySummary;
+    /** Error category when status is needs_reauth (e.g. oauth_credentials_expired) */
+    error_category?: AirweaveSDK.SourceConnectionErrorCategory;
+    /** Human-readable error message when status is needs_reauth */
+    error_message?: string;
+    /** URL to the auth provider's settings dashboard (for auth_provider errors) */
+    provider_settings_url?: string;
+    /** Auth provider short_name (e.g. 'composio', 'pipedream') for display */
+    provider_short_name?: string;
     /** Whether this source uses federated (real-time) search instead of syncing */
     federated_search?: boolean;
 }
