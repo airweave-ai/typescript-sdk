@@ -5,6 +5,7 @@
 export type EventType =
     | "sync.pending"
     | "sync.running"
+    | "sync.cancelling"
     | "sync.completed"
     | "sync.failed"
     | "sync.cancelled"
@@ -30,6 +31,7 @@ export type EventType =
 export const EventType = {
     SyncPending: "sync.pending",
     SyncRunning: "sync.running",
+    SyncCancelling: "sync.cancelling",
     SyncCompleted: "sync.completed",
     SyncFailed: "sync.failed",
     SyncCancelled: "sync.cancelled",
